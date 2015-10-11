@@ -41,6 +41,8 @@ public class MainActivity extends ActionBarActivity
     private PendingIntent pendingIntent;
     private AlarmManager manager;
 
+    public static final int BROADCAST_PERIOD = 10000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,18 +56,19 @@ public class MainActivity extends ActionBarActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
-        Intent alarmIntent = new Intent(this, AlarmReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
         Firebase.setAndroidContext(this);
         startAlarm();
     }
 
     void startAlarm() {
-        manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        int interval = 10000;
+        Intent alarmIntent = new Intent(this, LocationAlarmReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
+        manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
+        int interval = BROADCAST_PERIOD;
         manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
         Toast.makeText(this, "Alarm Set", Toast.LENGTH_SHORT).show();
+
     }
 
     void cancelAlarm() {
