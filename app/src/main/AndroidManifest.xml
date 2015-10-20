@@ -11,11 +11,11 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,13 +33,30 @@
             android:name=".AlarmReceiver"
             android:enabled="true"
             android:exported="true"
-            android:process=":remote">
+            android:process=":remote" >
         </receiver>
         <receiver
             android:name=".LocationAlarmReceiver"
             android:enabled="true"
             android:exported="true"
-            android:process=":remote">
+            android:process=":remote" >
+        </receiver>
+        <receiver
+            android:name=".PowerAlarmReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":remote" >
+        </receiver>
+
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
+
+        <receiver
+            android:name=".ProximitySensorReceiver"
+            android:enabled="true"
+            android:exported="true" >
         </receiver>
     </application>
 

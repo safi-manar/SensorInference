@@ -3,28 +3,23 @@ package us.michaelchen.compasslogger;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.provider.Settings;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.content.Context;
-import android.os.Build;
-import android.os.Bundle;
-import android.view.Gravity;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -38,14 +33,16 @@ public class MainActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
-    private PendingIntent pendingIntent;
+    private List<PendingIntent> pendingIntents;
     private AlarmManager manager;
 
-    public static final int BROADCAST_PERIOD = 10000;
+    public static final int BROADCAST_PERIOD = 60000*30; //60 seconds * 30 mins
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+        pendingIntents = new ArrayList<>();
         setContentView(R.layout.activity_main);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
@@ -57,22 +54,35 @@ public class MainActivity extends ActionBarActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
         Firebase.setAndroidContext(this);
-        startAlarm();
+        startAlarms();
     }
 
-    void startAlarm() {
-        Intent alarmIntent = new Intent(this, LocationAlarmReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
+    void startAlarms() {
         manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
         int interval = BROADCAST_PERIOD;
-        manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
-        Toast.makeText(this, "Alarm Set", Toast.LENGTH_SHORT).show();
+        Intent alarmIntent;
+        PendingIntent pendingIntent;
 
+        alarmIntent = new Intent(this, LocationAlarmReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
+        pendingIntents.add(pendingIntent);
+        manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
+
+        alarmIntent = new Intent(this, PowerAlarmReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
+        pendingIntents.add(pendingIntent);
+        manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
+
+        Toast.makeText(this, "Alarms Set", Toast.LENGTH_SHORT).show();
     }
 
-    void cancelAlarm() {
-        manager.cancel(pendingIntent);
+
+
+    void cancelAlarms() {
+        for (PendingIntent pendingIntent : pendingIntents) {
+            manager.cancel(pendingIntent);
+        }
+        pendingIntents.clear();
     }
 
     @Override
@@ -83,11 +93,9 @@ public class MainActivity extends ActionBarActivity
                 .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
                 .commit();
         switch(position) {
-            case 0:
-                startAlarm();
-                break;
             case 1:
-                cancelAlarm();
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
                 break;
         }
     }
