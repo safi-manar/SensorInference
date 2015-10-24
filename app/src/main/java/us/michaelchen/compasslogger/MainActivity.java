@@ -36,7 +36,7 @@ public class MainActivity extends ActionBarActivity
     private List<PendingIntent> pendingIntents;
     private AlarmManager manager;
 
-    public static final int BROADCAST_PERIOD = 60000*30; //60 seconds * 30 mins
+    public static final int BROADCAST_PERIOD = 60000*10; //60 seconds * 10 mins
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
