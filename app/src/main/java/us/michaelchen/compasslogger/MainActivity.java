@@ -1,13 +1,17 @@
 package us.michaelchen.compasslogger;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -35,6 +39,9 @@ public class MainActivity extends ActionBarActivity
     private CharSequence mTitle;
     private List<PendingIntent> pendingIntents;
     private AlarmManager manager;
+    private int permissionStateChecks = 0;
+    private String[] permissions = {Manifest.permission.READ_PHONE_STATE, Manifest.permission.ACCESS_FINE_LOCATION};
+
 
     public static final int BROADCAST_PERIOD = 60000*10; //60 seconds * 10 mins
 
@@ -54,8 +61,54 @@ public class MainActivity extends ActionBarActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
         Firebase.setAndroidContext(this);
+        checkPermissions();
+
+    }
+
+    void onPermissionCheckSuccess() {
         startAlarms();
     }
+
+    void checkPermissions() {
+        for (int i = 0; i < permissions.length; i++) {
+            if (ContextCompat.checkSelfPermission(this,
+                    permissions[i])
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{permissions[i]},
+                        i);
+            } else {
+                permissionStateChecks++;
+            }
+        }
+
+        if (permissionStateChecks == permissions.length) {
+            onPermissionCheckSuccess();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+
+        // If request is cancelled, the result arrays are empty.
+        if (grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+            permissionStateChecks++;
+            if (permissionStateChecks == permissions.length) {
+                onPermissionCheckSuccess();
+            }
+
+        } else {
+            // permission denied, boo! Exit
+            finish();
+            System.exit(-1);
+        }
+        return;
+    }
+
 
     void startAlarms() {
         manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
@@ -63,26 +116,12 @@ public class MainActivity extends ActionBarActivity
         Intent alarmIntent;
         PendingIntent pendingIntent;
 
-        alarmIntent = new Intent(this, LocationAlarmReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
-        pendingIntents.add(pendingIntent);
-        manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
-
-        alarmIntent = new Intent(this, PowerAlarmReceiver.class);
+        alarmIntent = new Intent(this, AlarmReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
         pendingIntents.add(pendingIntent);
         manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
 
         Toast.makeText(this, "Alarms Set", Toast.LENGTH_SHORT).show();
-    }
-
-
-
-    void cancelAlarms() {
-        for (PendingIntent pendingIntent : pendingIntents) {
-            manager.cancel(pendingIntent);
-        }
-        pendingIntents.clear();
     }
 
     @Override

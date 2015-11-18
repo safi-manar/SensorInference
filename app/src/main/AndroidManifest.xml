@@ -35,18 +35,6 @@
             android:exported="true"
             android:process=":remote" >
         </receiver>
-        <receiver
-            android:name=".LocationAlarmReceiver"
-            android:enabled="true"
-            android:exported="true"
-            android:process=":remote" >
-        </receiver>
-        <receiver
-            android:name=".PowerAlarmReceiver"
-            android:enabled="true"
-            android:exported="true"
-            android:process=":remote" >
-        </receiver>
 
         <activity
             android:name=".SettingsActivity"
@@ -58,6 +46,12 @@
             android:enabled="true"
             android:exported="true" >
         </receiver>
+
+        <service
+            android:name=".LocationRecordingService"
+            android:exported="false"
+            android:permission="android.p">
+        </service>
     </application>
 
 </manifest>
