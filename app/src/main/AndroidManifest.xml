@@ -23,12 +23,6 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".DataRecordingService"
-            android:enabled="true"
-            android:exported="true" >
-        </service>
-
         <receiver
             android:name=".AlarmReceiver"
             android:enabled="true"
@@ -41,16 +35,22 @@
             android:label="@string/title_activity_settings" >
         </activity>
 
-        <receiver
-            android:name=".ProximitySensorReceiver"
-            android:enabled="true"
-            android:exported="true" >
-        </receiver>
-
         <service
             android:name=".LocationRecordingService"
             android:exported="false"
-            android:permission="android.p">
+            android:permission="android.p" >
+        </service>
+        <service
+            android:name=".PowerRecordingService"
+            android:exported="false" >
+        </service>
+        <service
+            android:name=".LightSensorService"
+            android:exported="false" >
+        </service>
+        <service
+            android:name=".ProximitySensorService"
+            android:exported="false" >
         </service>
     </application>
 

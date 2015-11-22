@@ -15,6 +15,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import com.firebase.client.Firebase;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -41,6 +43,8 @@ public class MainActivity extends ActionBarActivity
     private AlarmManager manager;
     private int permissionStateChecks = 0;
     private String[] permissions = {Manifest.permission.READ_PHONE_STATE, Manifest.permission.ACCESS_FINE_LOCATION};
+
+    static String deviceId;
 
 
     public static final int BROADCAST_PERIOD = 60000*10; //60 seconds * 10 mins
@@ -66,7 +70,21 @@ public class MainActivity extends ActionBarActivity
     }
 
     void onPermissionCheckSuccess() {
+        setDeviceId();
         startAlarms();
+    }
+
+    void setDeviceId() {
+        final TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+
+        final String tmDevice, tmSerial, androidId;
+        tmDevice = "" + tm.getDeviceId();
+        tmSerial = "" + tm.getSimSerialNumber();
+        androidId = "" + android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+
+        UUID deviceUuid = new UUID(androidId.hashCode(), ((long)tmDevice.hashCode() << 32) | tmSerial.hashCode());
+        String deviceId = deviceUuid.toString();
+        MainActivity.deviceId = deviceId;
     }
 
     void checkPermissions() {
