@@ -23,8 +23,6 @@ import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class MainActivity extends ActionBarActivity
@@ -39,13 +37,10 @@ public class MainActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
-    private List<PendingIntent> pendingIntents;
-    private AlarmManager manager;
     private int permissionStateChecks = 0;
     private String[] permissions = {Manifest.permission.READ_PHONE_STATE, Manifest.permission.ACCESS_FINE_LOCATION};
 
     static String deviceId;
-
 
     public static final int BROADCAST_PERIOD = 60000*10; //60 seconds * 10 mins
 
@@ -53,7 +48,6 @@ public class MainActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        pendingIntents = new ArrayList<>();
         setContentView(R.layout.activity_main);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
@@ -127,18 +121,17 @@ public class MainActivity extends ActionBarActivity
         return;
     }
 
+    static void startAlarms(Context context) {
+        AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        int interval = BROADCAST_PERIOD;
+
+        Intent alarmIntent = new Intent(context, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, 0);
+        manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
+    }
 
     void startAlarms() {
-        manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        int interval = BROADCAST_PERIOD;
-        Intent alarmIntent;
-        PendingIntent pendingIntent;
-
-        alarmIntent = new Intent(this, AlarmReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
-        pendingIntents.add(pendingIntent);
-        manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
-
+        startAlarms(this);
         Toast.makeText(this, "Alarms Set", Toast.LENGTH_SHORT).show();
     }
 

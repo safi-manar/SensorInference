@@ -22,5 +22,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         i = new Intent(context, ProximitySensorService.class);
         context.startService(i);
 
+        i = new Intent(context, StepCountService.class);
+        context.startService(i);
     }
 }

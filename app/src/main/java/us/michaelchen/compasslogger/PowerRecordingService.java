@@ -4,9 +4,6 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
-import android.util.Log;
-
-import com.firebase.client.Firebase;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -29,29 +26,26 @@ public class PowerRecordingService extends RecordingService {
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
-            try {
-                super.initContext(this);
-                IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-                Intent batteryStatus = context.registerReceiver(null, ifilter);
-                int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
-                boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
-                        status == BatteryManager.BATTERY_STATUS_FULL;
-                int chargePlug = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
-                boolean usbCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_USB;
-                boolean acCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_AC;
-                Map<String, Object> map = new HashMap<>();
-                map.put(CHARGING_KEY, isCharging);
-                map.put(CHARGING_USB_KEY, usbCharge);
-                map.put(CHARGING_AC_KEY, acCharge);
-                map.put(TIME, new Date().toString());
+            super.initContext(this);
+            IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+            Intent batteryStatus = context.registerReceiver(null, ifilter);
+            int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+            boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
+                    status == BatteryManager.BATTERY_STATUS_FULL;
+            int chargePlug = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
+            boolean usbCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_USB;
+            boolean acCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_AC;
+            Map<String, Object> map = new HashMap<>();
+            map.put(CHARGING_KEY, isCharging);
+            map.put(CHARGING_USB_KEY, usbCharge);
+            map.put(CHARGING_AC_KEY, acCharge);
+            map.put(TIME, new Date().toString());
 
-                // add to firebase entry
-                Firebase dataRef = firebase.child(USER_DATA_KEY).child(deviceId);
-                Firebase ref = dataRef.child(POWER_KEY);
-                ref.push().setValue(map);
-            } catch (RuntimeException e) {
-                Log.e(TAG, TAG, e);
-            }
+            // add to firebase entry
+            updateDatabase(POWER_KEY, map);
+//            Firebase dataRef = firebase.child(USER_DATA_KEY).child(deviceId);
+//            Firebase ref = dataRef.child(POWER_KEY);
+//            ref.push().setValue(map);
         }
     }
 

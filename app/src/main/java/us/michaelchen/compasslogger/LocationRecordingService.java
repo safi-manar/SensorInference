@@ -14,8 +14,6 @@ import android.location.LocationManager;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-import com.firebase.client.Firebase;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -63,50 +61,47 @@ public class LocationRecordingService extends RecordingService {
         @Override
         public void onSensorChanged(SensorEvent event) {
             // TODO Auto-generated method stub
-            try {
-                sensorManager.unregisterListener(this);
-                float[] rMat = new float[9];
-                float[] orientation = new float[3];
-                SensorManager.getRotationMatrixFromVector(rMat, event.values);
-                // get the azimuth value (orientation[0]) in degree
-                int azimuth = (int) ( Math.toDegrees( SensorManager.getOrientation( rMat, orientation )[0] ) + 360 ) % 360;
+            sensorManager.unregisterListener(this);
+            float[] rMat = new float[9];
+            float[] orientation = new float[3];
+            SensorManager.getRotationMatrixFromVector(rMat, event.values);
+            // get the azimuth value (orientation[0]) in degree
+            int azimuth = (int) ( Math.toDegrees( SensorManager.getOrientation( rMat, orientation )[0] ) + 360 ) % 360;
 
-                Log.d(TAG, event.toString());
-                Firebase dataRef = firebase.child(USER_DATA_KEY).child(deviceId);
-                Firebase locationRef = dataRef.child(LOCATION_KEY);
+            Log.d(TAG, event.toString());
 
-                List<Float> values = new ArrayList<>(event.values.length);
-                for (int i = 0; i < event.values.length; i++) {
-                    values.add(event.values[i]);
-                }
-
-                Map<String, Object> map = new HashMap<>();
-                map.put(TIME, new Date().toString());
-                map.put(AZIMUTH_KEY, azimuth);
-                map.put(ROTATION_KEY, values);
-                String locationProvider = LocationManager.GPS_PROVIDER;
-                int permissionCheck = ContextCompat.checkSelfPermission(context,
-                        Manifest.permission.ACCESS_FINE_LOCATION);
-                if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
-                    LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-                    Location location = locationManager.getLastKnownLocation(locationProvider);
-                    HashMap<String, Double> coords = new HashMap<>();
-                    if (location == null) {
-                        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                    }
-                    if (location != null) {
-                        coords.put(LATITUDE_KEY, location.getLatitude());
-                        coords.put(LONGITUDE_KEY, location.getLongitude());
-                    }
-                    map.put(GPS_KEY, coords);
-                } else {
-                    // Get coarse location?
-                }
-
-                locationRef.push().setValue(map);
-            } catch (RuntimeException e) {
-                Log.e(TAG, TAG, e);
+            List<Float> values = new ArrayList<>(event.values.length);
+            for (int i = 0; i < event.values.length; i++) {
+                values.add(event.values[i]);
             }
+
+            Map<String, Object> map = new HashMap<>();
+            map.put(TIME, new Date().toString());
+            map.put(AZIMUTH_KEY, azimuth);
+            map.put(ROTATION_KEY, values);
+            String locationProvider = LocationManager.GPS_PROVIDER;
+            int permissionCheck = ContextCompat.checkSelfPermission(context,
+                    Manifest.permission.ACCESS_FINE_LOCATION);
+            if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+                LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+                Location location = locationManager.getLastKnownLocation(locationProvider);
+                HashMap<String, Double> coords = new HashMap<>();
+                if (location == null) {
+                    location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                }
+                if (location != null) {
+                    coords.put(LATITUDE_KEY, location.getLatitude());
+                    coords.put(LONGITUDE_KEY, location.getLongitude());
+                }
+                map.put(GPS_KEY, coords);
+            } else {
+                // Get coarse location?
+            }
+
+//                Firebase dataRef = firebase.child(USER_DATA_KEY).child(deviceId);
+//                Firebase locationRef = dataRef.child(LOCATION_KEY);
+//                locationRef.push().setValue(map);
+            updateDatabase(LOCATION_KEY, map);
         }
     };
 }
