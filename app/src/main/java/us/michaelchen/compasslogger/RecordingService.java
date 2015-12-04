@@ -25,12 +25,17 @@ public abstract class RecordingService extends IntentService {
         super("RecordingService");
     }
 
-    protected void initContext(Context context) {
+    protected synchronized void initContext(Context context) {
         this.context = context;
         deviceId = getDeviceId();
         Firebase.setAndroidContext(context);
-        firebase = new Firebase(FIREBASE_URL);
-        deviceDb = firebase.child(USER_DATA_KEY).child(deviceId);
+        try {
+            firebase = new Firebase(FIREBASE_URL);
+            deviceDb = firebase.child(USER_DATA_KEY).child(deviceId);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Error in firebase", e);
+        }
     }
 
     public String getDeviceId() {

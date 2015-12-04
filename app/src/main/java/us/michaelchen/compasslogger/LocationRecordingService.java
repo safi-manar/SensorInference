@@ -33,7 +33,7 @@ public class LocationRecordingService extends RecordingService {
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
             super.initContext(this);
-            sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+            sensorManager = (SensorManager) this.getSystemService(Context.SENSOR_SERVICE);
             List<Sensor> sensors = sensorManager.getSensorList(Sensor.TYPE_ROTATION_VECTOR);
             if(sensors.size() > 0){
                 sensorManager.registerListener(sensorEventListener, sensors.get(0), SensorManager.SENSOR_DELAY_UI);
@@ -97,10 +97,6 @@ public class LocationRecordingService extends RecordingService {
             } else {
                 // Get coarse location?
             }
-
-//                Firebase dataRef = firebase.child(USER_DATA_KEY).child(deviceId);
-//                Firebase locationRef = dataRef.child(LOCATION_KEY);
-//                locationRef.push().setValue(map);
             updateDatabase(LOCATION_KEY, map);
         }
     };
