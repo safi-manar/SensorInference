@@ -5,6 +5,54 @@
     <string name="title_section2">Settings</string>
     <string name="title_section3">Feedback</string>
 
+    <string name="ok">Agree</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="agreement_title">Consent to Participate in Research</string>
+    <string name="agreement_message">
+        The purpose of this study is to examine whether we can accurately predict certain types of
+        demographic information and the daily routines of smartphone users using innocuous sensor
+        data, such as from the accelerometer and compass.\n\n
+
+        If you agree to be in this study, this app will ask you several questions about your
+        demographics and daily routines. This app will then run in the background for one week.
+        During this time, the app will periodically take snapshots of your smartphone\'s sensor data,
+        to see whether any of it correlates with your survey responses. After one week, the app will
+        uninstall itself and you will be granted the bonus payment. This app will run silently,
+        will not collect any information that personally identifies you, and will not impact your
+        phone\'s performance or battery life.
+
+        Participation in this study will involve a total of 5 minutes to fill out the form, and then
+        leaving the app running in the background for one week.\n\n
+
+        This research will not benefit you directly, however it will indirectly benefit you and other
+        smartphone users by helping system designers better understand what types of inferences
+        could be made from sensor data.\n\n
+
+        Some of the research questions may make you uncomfortable or upset. You are free to decline
+        to stop the study at any time. You may also uninstall the app at any time to stop the study.
+        All study data will be collected anonymously; at no point will we collect study data that
+        identifies you personally.\n\n
+
+        Your study data will be handled as confidentially as possible. If results of this study are
+        published or presented, individual names and other personally identifiable information will
+        not be used unless you give explicit permission for this below.\n\n
+
+        The research data will be maintained for possible use in future research by myself or others.
+        The same measures described above will be taken to protect confidentiality of this study data.\n\n
+
+        Participants will be given $0.25 upon installing the app. Upon completing the study after one
+        week, participants will be granted a $2.00 bonus.\n\n
+
+        You have the right to decline to participate or to withdraw at any point in this study without
+        penalty or loss of benefits to which you are otherwise entitled.\n\n
+
+        If you have any questions or concerns about your rights and treatment as a research subject,
+        you may contact the office of UC Berkeley\'s Committee for the Protection of Human
+        Subjects, at 510-642-7461 or subjects@berkeley.edu.
+
+    </string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
@@ -70,4 +118,5 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+    <string name="title_activity_form">FormActivity</string>
 </resources>

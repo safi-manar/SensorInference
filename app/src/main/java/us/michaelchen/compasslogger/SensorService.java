@@ -22,9 +22,10 @@ public abstract class SensorService extends RecordingService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        super.onHandleIntent(intent);
         if (intent != null) {
             super.initContext(this);
-            sensorManager = (SensorManager) this.getSystemService(Context.SENSOR_SERVICE);
+            sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
             Sensor sensor = sensorManager.getDefaultSensor(getSensorType());
             sensorManager.registerListener(sensorEventListener, sensor, SensorManager.SENSOR_DELAY_UI);
         }

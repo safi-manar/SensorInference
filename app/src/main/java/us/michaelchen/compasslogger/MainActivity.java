@@ -3,16 +3,18 @@ package us.michaelchen.compasslogger;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.telephony.TelephonyManager;
@@ -40,9 +42,12 @@ public class MainActivity extends ActionBarActivity
     private int permissionStateChecks = 0;
     private String[] permissions = {Manifest.permission.READ_PHONE_STATE, Manifest.permission.ACCESS_FINE_LOCATION};
 
-    static String deviceId;
-
     public static final int BROADCAST_PERIOD = 60000*10; //60 seconds * 10 mins
+    final String PREFS_NAME = "CompassLoggerPrefs";
+    final String PREFS_AGREED = "user_agreed";
+    final String PREFS_FORM_COMPLETE = "user_finished_form";
+
+    static final String INTENT_DEVICE_ID = "device_id";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,25 +55,69 @@ public class MainActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+//        mNavigationDrawerFragment = (NavigationDrawerFragment)
+//                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
         // Set up the drawer.
-        mNavigationDrawerFragment.setUp(
-                R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
+//        mNavigationDrawerFragment.setUp(
+//                R.id.navigation_drawer,
+//                (DrawerLayout) findViewById(R.id.drawer_layout));
         Firebase.setAndroidContext(this);
-        checkPermissions();
 
+        if (checkFirstLaunch()) {
+            checkPermissions();
+        } else {
+            AlertDialog dialog = agreementDialog();
+            dialog.show();
+        }
+
+    }
+
+    boolean checkFirstLaunch() {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, 0);
+        return prefs.getBoolean(PREFS_AGREED, false);
+    }
+
+    boolean checkFormComplete() {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, 0);
+        return prefs.getBoolean(PREFS_FORM_COMPLETE, false);
+    }
+
+    private AlertDialog agreementDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                SharedPreferences prefs = getSharedPreferences(PREFS_NAME, 0);
+//                prefs.edit().putBoolean(PREFS_AGREED, true).commit();
+                checkPermissions();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User cancelled the dialog
+                MainActivity.this.finish();
+                System.exit(0);
+            }
+        });
+
+        builder.setMessage(R.string.agreement_message)
+                .setTitle(R.string.agreement_title);
+
+        AlertDialog dialog = builder.create();
+        return dialog;
     }
 
     void onPermissionCheckSuccess() {
-        setDeviceId();
         startAlarms();
+        if (!checkFormComplete()) {
+            Intent intent = new Intent(this, FormActivity.class);
+            intent.putExtra(INTENT_DEVICE_ID, getDeviceId());
+            startActivity(intent);
+        }
     }
 
-    void setDeviceId() {
+    String getDeviceId() {
         final TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 
         final String tmDevice, tmSerial, androidId;
@@ -78,7 +127,7 @@ public class MainActivity extends ActionBarActivity
 
         UUID deviceUuid = new UUID(androidId.hashCode(), ((long)tmDevice.hashCode() << 32) | tmSerial.hashCode());
         String deviceId = deviceUuid.toString();
-        MainActivity.deviceId = deviceId;
+        return deviceId;
     }
 
     void checkPermissions() {
