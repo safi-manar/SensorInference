@@ -177,6 +177,9 @@ public class MainActivity extends ActionBarActivity
         Intent alarmIntent = new Intent(context, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, 0);
         manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
+
+        Intent i = new Intent(context, ScreenPowerService.class);
+        context.startService(i);
     }
 
     void startAlarms() {

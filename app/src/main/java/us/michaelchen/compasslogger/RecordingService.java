@@ -35,8 +35,6 @@ public abstract class RecordingService extends IntentService {
 
     protected synchronized void initContext(Context context) {
         this.context = context;
-//        deviceId = getDeviceId();
-//        Firebase.setAndroidContext(context);
         try {
 
         } catch (RuntimeException e) {

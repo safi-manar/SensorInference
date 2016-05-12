@@ -5,12 +5,18 @@
       <GradleProjectSettings>
         <option name="distributionType" value="LOCAL" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleHome" value="$APPLICATION_HOME_DIR$/gradle/gradle-2.8" />
+        <option name="gradleHome" value="$APPLICATION_HOME_DIR$/gradle/gradle-2.10" />
         <option name="gradleJvm" value="1.8" />
         <option name="modules">
           <set>
-            <option value="$USER_HOME$/Dropbox/Documents/Academic/Permissions/CompassLogger" />
-            <option value="$USER_HOME$/Dropbox/Documents/Academic/Permissions/CompassLogger/app" />
+            <option value="$PROJECT_DIR$/../../../Dropbox/Documents/Academic/Permissions/CompassLogger" />
+            <option value="$PROJECT_DIR$/../../../Dropbox/Documents/Academic/Permissions/CompassLogger/app" />
+          </set>
+        </option>
+        <option name="myModules">
+          <set>
+            <option value="$PROJECT_DIR$/../../../Dropbox/Documents/Academic/Permissions/CompassLogger" />
+            <option value="$PROJECT_DIR$/../../../Dropbox/Documents/Academic/Permissions/CompassLogger/app" />
           </set>
         </option>
       </GradleProjectSettings>
