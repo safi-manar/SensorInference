@@ -6,8 +6,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import us.michaelchen.compasslogger.sensor.RecordingService;
-
 public class ScreenPowerService extends RecordingService {
     public static final String SCREEN_STATE = "screen_state";
     public static final String SCREEN_ON = "screen_on";

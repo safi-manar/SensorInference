@@ -85,6 +85,15 @@
         <service
             android:name=".BackgroundService"
             android:enabled="true"
+            android:exported="false" />
+
+        <receiver
+            android:name=".GenericReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
+        <service
+            android:name=".sensor.GenericReceiverService"
             android:exported="false"></service>
     </application>
 
