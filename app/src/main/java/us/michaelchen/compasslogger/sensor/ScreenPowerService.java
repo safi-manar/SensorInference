@@ -1,10 +1,12 @@
-package us.michaelchen.compasslogger;
+package us.michaelchen.compasslogger.sensor;
 
 import android.content.Intent;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import us.michaelchen.compasslogger.sensor.RecordingService;
 
 public class ScreenPowerService extends RecordingService {
     public static final String SCREEN_STATE = "screen_state";

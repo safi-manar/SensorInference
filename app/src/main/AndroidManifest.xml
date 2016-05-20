@@ -36,17 +36,17 @@
             android:label="@string/title_activity_settings" />
 
         <service
-            android:name=".LocationRecordingService"
+            android:name=".sensor.LocationRecordingService"
             android:exported="false"
             android:permission="android.p" />
         <service
-            android:name=".PowerRecordingService"
+            android:name=".sensor.PowerRecordingService"
             android:exported="false" />
         <service
-            android:name=".LightSensorService"
+            android:name=".sensor.LightSensorService"
             android:exported="false" />
         <service
-            android:name=".ProximitySensorService"
+            android:name=".sensor.ProximitySensorService"
             android:exported="false" />
 
         <receiver
@@ -59,7 +59,7 @@
         </receiver>
 
         <service
-            android:name=".StepCountService"
+            android:name=".sensor.StepCountService"
             android:exported="false" />
 
         <activity
@@ -68,7 +68,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <service
-            android:name=".ScreenPowerService"
+            android:name=".sensor.ScreenPowerService"
             android:enabled="true"
             android:exported="false" />
 
@@ -77,10 +77,15 @@
             android:enabled="true"
             android:exported="false">
             <intent-filter>
-                <action android:name="android.intent.action.SCREEN_OFF"></action>
-                <action android:name="android.intent.action.SCREEN_ON"></action>
+                <action android:name="android.intent.action.SCREEN_OFF" />
+                <action android:name="android.intent.action.SCREEN_ON" />
             </intent-filter>
         </receiver>
+
+        <service
+            android:name=".BackgroundService"
+            android:enabled="true"
+            android:exported="false"></service>
     </application>
 
 </manifest>

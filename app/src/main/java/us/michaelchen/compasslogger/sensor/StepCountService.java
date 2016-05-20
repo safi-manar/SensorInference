@@ -1,4 +1,4 @@
-package us.michaelchen.compasslogger;
+package us.michaelchen.compasslogger.sensor;
 
 import android.hardware.Sensor;
 

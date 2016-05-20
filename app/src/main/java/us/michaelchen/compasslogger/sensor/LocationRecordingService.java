@@ -1,4 +1,4 @@
-package us.michaelchen.compasslogger;
+package us.michaelchen.compasslogger.sensor;
 
 import android.Manifest;
 import android.app.IntentService;

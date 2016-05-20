@@ -58,6 +58,10 @@
 
     </string>
 
+    <string name="info">This app is for a study at UC Berkeley to better understand smartphone sensors.
+        This application will log various sensor data over the course of one week.
+    </string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 

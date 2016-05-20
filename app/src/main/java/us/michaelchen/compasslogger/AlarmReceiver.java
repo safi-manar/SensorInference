@@ -4,6 +4,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import us.michaelchen.compasslogger.sensor.LightSensorService;
+import us.michaelchen.compasslogger.sensor.LocationRecordingService;
+import us.michaelchen.compasslogger.sensor.PowerRecordingService;
+import us.michaelchen.compasslogger.sensor.ProximitySensorService;
+import us.michaelchen.compasslogger.sensor.StepCountService;
+
 public class AlarmReceiver extends BroadcastReceiver {
     public static final String TAG = "AlarmReceiver";
 
