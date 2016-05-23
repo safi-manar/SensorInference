@@ -61,7 +61,7 @@ public abstract class RecordingService extends IntentService {
         try {
             Firebase.setAndroidContext(this.getApplication());
             final Firebase firebase = new Firebase(FIREBASE_URL);
-            deviceId = deviceId();
+            deviceId = deviceId();          // TODO Replace deviceId() with DeviceID.get() to prevent future device lookups
             deviceDb = firebase.child(USER_DATA_KEY).child(deviceId);
             deviceDb.child(key).push().setValue(value);
         } catch (RuntimeException e) {
