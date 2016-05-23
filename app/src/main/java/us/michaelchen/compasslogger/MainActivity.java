@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
         startAlarms();
         if (!checkFormComplete()) {
             Intent intent = new Intent(this, FormActivity.class);
-            intent.putExtra(INTENT_DEVICE_ID, getDeviceId());       // TODO Replace getDeviceId() with DeviceID.get() to prevent future device lookups
+            intent.putExtra(INTENT_DEVICE_ID, getDeviceId());       // TODO Replace getDeviceId() with DeviceID.get(this) to prevent future device lookups
             startActivity(intent);
         }
     }
