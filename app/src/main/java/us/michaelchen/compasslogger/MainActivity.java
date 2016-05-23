@@ -1,7 +1,6 @@
 package us.michaelchen.compasslogger;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -12,21 +11,13 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
-import android.telephony.TelephonyManager;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 
-import java.util.UUID;
+import us.michaelchen.compasslogger.utils.DeviceID;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -104,22 +95,9 @@ public class MainActivity extends AppCompatActivity {
         startAlarms();
         if (!checkFormComplete()) {
             Intent intent = new Intent(this, FormActivity.class);
-            intent.putExtra(INTENT_DEVICE_ID, getDeviceId());       // TODO Replace getDeviceId() with DeviceID.get(this) to prevent future device lookups
+            intent.putExtra(INTENT_DEVICE_ID, DeviceID.getLegacy(this));       // TODO Replace getLegacy() with get() to prevent future device lookups
             startActivity(intent);
         }
-    }
-
-    String getDeviceId() {
-        final TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-
-        final String tmDevice, tmSerial, androidId;
-        tmDevice = "" + tm.getDeviceId();
-        tmSerial = "" + tm.getSimSerialNumber();
-        androidId = "" + android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
-
-        UUID deviceUuid = new UUID(androidId.hashCode(), ((long)tmDevice.hashCode() << 32) | tmSerial.hashCode());
-        String deviceId = deviceUuid.toString();
-        return deviceId;
     }
 
     void checkPermissions() {

@@ -21,7 +21,6 @@ public abstract class SensorService extends RecordingService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        super.onHandleIntent(intent);
         if (intent != null) {
             super.initContext(this);
             sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -34,12 +33,10 @@ public abstract class SensorService extends RecordingService {
 
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
-            // TODO Auto-generated method stub
         }
 
         @Override
         public void onSensorChanged(SensorEvent event) {
-            // TODO Auto-generated method stub
             sensorManager.unregisterListener(this);
             float value = event.values[0];
             Log.d(TAG, event.toString());

@@ -1,6 +1,7 @@
 package us.michaelchen.compasslogger.utils;
 
 import android.content.Context;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -21,6 +22,12 @@ public class DeviceID {
     private static final String UUID_FILE_NAME = "UUID.txt";
     private static String id = null;
 
+    /**
+     *
+     * @param c Android context
+     * @return A random UUID. If this is the first time this installation has been run, then generate
+     * a new UUID and save it for future use.
+     */
     public static String get(Context c) {
         // Check if there's already an ID
         if(id == null) {
@@ -35,6 +42,25 @@ public class DeviceID {
         }
 
         return id;
+    }
+
+    /**
+     *
+     * @param c Android context
+     * @return A UUID generated from hashes of the device, Android, and SIM IDs. This always produces
+     * the same UUID for a given device, which would allow that device to be re-identified in the future.
+     */
+    public static String getLegacy(Context c) {
+        final TelephonyManager tm = (TelephonyManager) c.getSystemService(Context.TELEPHONY_SERVICE);
+
+        final String tmDevice, tmSerial, androidId;
+        tmDevice = "" + tm.getDeviceId();
+        tmSerial = "" + tm.getSimSerialNumber();
+        androidId = "" + android.provider.Settings.Secure.getString(c.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+
+        UUID deviceUuid = new UUID(androidId.hashCode(), ((long)tmDevice.hashCode() << 32) | tmSerial.hashCode());
+        String deviceId = deviceUuid.toString();
+        return deviceId;
     }
 
     /**

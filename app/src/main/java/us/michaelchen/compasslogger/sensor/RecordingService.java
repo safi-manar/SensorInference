@@ -2,14 +2,13 @@ package us.michaelchen.compasslogger.sensor;
 
 import android.app.IntentService;
 import android.content.Context;
-import android.content.Intent;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.firebase.client.Firebase;
 
 import java.util.Map;
-import java.util.UUID;
+
+import us.michaelchen.compasslogger.utils.DeviceID;
 
 public abstract class RecordingService extends IntentService {
 
@@ -28,11 +27,6 @@ public abstract class RecordingService extends IntentService {
 
     }
 
-    @Override
-    protected void onHandleIntent(Intent intent) {
-
-    }
-
     protected synchronized void initContext(Context context) {
         this.context = context;
         try {
@@ -44,24 +38,11 @@ public abstract class RecordingService extends IntentService {
         }
     }
 
-    private String deviceId() {
-        final TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-
-        final String tmDevice, tmSerial, androidId;
-        tmDevice = "" + tm.getDeviceId();
-        tmSerial = "" + tm.getSimSerialNumber();
-        androidId = "" + android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
-
-        UUID deviceUuid = new UUID(androidId.hashCode(), ((long)tmDevice.hashCode() << 32) | tmSerial.hashCode());
-        String deviceId = deviceUuid.toString();
-        return deviceId;
-    }
-
     void updateDatabase(String key, Map<String, Object> value) {
         try {
             Firebase.setAndroidContext(this.getApplication());
             final Firebase firebase = new Firebase(FIREBASE_URL);
-            deviceId = deviceId();          // TODO Replace deviceId() with DeviceID.get(this) to prevent future device lookups
+            deviceId = DeviceID.getLegacy(this);          // TODO Replace getLegacy() with get() to prevent future device lookups
             deviceDb = firebase.child(USER_DATA_KEY).child(deviceId);
             deviceDb.child(key).push().setValue(value);
         } catch (RuntimeException e) {
