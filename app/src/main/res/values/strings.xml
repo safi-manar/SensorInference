@@ -128,4 +128,7 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="title_activity_form">FormActivity</string>
+
+    <!-- Firebase settings -->
+    <string name="firebase_url">https://luminous-torch-7892.firebaseio.com/</string>
 </resources>
