@@ -20,9 +20,11 @@ public abstract class AbstractRecordingService extends IntentService {
     private static String deviceId = null;
     private static Firebase deviceDb = null;
 
+    protected String tag = null;
 
     protected AbstractRecordingService(String subclassName) {
         super(subclassName);
+        tag = subclassName;
 
         init();
     }
@@ -49,7 +51,7 @@ public abstract class AbstractRecordingService extends IntentService {
      * @param value
      */
     protected final void updateDatabase(Map<String, Object> value) {
-        // Add time data if it's not present:w
+        // Add time data if it's not present
         if(!value.containsKey(TIME_KEY)) {
             value.put(TIME_KEY, new Date().toString());
         }

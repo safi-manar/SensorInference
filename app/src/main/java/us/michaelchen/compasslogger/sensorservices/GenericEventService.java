@@ -8,11 +8,11 @@ import java.util.Map;
 /**
  * Created by ioreyes on 5/24/16.
  */
-public class GenericReceiverService extends AbstractRecordingService {
+public class GenericEventService extends AbstractRecordingService {
     public static final String EVENT_KEY = "event";
 
-    public GenericReceiverService() {
-        super("GenericReceiverService");
+    public GenericEventService() {
+        super("GenericEventService");
     }
 
     @Override

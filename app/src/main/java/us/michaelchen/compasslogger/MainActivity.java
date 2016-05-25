@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         startAlarms();
         if (!checkFormComplete()) {
             Intent intent = new Intent(this, FormActivity.class);
-            intent.putExtra(INTENT_DEVICE_ID, DeviceID.getLegacy(this));       // TODO Replace getLegacy() with get() to prevent future device lookups
+            intent.putExtra(INTENT_DEVICE_ID, DeviceID.get(this));
             startActivity(intent);
         }
     }

@@ -46,25 +46,6 @@ public class DeviceID {
 
     /**
      *
-     * @param c Android context
-     * @return A UUID generated from hashes of the device, Android, and SIM IDs. This always produces
-     * the same UUID for a given device, which would allow that device to be re-identified in the future.
-     */
-    public static String getLegacy(Context c) {
-        final TelephonyManager tm = (TelephonyManager) c.getSystemService(Context.TELEPHONY_SERVICE);
-
-        final String tmDevice, tmSerial, androidId;
-        tmDevice = "" + tm.getDeviceId();
-        tmSerial = "" + tm.getSimSerialNumber();
-        androidId = "" + android.provider.Settings.Secure.getString(c.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
-
-        UUID deviceUuid = new UUID(androidId.hashCode(), ((long)tmDevice.hashCode() << 32) | tmSerial.hashCode());
-        String deviceId = deviceUuid.toString();
-        return deviceId;
-    }
-
-    /**
-     *
      * @return A randomly generated UUID
      */
     private static String generateID() {

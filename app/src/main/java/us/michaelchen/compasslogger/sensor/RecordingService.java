@@ -8,6 +8,7 @@ import com.firebase.client.Firebase;
 
 import java.util.Map;
 
+import us.michaelchen.compasslogger.R;
 import us.michaelchen.compasslogger.utils.DeviceID;
 
 public abstract class RecordingService extends IntentService {
@@ -20,11 +21,14 @@ public abstract class RecordingService extends IntentService {
     public static final String USER_DATA_KEY = "userData";
     public static final String TAG = "RecordingService";
 
-    private static final String FIREBASE_URL = "https://luminous-torch-7892.firebaseio.com/";
+    private static String firebaseUrl = null;
 
     public RecordingService() {
         super("RecordingService");
 
+        if(firebaseUrl == null) {
+            firebaseUrl = getResources().getString(R.string.firebase_url);
+        }
     }
 
     protected synchronized void initContext(Context context) {
@@ -41,8 +45,8 @@ public abstract class RecordingService extends IntentService {
     void updateDatabase(String key, Map<String, Object> value) {
         try {
             Firebase.setAndroidContext(this.getApplication());
-            final Firebase firebase = new Firebase(FIREBASE_URL);
-            deviceId = DeviceID.getLegacy(this);          // TODO Replace getLegacy() with get() to prevent future device lookups
+            final Firebase firebase = new Firebase(firebaseUrl);
+            deviceId = DeviceID.get(this);
             deviceDb = firebase.child(USER_DATA_KEY).child(deviceId);
             deviceDb.child(key).push().setValue(value);
         } catch (RuntimeException e) {
