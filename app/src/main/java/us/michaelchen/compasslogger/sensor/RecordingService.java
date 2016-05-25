@@ -25,10 +25,6 @@ public abstract class RecordingService extends IntentService {
 
     public RecordingService() {
         super("RecordingService");
-
-        if(firebaseUrl == null) {
-            firebaseUrl = getResources().getString(R.string.firebase_url);
-        }
     }
 
     protected synchronized void initContext(Context context) {
@@ -43,6 +39,10 @@ public abstract class RecordingService extends IntentService {
     }
 
     void updateDatabase(String key, Map<String, Object> value) {
+        if(firebaseUrl == null) {
+            firebaseUrl = getResources().getString(R.string.firebase_url);
+        }
+
         try {
             Firebase.setAndroidContext(this.getApplication());
             final Firebase firebase = new Firebase(firebaseUrl);
