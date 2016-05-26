@@ -27,8 +27,10 @@ public abstract class AbstractSensorService extends AbstractRecordingService {
             sensorManager.unregisterListener(this);
             Log.d(tag, event.toString());
 
-            Map<String, Object> data = processSensorData(event);
-            updateDatabase(data);
+            if(event.sensor.getType() == getSensorType()) {
+                Map<String, Object> data = processSensorData(event);
+                updateDatabase(data);
+            }
         }
     };
 
