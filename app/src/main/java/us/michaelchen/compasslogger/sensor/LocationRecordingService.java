@@ -55,12 +55,11 @@ public class LocationRecordingService extends RecordingService {
 
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
-            // TODO Auto-generated method stub
+
         }
 
         @Override
         public void onSensorChanged(SensorEvent event) {
-            // TODO Auto-generated method stub
             sensorManager.unregisterListener(this);
             float[] rMat = new float[9];
             float[] orientation = new float[3];

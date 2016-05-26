@@ -131,5 +131,6 @@
 
     <!-- Firebase settings -->
     <!--<string name="firebase_url">https://luminous-torch-7892.firebaseio.com/</string>-->
-    <string name="firebase_url">https://project-1474116891192680019.firebaseio.com/</string>
+    <string name="firebase_url">https://sensorinference-xgymkq5nno.firebaseio.com/</string>
+    <string name="gdocs_url">https://docs.google.com/forms/d/1l7AnMbpM-NVXBObjUg4lrcSIt1VDXsfpXBcbMRKWRSI/viewform?entry.1894950560=</string>
 </resources>
