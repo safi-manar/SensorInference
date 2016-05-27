@@ -26,7 +26,7 @@ public class PowerRecordingService extends AbstractRecordingService {
     }
 
     @Override
-    protected void onHandleIntent(Intent intent) {
+    protected Map<String, Object> readData(Intent intent) {
         // Request battery status information
         Intent batteryStatus = registerReceiver(null, BATTERY_FILTER);
         int statusCode = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
@@ -34,7 +34,7 @@ public class PowerRecordingService extends AbstractRecordingService {
 
         // Figure out the charging state
         boolean isCharging = statusCode == BatteryManager.BATTERY_STATUS_CHARGING ||
-                             statusCode == BatteryManager.BATTERY_STATUS_FULL;
+                statusCode == BatteryManager.BATTERY_STATUS_FULL;
         boolean onUSB = chargePlug == BatteryManager.BATTERY_PLUGGED_USB;
         boolean onAC = chargePlug == BatteryManager.BATTERY_PLUGGED_AC;
 
@@ -44,6 +44,6 @@ public class PowerRecordingService extends AbstractRecordingService {
         vals.put(CHARGING_USB_KEY, onUSB);
         vals.put(CHARGING_AC_KEY, onAC);
 
-        updateDatabase(vals);
+        return vals;
     }
 }

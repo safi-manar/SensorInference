@@ -47,10 +47,10 @@ public class RotationSensorRecordingService extends AbstractSensorRecordingServi
         }
 
         // Package up the data
-        Map<String, Object> vals = new HashMap<>();
-        vals.put(AZIMUTH_KEY, azimuth);
-        vals.put(ROTATION_KEY, rotations);
+        Map<String, Object> data = new HashMap<>();
+        data.put(AZIMUTH_KEY, azimuth);
+        data.put(ROTATION_KEY, rotations);
 
-        return vals;
+        return data;
     }
 }

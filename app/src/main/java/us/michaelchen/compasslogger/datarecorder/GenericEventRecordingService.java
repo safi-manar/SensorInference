@@ -16,19 +16,19 @@ public class GenericEventRecordingService extends AbstractRecordingService {
     }
 
     @Override
-    protected void onHandleIntent(Intent intent) {
-        if(intent.hasExtra(EVENT_KEY)) {
-            String event = intent.getStringExtra(EVENT_KEY);
-
-            Map<String, Object> map = new HashMap<>();
-            map.put(EVENT_KEY, event);
-
-            updateDatabase(map);
-        }
+    protected String broadcastKey() {
+        return "broadcast events";
     }
 
     @Override
-    protected String broadcastKey() {
-        return "broadcast events";
+    protected Map<String, Object> readData(Intent intent) {
+        Map<String, Object> data = new HashMap<>();
+
+        if (intent.hasExtra(EVENT_KEY)) {
+            String event = intent.getStringExtra(EVENT_KEY);
+            data.put(EVENT_KEY, event);
+        }
+
+        return data;
     }
 }

@@ -1,6 +1,7 @@
 package us.michaelchen.compasslogger.datarecorder;
 
 import android.app.IntentService;
+import android.content.Intent;
 
 import com.firebase.client.Firebase;
 
@@ -26,13 +27,6 @@ public abstract class AbstractRecordingService extends IntentService {
         super(subclassName);
         tag = subclassName;
 
-        init();
-    }
-
-    /**
-     * Initialize the device ID and database connection
-     */
-    private void init() {
         // Get the installation-persistent random device ID
         if(deviceId == null) {
             deviceId = DeviceID.get(this);
@@ -46,11 +40,16 @@ public abstract class AbstractRecordingService extends IntentService {
         }
     }
 
+    @Override
+    protected final void onHandleIntent(Intent intent) {
+        updateDatabase(readData(intent));
+    }
+
     /**
      * Push the key-value pair to the database
      * @param value
      */
-    protected final void updateDatabase(Map<String, Object> value) {
+    private void updateDatabase(Map<String, Object> value) {
         // Add time data if it's not present
         if(!value.containsKey(TIME_KEY)) {
             value.put(TIME_KEY, new Date().toString());
@@ -61,8 +60,15 @@ public abstract class AbstractRecordingService extends IntentService {
     }
 
     /**
-     * Defines the unique identifying broadcast key for a given sensor service
+     * Defines the unique identifying broadcast key for a given data soure
      * @return The unique identifying key
      */
     protected abstract String broadcastKey();
+
+    /**
+     * Reads the system data requested by the intent
+     * @param intent
+     * @return A map of labeled readouts from the data source
+     */
+    protected abstract Map<String, Object> readData(Intent intent);
 }
