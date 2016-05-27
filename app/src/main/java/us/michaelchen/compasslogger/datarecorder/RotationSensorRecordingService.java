@@ -1,4 +1,4 @@
-package us.michaelchen.compasslogger.sensorservices;
+package us.michaelchen.compasslogger.datarecorder;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -12,12 +12,12 @@ import java.util.Map;
 /**
  * Created by ioreyes on 5/26/16.
  */
-public class RotationSensorService extends AbstractSensorService {
+public class RotationSensorRecordingService extends AbstractSensorRecordingService {
     private static final String AZIMUTH_KEY = "azimuth";
     private static final String ROTATION_KEY = "rotations";
 
-    public RotationSensorService() {
-        super("RotationSensorService");
+    public RotationSensorRecordingService() {
+        super("RotationSensorRecordingService");
     }
 
     @Override

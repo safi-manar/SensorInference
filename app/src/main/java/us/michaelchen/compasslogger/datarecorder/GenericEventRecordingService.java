@@ -1,4 +1,4 @@
-package us.michaelchen.compasslogger.sensorservices;
+package us.michaelchen.compasslogger.datarecorder;
 
 import android.content.Intent;
 
@@ -8,11 +8,11 @@ import java.util.Map;
 /**
  * Created by ioreyes on 5/24/16.
  */
-public class GenericEventService extends AbstractRecordingService {
-    public static final String EVENT_KEY = "event";
+public class GenericEventRecordingService extends AbstractRecordingService {
+    private static final String EVENT_KEY = "event";
 
-    public GenericEventService() {
-        super("GenericEventService");
+    public GenericEventRecordingService() {
+        super("GenericEventRecordingService");
     }
 
     @Override

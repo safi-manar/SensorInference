@@ -1,4 +1,4 @@
-package us.michaelchen.compasslogger.sensorservices;
+package us.michaelchen.compasslogger.datarecorder;
 
 import android.content.Intent;
 import android.hardware.Sensor;
@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * Created by ioreyes on 5/25/16.
  */
-public abstract class AbstractSensorService extends AbstractRecordingService {
+public abstract class AbstractSensorRecordingService extends AbstractRecordingService {
     private SensorManager sensorManager = null;
 
     private final SensorEventListener SENSOR_LISTENER = new SensorEventListener() {
@@ -34,7 +34,7 @@ public abstract class AbstractSensorService extends AbstractRecordingService {
         }
     };
 
-    protected AbstractSensorService(String subclassName) {
+    protected AbstractSensorRecordingService(String subclassName) {
         super(subclassName);
     }
 

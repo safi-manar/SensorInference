@@ -1,13 +1,13 @@
-package us.michaelchen.compasslogger.sensorservices;
+package us.michaelchen.compasslogger.datarecorder;
 
 import android.hardware.Sensor;
 
 /**
  * Created by ioreyes on 5/25/16.
  */
-public class LightSensorService extends AbstractSensorService {
-    public LightSensorService() {
-        super("LightSensorService");
+public class LightSensorRecordingService extends AbstractSensorRecordingService {
+    public LightSensorRecordingService() {
+        super("LightSensorRecordingService");
     }
 
     @Override

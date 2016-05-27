@@ -1,13 +1,13 @@
-package us.michaelchen.compasslogger.sensorservices;
+package us.michaelchen.compasslogger.datarecorder;
 
 import android.hardware.Sensor;
 
 /**
  * Created by ioreyes on 5/25/16.
  */
-public class ProximitySensorService extends AbstractSensorService {
-    public ProximitySensorService() {
-        super("ProximitySensorService");
+public class ProximitySensorRecordingService extends AbstractSensorRecordingService {
+    public ProximitySensorRecordingService() {
+        super("ProximitySensorRecordingService");
     }
 
     @Override
