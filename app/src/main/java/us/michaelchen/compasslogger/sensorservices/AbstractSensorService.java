@@ -16,7 +16,7 @@ import java.util.Map;
 public abstract class AbstractSensorService extends AbstractRecordingService {
     private SensorManager sensorManager = null;
 
-    private final SensorEventListener sensorEventListener = new SensorEventListener() {
+    private final SensorEventListener SENSOR_LISTENER = new SensorEventListener() {
 
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -49,7 +49,7 @@ public abstract class AbstractSensorService extends AbstractRecordingService {
         if(intent != null) {
             sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
             Sensor sensor = sensorManager.getDefaultSensor(getSensorType());
-            sensorManager.registerListener(sensorEventListener, sensor, SensorManager.SENSOR_DELAY_UI);
+            sensorManager.registerListener(SENSOR_LISTENER, sensor, SensorManager.SENSOR_DELAY_UI);
         }
     }
 

@@ -5,9 +5,9 @@ import android.hardware.Sensor;
 /**
  * Created by ioreyes on 5/25/16.
  */
-public class StepCountService extends AbstractSensorService {
-    public StepCountService() {
-        super("StepCountService");
+public class StepSensorService extends AbstractSensorService {
+    public StepSensorService() {
+        super("StepSensorService");
     }
 
     @Override
