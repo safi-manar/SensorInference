@@ -9,8 +9,7 @@ import java.util.Map;
  * Created by ioreyes on 5/31/16.
  */
 public class ScreenRecordingService extends AbstractRecordingService {
-    private static final String SCREEN_ON = "screenOn";
-    private static final String SCREEN_OFF = "screenOff";
+    private static final String SCREEN_STATE = "screenState";
 
     public ScreenRecordingService() {
         super("ScreenRecordingService");
@@ -27,8 +26,12 @@ public class ScreenRecordingService extends AbstractRecordingService {
 
         boolean screenOn = intent.getAction().equals(Intent.ACTION_SCREEN_ON);
         boolean screenOff = intent.getAction().equals(Intent.ACTION_SCREEN_OFF);
-        data.put(SCREEN_ON, screenOn);
-        data.put(SCREEN_OFF, screenOff);
+
+        if(screenOn && !screenOff) {
+            data.put(SCREEN_STATE, "on");
+        } else if(!screenOn && screenOff) {
+            data.put(SCREEN_STATE, "off");
+        }
 
         return data;
     }

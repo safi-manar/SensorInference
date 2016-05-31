@@ -5,14 +5,20 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
 
-public class BackgroundService extends Service {
-    public BackgroundService() {
-    }
+import us.michaelchen.compasslogger.receiver.GenericIntentReceiver;
+import us.michaelchen.compasslogger.receiver.PowerIntentReceiver;
+import us.michaelchen.compasslogger.receiver.ScreenIntentReceiver;
 
-    ScreenReceiver screenReceiver = null;
-    GenericReceiver genericReceiver = null;
-    private final String[] receiveIntents = {Intent.ACTION_SCREEN_OFF, Intent.ACTION_APPLICATION_RESTRICTIONS_CHANGED,
-        Intent.ACTION_APP_ERROR, Intent.ACTION_APP_ERROR, Intent.ACTION_BATTERY_LOW,
+/**
+ * Records asynchronous events, as listed in the intents below
+ */
+public class EventMonitoringService extends Service {
+    private static final String[] GENERIC_INTENTS = {
+            Intent.ACTION_SCREEN_OFF,
+            Intent.ACTION_APPLICATION_RESTRICTIONS_CHANGED,
+            Intent.ACTION_APP_ERROR,
+            Intent.ACTION_APP_ERROR,
+            Intent.ACTION_BATTERY_LOW,
             Intent.ACTION_BOOT_COMPLETED,
             Intent.ACTION_CAMERA_BUTTON,
             Intent.ACTION_CLOSE_SYSTEM_DIALOGS,
@@ -31,24 +37,30 @@ public class BackgroundService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+
         registerScreenFilter();
+        registerPowerFilter();
         registerGenericFilter();
     }
 
     private void registerScreenFilter() {
-        IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_SCREEN_ON);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
-        screenReceiver = new ScreenReceiver();
-        registerReceiver(screenReceiver, filter);
+        registerReceiver(new ScreenIntentReceiver(), filter);
+    }
+
+    private void registerPowerFilter() {
+        IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        registerReceiver(new PowerIntentReceiver(), filter);
     }
 
     private void registerGenericFilter() {
         IntentFilter filter = new IntentFilter();
-        for (String action : receiveIntents) {
+        for (String action : GENERIC_INTENTS) {
             filter.addAction(action);
         }
-        genericReceiver = new GenericReceiver();
-        registerReceiver(genericReceiver, filter);
+        registerReceiver(new GenericIntentReceiver(), filter);
     }
 
     @Override

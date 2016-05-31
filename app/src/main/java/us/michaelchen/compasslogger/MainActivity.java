@@ -92,7 +92,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void onPermissionCheckSuccess() {
-        startAlarms();
+        //startAlarms();
+        startEventMonitoring();
         if (!checkFormComplete()) {
             Intent intent = new Intent(this, FormActivity.class);
             intent.putExtra(INTENT_DEVICE_ID, DeviceID.get(this));
@@ -150,13 +151,19 @@ public class MainActivity extends AppCompatActivity {
 
 //        Intent i = new Intent(context, ScreenPowerService.class);
 //        context.startService(i);
-        Intent i = new Intent(context, BackgroundService.class);
-        context.startService(i);
     }
 
     void startAlarms() {
         startAlarms(this);
         Toast.makeText(this, "Alarms Set", Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Starts asynchronous event monitoring
+     */
+    private void startEventMonitoring() {
+        Intent i = new Intent(this, EventMonitoringService.class);
+        startService(i);
     }
 
     public void onSectionAttached(int number) {

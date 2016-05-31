@@ -17,17 +17,13 @@ public class GenericEventRecordingService extends AbstractRecordingService {
 
     @Override
     protected String broadcastKey() {
-        return "broadcast events";
+        return "generic";
     }
 
     @Override
     protected Map<String, Object> readData(Intent intent) {
         Map<String, Object> data = new HashMap<>();
-
-        if (intent.hasExtra(EVENT_KEY)) {
-            String event = intent.getStringExtra(EVENT_KEY);
-            data.put(EVENT_KEY, event);
-        }
+        data.put(EVENT_KEY, intent.getAction());
 
         return data;
     }

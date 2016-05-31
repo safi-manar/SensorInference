@@ -26,7 +26,18 @@ public abstract class AbstractRecordingService extends IntentService {
     protected AbstractRecordingService(String subclassName) {
         super(subclassName);
         tag = subclassName;
+    }
 
+    @Override
+    protected final void onHandleIntent(Intent intent) {
+        init();
+        updateDatabase(readData(intent));
+    }
+
+    /**
+     * Initialize required fields like the device ID and database handle
+     */
+    private void init() {
         // Get the installation-persistent random device ID
         if(deviceId == null) {
             deviceId = DeviceID.get(this);
@@ -38,11 +49,6 @@ public abstract class AbstractRecordingService extends IntentService {
             Firebase fb = new Firebase(dbURL);
             deviceDb = fb.child(USER_DATA_KEY).child(deviceId);
         }
-    }
-
-    @Override
-    protected final void onHandleIntent(Intent intent) {
-        updateDatabase(readData(intent));
     }
 
     /**

@@ -83,7 +83,7 @@
         </receiver>
 
         <service
-            android:name=".BackgroundService"
+            android:name=".EventMonitoringService"
             android:enabled="true"
             android:exported="false" />
 
@@ -95,6 +95,22 @@
         <service
             android:name=".sensor.GenericReceiverService"
             android:exported="false"></service>
+
+
+
+        <!-- Refactored services and receivers -->
+        <service
+            android:name=".datarecorder.ScreenRecordingService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".datarecorder.PowerRecordingService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".datarecorder.GenericEventRecordingService"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>
