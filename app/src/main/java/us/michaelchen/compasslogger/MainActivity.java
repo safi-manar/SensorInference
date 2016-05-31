@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 
+import us.michaelchen.compasslogger.receiver.AlarmReceiver;
 import us.michaelchen.compasslogger.utils.DeviceID;
 
 public class MainActivity extends AppCompatActivity {

@@ -26,7 +26,7 @@
         </activity>
 
         <receiver
-            android:name=".AlarmReceiver"
+            android:name=".receiver.AlarmReceiver"
             android:enabled="true"
             android:exported="true"
             android:process=":remote" />
@@ -36,7 +36,7 @@
             android:label="@string/title_activity_settings" />
 
         <receiver
-            android:name=".BootReceiver"
+            android:name=".receiver.BootReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>

@@ -1,4 +1,4 @@
-package us.michaelchen.compasslogger;
+package us.michaelchen.compasslogger.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

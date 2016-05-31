@@ -1,8 +1,10 @@
-package us.michaelchen.compasslogger;
+package us.michaelchen.compasslogger.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+
+import us.michaelchen.compasslogger.MainActivity;
 
 public class BootReceiver extends BroadcastReceiver {
     public BootReceiver() {
