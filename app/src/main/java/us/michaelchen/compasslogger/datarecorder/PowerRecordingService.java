@@ -34,16 +34,16 @@ public class PowerRecordingService extends AbstractRecordingService {
 
         // Figure out the charging state
         boolean isCharging = statusCode == BatteryManager.BATTERY_STATUS_CHARGING ||
-                statusCode == BatteryManager.BATTERY_STATUS_FULL;
+                             statusCode == BatteryManager.BATTERY_STATUS_FULL;
         boolean onUSB = chargePlug == BatteryManager.BATTERY_PLUGGED_USB;
         boolean onAC = chargePlug == BatteryManager.BATTERY_PLUGGED_AC;
 
         // Record the data
-        Map<String, Object> vals = new HashMap<>();
-        vals.put(CHARGING_KEY, isCharging);
-        vals.put(CHARGING_USB_KEY, onUSB);
-        vals.put(CHARGING_AC_KEY, onAC);
+        Map<String, Object> data = new HashMap<>();
+        data.put(CHARGING_KEY, isCharging);
+        data.put(CHARGING_USB_KEY, onUSB);
+        data.put(CHARGING_AC_KEY, onAC);
 
-        return vals;
+        return data;
     }
 }
