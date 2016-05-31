@@ -32,7 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private int permissionStateChecks = 0;
     private String[] permissions = {Manifest.permission.READ_PHONE_STATE, Manifest.permission.ACCESS_FINE_LOCATION};
 
-    public static final int BROADCAST_PERIOD = 60000*10; //60 seconds * 10 mins
+    private static final int BROADCAST_MINUTES = 1;
+    private static final int BROADCAST_PERIOD = 1000 * 60 * BROADCAST_MINUTES;
     final String PREFS_NAME = "CompassLoggerPrefs";
     final String PREFS_AGREED = "user_agreed";
     final String PREFS_FORM_COMPLETE = "user_finished_form";
@@ -92,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void onPermissionCheckSuccess() {
-        //startAlarms();
+        startAlarms(this);
         startEventMonitoring();
         if (!checkFormComplete()) {
             Intent intent = new Intent(this, FormActivity.class);
@@ -141,21 +142,17 @@ public class MainActivity extends AppCompatActivity {
         return;
     }
 
-    static void startAlarms(Context context) {
+    public static void startAlarms(Context context) {
         AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        int interval = BROADCAST_PERIOD;
 
         Intent alarmIntent = new Intent(context, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, 0);
-        manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
+        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+                                    System.currentTimeMillis(),
+                                    BROADCAST_PERIOD,
+                                    pendingIntent);
 
-//        Intent i = new Intent(context, ScreenPowerService.class);
-//        context.startService(i);
-    }
-
-    void startAlarms() {
-        startAlarms(this);
-        Toast.makeText(this, "Alarms Set", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Alarms Set", Toast.LENGTH_SHORT).show();
     }
 
     /**

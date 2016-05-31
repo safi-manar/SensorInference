@@ -64,7 +64,7 @@ public class LocationRecordingService extends RecordingService {
             float[] rMat = new float[9];
             float[] orientation = new float[3];
             SensorManager.getRotationMatrixFromVector(rMat, event.values);
-            // get the azimuth value (orientation[0]) in degree
+            // compare the azimuth value (orientation[0]) in degree
             int azimuth = (int) ( Math.toDegrees( SensorManager.getOrientation( rMat, orientation )[0] ) + 360 ) % 360;
 
             Log.d(TAG, event.toString());

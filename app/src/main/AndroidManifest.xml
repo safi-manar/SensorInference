@@ -35,20 +35,6 @@
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" />
 
-        <service
-            android:name=".sensor.LocationRecordingService"
-            android:exported="false"
-            android:permission="android.p" />
-        <service
-            android:name=".sensor.PowerRecordingService"
-            android:exported="false" />
-        <service
-            android:name=".sensor.LightSensorService"
-            android:exported="false" />
-        <service
-            android:name=".sensor.ProximitySensorService"
-            android:exported="false" />
-
         <receiver
             android:name=".BootReceiver"
             android:enabled="true"
@@ -58,44 +44,15 @@
             </intent-filter>
         </receiver>
 
-        <service
-            android:name=".sensor.StepCountService"
-            android:exported="false" />
-
         <activity
             android:name=".FormActivity"
             android:label="@string/title_activity_form"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <service
-            android:name=".sensor.ScreenPowerService"
-            android:enabled="true"
-            android:exported="false" />
-
-        <receiver
-            android:name=".ScreenReceiver"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.SCREEN_OFF" />
-                <action android:name="android.intent.action.SCREEN_ON" />
-            </intent-filter>
-        </receiver>
-
-        <service
             android:name=".EventMonitoringService"
             android:enabled="true"
             android:exported="false" />
-
-        <receiver
-            android:name=".GenericReceiver"
-            android:enabled="true"
-            android:exported="false" />
-
-        <service
-            android:name=".sensor.GenericReceiverService"
-            android:exported="false"></service>
-
 
 
         <!-- Refactored services and receivers -->
@@ -111,6 +68,31 @@
             android:name=".datarecorder.GenericEventRecordingService"
             android:enabled="true"
             android:exported="false" />
+
+
+        <service
+            android:name=".datarecorder.LightSensorRecordingService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".datarecorder.ProximitySensorRecordingService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".datarecorder.RotationSensorRecordingService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".datarecorder.StepSensorRecordingService"
+            android:enabled="true"
+            android:exported="false" />
+
+
+        <service
+            android:name=".datarecorder.LocationRecordingService"
+            android:exported="false"
+            android:enabled="true"
+            android:permission="android.p" />
     </application>
 
 </manifest>
