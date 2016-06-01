@@ -34,7 +34,7 @@
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/app.iml" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
     </list>
     <ignored path="CompassLogger.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -58,8 +58,8 @@
       <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4022082">
-              <caret line="34" column="9" selection-start-line="34" selection-start-column="9" selection-end-line="34" selection-end-column="9" />
+            <state vertical-scroll-proportion="0.48501578">
+              <caret line="41" column="0" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -2388,7 +2388,13 @@
       <option name="project" value="LOCAL" />
       <updated>1464212853054</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Remove project metadata again">
+      <created>1464801109105</created>
+      <option name="number" value="00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1464801109105</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -2458,7 +2464,8 @@
     <MESSAGE value="Integrated per-install random UUID generation, implemented (but not integrated) refactored sensorservices -- not sure if these are ultimately necessary though" />
     <MESSAGE value="Integrated per-install random UUID generation, implemented (but not integrated) refactored sensorservices, moved Firebase URL to strings.xml" />
     <MESSAGE value="Fixed null pointer exception with pulling the Firebase address from strings.xml" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed null pointer exception with pulling the Firebase address from strings.xml" />
+    <MESSAGE value="Remove project metadata again" />
+    <option name="LAST_COMMIT_MESSAGE" value="Remove project metadata again" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -2677,8 +2684,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4022082">
-          <caret line="34" column="9" selection-start-line="34" selection-start-column="9" selection-end-line="34" selection-end-column="9" />
+        <state vertical-scroll-proportion="0.48501578">
+          <caret line="41" column="0" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
           <folding />
         </state>
       </provider>
