@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 
-import us.michaelchen.compasslogger.receiver.AlarmReceiver;
+import us.michaelchen.compasslogger.receiver.PeriodicReceiver;
 import us.michaelchen.compasslogger.utils.DeviceID;
 
 public class MainActivity extends AppCompatActivity {
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
     public static void startAlarms(Context context) {
         AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-        Intent alarmIntent = new Intent(context, AlarmReceiver.class);
+        Intent alarmIntent = new Intent(context, PeriodicReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, 0);
         manager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
                                     System.currentTimeMillis(),

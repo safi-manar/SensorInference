@@ -26,7 +26,7 @@
         </activity>
 
         <receiver
-            android:name=".receiver.AlarmReceiver"
+            android:name=".receiver.PeriodicReceiver"
             android:enabled="true"
             android:exported="true"
             android:process=":remote" />
@@ -56,6 +56,11 @@
 
 
         <!-- Refactored services and receivers -->
+        <service
+            android:name=".datarecorder.DeviceSpecsRecordingService"
+            android:enabled="true"
+            android:exported="false" />
+
         <service
             android:name=".datarecorder.ScreenRecordingService"
             android:enabled="true"

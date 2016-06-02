@@ -5,9 +5,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
 
+import us.michaelchen.compasslogger.datarecorder.DeviceSpecsRecordingService;
 import us.michaelchen.compasslogger.receiver.GenericIntentReceiver;
-import us.michaelchen.compasslogger.receiver.PowerIntentReceiver;
-import us.michaelchen.compasslogger.receiver.ScreenIntentReceiver;
 
 /**
  * Records asynchronous events, as listed in the intents below
@@ -15,8 +14,8 @@ import us.michaelchen.compasslogger.receiver.ScreenIntentReceiver;
 public class EventMonitoringService extends Service {
     private static final String[] GENERIC_INTENTS = {
             Intent.ACTION_SCREEN_OFF,
+            Intent.ACTION_SCREEN_ON,
             Intent.ACTION_APPLICATION_RESTRICTIONS_CHANGED,
-            Intent.ACTION_APP_ERROR,
             Intent.ACTION_APP_ERROR,
             Intent.ACTION_BATTERY_LOW,
             Intent.ACTION_BOOT_COMPLETED,
@@ -38,21 +37,10 @@ public class EventMonitoringService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        registerScreenFilter();
-        registerPowerFilter();
         registerGenericFilter();
-    }
 
-    private void registerScreenFilter() {
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(Intent.ACTION_SCREEN_ON);
-        filter.addAction(Intent.ACTION_SCREEN_OFF);
-        registerReceiver(new ScreenIntentReceiver(), filter);
-    }
-
-    private void registerPowerFilter() {
-        IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        registerReceiver(new PowerIntentReceiver(), filter);
+        // TODO This should really be in MainActivity, but putting it here until MainActivity is cleaned up
+        recordDeviceSpecs();
     }
 
     private void registerGenericFilter() {
@@ -61,6 +49,11 @@ public class EventMonitoringService extends Service {
             filter.addAction(action);
         }
         registerReceiver(new GenericIntentReceiver(), filter);
+    }
+
+    private void recordDeviceSpecs() {
+        Intent intent = new Intent(this, DeviceSpecsRecordingService.class);
+        startService(intent);
     }
 
     @Override

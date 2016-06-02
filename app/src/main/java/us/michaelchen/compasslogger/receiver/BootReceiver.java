@@ -6,13 +6,13 @@ import android.content.Intent;
 
 import us.michaelchen.compasslogger.MainActivity;
 
+/**
+ * Receiver used to restart periodic sensor polling after boot start-up
+ */
 public class BootReceiver extends BroadcastReceiver {
-    public BootReceiver() {
-    }
-
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
+        if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
             // Set the alarm here.
             MainActivity.startAlarms(context);
         }
