@@ -9,7 +9,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -102,13 +101,14 @@ public class LocationRecordingService extends AbstractRecordingService {
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             hasPermissions = true;
 
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0.0f, LOCATION_LISTENER);
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0.0f, LOCATION_LISTENER);
+            for(String provider : locationManager.getAllProviders()) {
+                // Register the listener to all providers
+                locationManager.requestLocationUpdates(provider, 0, 0.0f, LOCATION_LISTENER);
 
-            Location netLoc = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            Location gpsLoc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-            bestLocation = BetterLocation.compare(netLoc, gpsLoc);
+                // Get the best last known location from all the providers
+                Location loc = locationManager.getLastKnownLocation(provider);
+                bestLocation = BetterLocation.compare(loc, bestLocation);
+            }
         }
     }
 
