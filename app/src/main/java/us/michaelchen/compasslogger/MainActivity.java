@@ -22,6 +22,7 @@ import com.firebase.client.Firebase;
 
 import us.michaelchen.compasslogger.receiver.PeriodicReceiver;
 import us.michaelchen.compasslogger.utils.DeviceID;
+import us.michaelchen.compasslogger.utils.MasterSwitch;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -220,8 +221,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             // The AlertDialog thread was asynchronous, so the dialog itself handled the startAlarms.
             // If the form has already been completed, sensor data collection can begin.
-            startAlarms(this);
-            startEventMonitoring();
+            MasterSwitch.on(this);
             //TODO Collect a timestamp at this point to be used to calculate a 1 week duration and remind the user
             // that the app may be uninstalled.
         }
@@ -258,34 +258,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             //Now that the user has completed the form, sensor data collection can begin.
-            startAlarms(context);
-            startEventMonitoring();
+            MasterSwitch.on(context);
             //TODO Collect a timestamp at this point to be used to calculate a 1 week duration and remind the user
             // that the app may be uninstalled.
         }
     };
-
-
-    public static void startAlarms(Context context) {
-        AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-
-        Intent alarmIntent = new Intent(context, PeriodicReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, 0);
-        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-                                    System.currentTimeMillis(),
-                                    BROADCAST_PERIOD,
-                                    pendingIntent);
-
-        Toast.makeText(context, "Alarms Set", Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * Starts asynchronous event monitoring
-     */
-    private void startEventMonitoring() {
-        Intent i = new Intent(this, EventMonitoringService.class);
-        startService(i);
-    }
-
-
 }

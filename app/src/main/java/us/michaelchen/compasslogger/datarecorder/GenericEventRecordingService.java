@@ -31,10 +31,16 @@ public class GenericEventRecordingService extends AbstractRecordingService {
 
             return null;
         } else {
-            Map<String, Object> copy = new LinkedHashMap<>(EVENT_BUFFER);
-            EVENT_BUFFER.clear();
+            // Only transmit non-empty activity buffers
+            if(!EVENT_BUFFER.isEmpty()) {
+                Map<String, Object> copy = new LinkedHashMap<>(EVENT_BUFFER);
+                EVENT_BUFFER.clear();
 
-            return copy;
+                return copy;
+            } else {
+
+                return null;
+            }
         }
     }
 }
