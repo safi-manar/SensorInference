@@ -12,6 +12,7 @@ import us.michaelchen.compasslogger.datarecorder.GenericEventRecordingService;
 public class GenericIntentReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+        intent.putExtra(GenericEventRecordingService.BUFFER_EXTRA, true);
         intent.setClass(context, GenericEventRecordingService.class);
         context.startService(intent);
     }

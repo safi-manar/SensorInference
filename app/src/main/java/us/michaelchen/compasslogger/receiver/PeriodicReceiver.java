@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import us.michaelchen.compasslogger.datarecorder.GenericEventRecordingService;
 import us.michaelchen.compasslogger.datarecorder.LightSensorRecordingService;
 import us.michaelchen.compasslogger.datarecorder.LocationRecordingService;
 import us.michaelchen.compasslogger.datarecorder.PowerRecordingService;
@@ -17,6 +18,8 @@ import us.michaelchen.compasslogger.datarecorder.StepSensorRecordingService;
  */
 public class PeriodicReceiver extends BroadcastReceiver {
     private static final Class[] PERIODICS = new Class[] {
+            GenericEventRecordingService.class,
+
             ScreenRecordingService.class,
             PowerRecordingService.class,
 

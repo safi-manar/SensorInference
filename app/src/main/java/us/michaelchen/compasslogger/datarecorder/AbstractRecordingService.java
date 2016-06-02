@@ -18,7 +18,7 @@ import us.michaelchen.compasslogger.utils.DeviceID;
  */
 public abstract class AbstractRecordingService extends IntentService {
     private static final String USER_DATA_KEY = "userData";
-    private static final String TIME_KEY = "time";
+    private static final String TIME_KEY = "submitTime";
 
     private static String deviceId = null;
     private static Firebase deviceDb = null;
@@ -58,13 +58,15 @@ public abstract class AbstractRecordingService extends IntentService {
      * @param value
      */
     private void updateDatabase(Map<String, Object> value) {
-        // Add time data if it's not present
-        if(!value.containsKey(TIME_KEY)) {
-            value.put(TIME_KEY, DataTimeFormat.current());
-        }
+        if(value != null) {
+            // Add time data if it's not present
+            if(!value.containsKey(TIME_KEY)) {
+                value.put(TIME_KEY, DataTimeFormat.current());
+            }
 
-        // Push to database
-        deviceDb.child(broadcastKey()).push().setValue(value);
+            // Push to database
+            deviceDb.child(broadcastKey()).push().setValue(value);
+        }
     }
 
     /**
