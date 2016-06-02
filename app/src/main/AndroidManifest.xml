@@ -49,6 +49,7 @@
             android:label="@string/title_activity_form"
             android:theme="@style/AppTheme.NoActionBar" />
 
+
         <service
             android:name=".EventMonitoringService"
             android:enabled="true"
