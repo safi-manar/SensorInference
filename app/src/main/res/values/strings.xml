@@ -5,7 +5,7 @@
     <string name="title_section2">Settings</string>
     <string name="title_section3">Feedback</string>
 
-    <string name="ok">Agree</string>
+    <string name="agree">Agree</string>
     <string name="cancel">Cancel</string>
 
     <string name="agreement_title">Consent to Participate in Research\n Understanding Smartphone Sensors</string>
@@ -57,6 +57,32 @@
         CPHS# 2015-11-8097
 
     </string>
+
+
+    <string name="denied_permission_response">
+        You chose to deny permissions that this app needs to collect data.\n
+        Please recall that the app will not collect any personally identifiable information besides GPS. All data
+        that is collected will be stored securely.\n\n
+
+        <b>Please note: You will not be paid the $2.00 bonus without participating in this portion of the study.</b>\n\n
+
+        The app will now close. If this is a mistake, you may restart the app and accept the permissions.
+    </string>
+
+    <string name="denied_permission_title">Permissions Denied Warning</string>
+    <string name="ok">Ok</string>
+
+    <string name="survey_form_message">
+        You will now be directed to complete a short survey for some demographic information needed for this research.
+        As always, your data will be kept securely and confidentially.\n\n
+
+        <b>Please note: You will not be paid the $2.00 bonus without participating in this portion of the study.</b>\n\n
+    </string>
+
+    <string name="survey_form_title">Required Survey Form</string>
+
+    <string name="survey_form_response">formResponse</string>
+
 
     <string name="info">This app is for a study at UC Berkeley to better understand smartphone sensors.
         This application will log various sensor data over the course of one week.
