@@ -16,6 +16,7 @@ import us.michaelchen.compasslogger.receiver.PeriodicReceiver;
  */
 public class MasterSwitch {
     private static boolean firstRun = true;
+    private static boolean running = false;
 
     // Used by periodics
     private static final int BROADCAST_MINUTES = 1;
@@ -50,13 +51,17 @@ public class MasterSwitch {
      * @param c Calling Android context
      */
     public static void on(Context c) {
-        if(firstRun) {
-            recordDeviceSpecs(c);
-            firstRun = false;
-        }
+        if(!running) {
+            if(firstRun) {
+                recordDeviceSpecs(c);
+                firstRun = false;
+            }
 
-        startAsynchronous(c);
-        startPeriodics(c);
+            startAsynchronous(c);
+            startPeriodics(c);
+
+            running = true;
+        }
     }
 
     /**
@@ -64,8 +69,20 @@ public class MasterSwitch {
      * @param c Calling Android context
      */
     public static void off(Context c) {
-        stopAsynchronous(c);
-        stopPeriodics(c);
+        if(running) {
+            stopAsynchronous(c);
+            stopPeriodics(c);
+
+            running = false;
+        }
+    }
+
+    /**
+     *
+     * @return True if the data collection services are active
+     */
+    public static boolean isRunning() {
+        return running;
     }
 
     /**
