@@ -133,8 +133,6 @@ public class MainActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this, new String[]{permissions[i]}, i);
                 // break the flow of the for loop to bypass asynchronous threading and subsequent permission requests.
                 return;
-            } else {
-                grantedCount++; //TODO Possibly dead code... See comment starting with "Since denied..."
             }
         }
 
