@@ -9,17 +9,21 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import us.michaelchen.compasslogger.utils.BetterLocation;
+import us.michaelchen.compasslogger.utils.DataTimeFormat;
 
 /**
  * Created by ioreyes on 5/27/16.
  */
 public class LocationRecordingService extends AbstractRecordingService {
+    private static final String FIX_TIME_KEY = "fixTime";
     private static final String LATITUDE_KEY = "lat";
     private static final String LONGITUDE_KEY = "lon";
+    private static final String PROVIDER_KEY = "provider";
 
     private static final int POLL_INTERVAL_MS = 500;
     private static final int FIX_WINDOW_SECS = 3;
@@ -78,8 +82,10 @@ public class LocationRecordingService extends AbstractRecordingService {
 
         Map<String, Object> data = new HashMap<>();
         if(bestLocation != null) {
+            data.put(FIX_TIME_KEY, DataTimeFormat.format(bestLocation.getTime()));
             data.put(LATITUDE_KEY, bestLocation.getLatitude());
             data.put(LONGITUDE_KEY, bestLocation.getLongitude());
+            data.put(PROVIDER_KEY, bestLocation.getProvider());
         }
 
         return data;

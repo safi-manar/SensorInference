@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.Map;
 
 import us.michaelchen.compasslogger.R;
+import us.michaelchen.compasslogger.utils.DataTimeFormat;
 import us.michaelchen.compasslogger.utils.DeviceID;
 
 /**
@@ -18,7 +19,6 @@ import us.michaelchen.compasslogger.utils.DeviceID;
 public abstract class AbstractRecordingService extends IntentService {
     private static final String USER_DATA_KEY = "userData";
     private static final String TIME_KEY = "time";
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss(zzz)");
 
     private static String deviceId = null;
     private static Firebase deviceDb = null;
@@ -60,7 +60,7 @@ public abstract class AbstractRecordingService extends IntentService {
     private void updateDatabase(Map<String, Object> value) {
         // Add time data if it's not present
         if(!value.containsKey(TIME_KEY)) {
-            value.put(TIME_KEY, DATE_FORMAT.format(new Date()));
+            value.put(TIME_KEY, DataTimeFormat.current());
         }
 
         // Push to database
