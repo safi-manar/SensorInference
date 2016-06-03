@@ -33,6 +33,7 @@ public abstract class AbstractSensorRecordingService extends AbstractRecordingSe
 
     @Override
     protected final Map<String, Object> readData(Intent intent) {
+        // Activate the sensor until a readout is collected from it
         registerSensorListener();
         while(data == null) {
 

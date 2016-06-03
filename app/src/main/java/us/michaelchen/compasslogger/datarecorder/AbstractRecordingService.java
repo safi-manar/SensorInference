@@ -5,8 +5,6 @@ import android.content.Intent;
 
 import com.firebase.client.Firebase;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Map;
 
 import us.michaelchen.compasslogger.R;

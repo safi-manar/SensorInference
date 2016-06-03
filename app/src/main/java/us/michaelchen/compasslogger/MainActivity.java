@@ -1,9 +1,7 @@
 package us.michaelchen.compasslogger;
 
 import android.Manifest;
-import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,11 +14,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 
-import us.michaelchen.compasslogger.receiver.PeriodicReceiver;
 import us.michaelchen.compasslogger.utils.DeviceID;
 import us.michaelchen.compasslogger.utils.MasterSwitch;
 
