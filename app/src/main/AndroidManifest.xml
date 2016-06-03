@@ -57,6 +57,14 @@
             android:exported="false" />
 
 
+        <!-- For the Deadline Notification -->
+        <service
+            android:name=".deadline.DeadlineService"
+            android:enabled="true"
+            android:exported="false" />
+
+
+
         <!-- Refactored services and receivers -->
         <service
             android:name=".datarecorder.DeviceSpecsRecordingService"
