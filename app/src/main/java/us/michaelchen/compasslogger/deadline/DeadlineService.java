@@ -17,11 +17,13 @@ public class DeadlineService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         Log.d("DeadlineService", "The deadline service has successfully started.");
+
+        Intent deadlineDialog = new Intent(this, DeadlineActivity.class);
+        deadlineDialog.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(deadlineDialog);
+        Log.d("DeadlineService", "Just started the DeadlineActivity");
     }
 
 }
 
-/*        Intent deadlineDialog = new Intent(this, DeadlineActivity.class);
-        deadlineDialog.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(deadlineDialog);
-        Log.d("DeadlineService", "Just started the DeadlineActivity");*/
+
