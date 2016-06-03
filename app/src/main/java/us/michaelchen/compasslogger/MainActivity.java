@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -38,6 +39,10 @@ public class MainActivity extends AppCompatActivity {
     final String PREFS_NAME = "CompassLoggerPrefs";
     final String PREFS_AGREED = "user_agreed";
     final String PREFS_FORM_COMPLETE = "user_finished_form";
+
+    //Variables for the Deadline Notification
+    private static final String PREFS_UNINSTALL_DEADLINE = "uninstall_deadline";
+    private static final long WEEK_IN_MILLIS = 60 * 60 * 24 * 7 * 1000; // 604800000
 
     static final String INTENT_DEVICE_ID = "device_id";
 
@@ -254,8 +259,26 @@ public class MainActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             //Now that the user has completed the form, sensor data collection can begin.
             MasterSwitch.on(context);
+            startDeadlineTimer();
             //TODO Collect a timestamp at this point to be used to calculate a 1 week duration and remind the user
             // that the app may be uninstalled.
         }
     };
+
+
+
+    /*Calculates one week's time and stores it in the SharedPreferences to be used by the DeadlineActivity*/
+    private void startDeadlineTimer() {
+        long currentTime = currentTime = System.currentTimeMillis();
+        long deadline = currentTime + WEEK_IN_MILLIS;
+
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, 0);
+        //prefs.edit().putLong(PREFS_UNINSTALL_DEADLINE, deadline).commit();
+
+
+        //TODO Delete later: For debugging.
+        long twoMinuteDeadline = currentTime + 120000;
+        prefs.edit().putLong(PREFS_UNINSTALL_DEADLINE, twoMinuteDeadline).commit();
+    }
 }
+
