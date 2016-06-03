@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mTitle = getTitle();
-        Firebase.setAndroidContext(this);
 
         if (checkAgreementConsent()) {
             checkPermissions();

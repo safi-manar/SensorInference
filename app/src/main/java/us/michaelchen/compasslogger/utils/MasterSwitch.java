@@ -5,6 +5,10 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.widget.Toast;
 
 import us.michaelchen.compasslogger.datarecorder.DeviceSpecsRecordingService;
@@ -46,6 +50,20 @@ public class MasterSwitch {
     };
     private static GenericIntentReceiver genericIntentReceiver = null;
 
+    // Used by step counter
+    private static SensorManager sensorManager = null;
+    private static SensorEventListener STEP_LISTENER = new SensorEventListener() {
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            // Do nothing, just keep the sensor alive
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+            // Do nothing, just keep the sensor alive
+        }
+    };
+
     /**
      * Turns on all the data collection services
      * @param c Calling Android context
@@ -57,6 +75,7 @@ public class MasterSwitch {
                 firstRun = false;
             }
 
+            startStepCounter(c);
             startAsynchronous(c);
             startPeriodics(c);
 
@@ -70,6 +89,7 @@ public class MasterSwitch {
      */
     public static void off(Context c) {
         if(running) {
+            stopStepCounter(c);
             stopAsynchronous(c);
             stopPeriodics(c);
 
@@ -139,6 +159,31 @@ public class MasterSwitch {
         if(genericIntentReceiver != null) {
             c.unregisterReceiver(genericIntentReceiver);
         }
+    }
+
+    /**
+     * Activate the step sensor
+     * @param c Calling Android context
+     */
+    private static void startStepCounter(Context c) {
+        if(sensorManager == null) {
+            sensorManager = (SensorManager) c.getSystemService(Context.SENSOR_SERVICE);
+        }
+
+        Sensor stepSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        sensorManager.registerListener(STEP_LISTENER, stepSensor, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    /**
+     * Deactivate the step sensor
+     * @param c Calling Android context
+     */
+    private static void stopStepCounter(Context c) {
+        if(sensorManager == null) {
+            sensorManager = (SensorManager) c.getSystemService(Context.SENSOR_SERVICE);
+        }
+
+        sensorManager.unregisterListener(STEP_LISTENER);
     }
 
     /**

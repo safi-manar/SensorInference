@@ -11,6 +11,7 @@ import us.michaelchen.compasslogger.datarecorder.PowerRecordingService;
 import us.michaelchen.compasslogger.datarecorder.ProximitySensorRecordingService;
 import us.michaelchen.compasslogger.datarecorder.RotationSensorRecordingService;
 import us.michaelchen.compasslogger.datarecorder.ScreenRecordingService;
+import us.michaelchen.compasslogger.datarecorder.StepSensorRecordingService;
 
 /**
  * Receiver used for periodic sensor polling
@@ -25,6 +26,7 @@ public class PeriodicReceiver extends BroadcastReceiver {
             LightSensorRecordingService.class,
             ProximitySensorRecordingService.class,
             RotationSensorRecordingService.class,
+            StepSensorRecordingService.class,
 
             // This requires additional permissions from the user
             LocationRecordingService.class
