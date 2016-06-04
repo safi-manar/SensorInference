@@ -11,8 +11,6 @@
   <component name="ChangeListManager">
     <list default="true" id="f8cf607a-6f09-453a-9992-ce43969e5e99" name="Default" comment="DeadlineNotification successfully working. Currently in debug (2 minute) mode.">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/us/michaelchen/compasslogger/deadline/DeadlineActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/us/michaelchen/compasslogger/deadline/DeadlineActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
     </list>
@@ -2577,7 +2575,13 @@
       <option name="project" value="LOCAL" />
       <updated>1464997190086</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Removed EventMonitoringService (dead) from AndroidManifest">
+      <created>1464998427530</created>
+      <option name="number" value="00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1464998427530</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -2659,7 +2663,8 @@
     <MESSAGE value="Dummy DeadlineService working." />
     <MESSAGE value="Dummy DeadlineActivity working." />
     <MESSAGE value="DeadlineService with a timer successfully working with dummy DeadlineActivity (which still does nothing). DeadlineService properly using correct System clock." />
-    <option name="LAST_COMMIT_MESSAGE" value="DeadlineService with a timer successfully working with dummy DeadlineActivity (which still does nothing). DeadlineService properly using correct System clock." />
+    <MESSAGE value="Removed EventMonitoringService (dead) from AndroidManifest" />
+    <option name="LAST_COMMIT_MESSAGE" value="Removed EventMonitoringService (dead) from AndroidManifest" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

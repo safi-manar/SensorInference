@@ -59,6 +59,7 @@
     </string>
 
 
+    <!-- For the Permission Denied dialog-->
     <string name="denied_permission_response">
         You chose to deny permissions that this app needs to collect data.\n
         Please recall that the app will not collect any personally identifiable information besides GPS. All data
@@ -79,11 +80,23 @@
         <b>Please note: You will not be paid the $2.00 bonus without participating in this portion of the study.</b>\n\n
     </string>
 
+    <!-- For the survey form prompt dialog-->
     <string name="survey_form_title">Required Survey Form</string>
 
     <string name="survey_form_response">formResponse</string>
 
 
+    <!-- For the deadline notification uninstall prompt dialog-->
+    <string name="uninstall_message_title">Sensory Privacy Research Complete!</string>
+    <string name="uninstall_message">
+        Thank you for participating in our research project! \n\n
+        One week has passed since you installed our app, so you are officially done with your participation.
+        You can now proceed to uninstall the app.
+    </string>
+    <string name="uninstall_proceed_button">Proceed to Uninstall</string>
+
+
+    <!-- For the MainActivity layout-->
     <string name="info">This app is for a study at UC Berkeley to better understand smartphone sensors.
         This application will log various sensor data over the course of one week.
     </string>
