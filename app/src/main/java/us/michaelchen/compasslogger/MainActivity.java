@@ -23,13 +23,7 @@ import us.michaelchen.compasslogger.utils.MasterSwitch;
 
 public class MainActivity extends AppCompatActivity {
 
-    /**
-     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
-     */
-
-    /**
-     * Used to store the last screen title. .
-     */
+    // Used to store the last screen title.
     private CharSequence mTitle;
     private int permissionStateChecks = 0;
     private String[] permissions = {Manifest.permission.READ_PHONE_STATE, Manifest.permission.ACCESS_FINE_LOCATION};
@@ -86,15 +80,12 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    /* Displays the agreement ("Consent to Participate in Research..." ) dialog.
-    *
-    *
-    * */
+    /* Displays the agreement ("Consent to Participate in Research..." ) dialog.*/
     private AlertDialog agreementDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         // The Agree button adds PREFS_AGREED = true to the SharedPreferences.
-        // It then calls CheckPermissions() //TODO Why??
+        // It then calls CheckPermissions() to begin the permission request.
         builder.setPositiveButton(R.string.agree, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 SharedPreferences prefs = getSharedPreferences(PREFS_NAME, 0);
@@ -221,9 +212,9 @@ public class MainActivity extends AppCompatActivity {
         } else {
             // The AlertDialog thread was asynchronous, so the dialog itself handled the startAlarms.
             // If the form has already been completed, sensor data collection can begin.
+            // Note that since the form has already been completed, then a deadline timer has already
+            // been set, so there is no need to call it again.
             MasterSwitch.on(this);
-            //TODO Collect a timestamp at this point to be used to calculate a 1 week duration and remind the user
-            // that the app may be uninstalled.
         }
     }
 
@@ -259,9 +250,8 @@ public class MainActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             //Now that the user has completed the form, sensor data collection can begin.
             MasterSwitch.on(context);
+            // Sensor data collection has begun. Now begin a one-week countdown.
             startDeadlineTimer();
-            //TODO Collect a timestamp at this point to be used to calculate a 1 week duration and remind the user
-            // that the app may be uninstalled.
         }
     };
 
