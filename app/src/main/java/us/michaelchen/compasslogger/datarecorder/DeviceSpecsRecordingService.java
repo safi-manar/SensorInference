@@ -10,6 +10,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import us.michaelchen.compasslogger.R;
+
 /**
  * Created by ioreyes on 6/2/16.
  */
@@ -47,6 +49,9 @@ public class DeviceSpecsRecordingService extends AbstractRecordingService {
         for(Sensor s : sensorList) {
             data.put(String.format(SENSOR_KEY, index++), s.getName());
         }
+
+        // The hash value from Strings.xml will be replaced by Gradle build
+        data.put(getString(R.string.git_build), getString(R.string.git_hash));
 
         return data;
     }

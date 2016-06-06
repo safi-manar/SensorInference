@@ -96,6 +96,11 @@
     <string name="uninstall_proceed_button">Proceed to Uninstall</string>
 
 
+    <!--For the GitVersion-->
+    <string name="git_build">gitBuild</string>
+    <string name="git_hash">gitVersionReplace</string> <!--Replaced by Gradle build.-->
+
+
     <!-- For the MainActivity layout-->
     <string name="info">This app is for a study at UC Berkeley to better understand smartphone sensors.
         This application will log various sensor data over the course of one week.

@@ -1,5 +1,19 @@
 apply plugin: 'com.android.application'
 
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "gradle.plugin.com.palantir.gradle.gitversion:gradle-git-version:0.5.2"
+    }
+}
+
+apply plugin: "com.palantir.git-version"
+
+
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
@@ -42,4 +56,23 @@ dependencies {
     compile 'com.android.support:design:23.0.1'
 
     compile 'ch.acra:acra:4.9.0'
+
+    versionPrinter()
+}
+
+
+
+def versionPrinter() {
+    println("Current version info: ")
+    def details = versionDetails()
+    println("gitHash: " + details.gitHash)
+    println("lastTag: " + details.lastTag)
+    println("commitDistance: " + details.commitDistance)
+    println("gitVersion(): " + gitVersion())
+
+}
+
+
+def replaceVersion() {
+
 }
