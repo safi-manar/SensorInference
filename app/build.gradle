@@ -1,19 +1,5 @@
 apply plugin: 'com.android.application'
 
-buildscript {
-    repositories {
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-    dependencies {
-        classpath "gradle.plugin.com.palantir.gradle.gitversion:gradle-git-version:0.5.2"
-    }
-}
-
-apply plugin: "com.palantir.git-version"
-
-
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
@@ -61,12 +47,19 @@ dependencies {
 }
 
 def updateVersion() {
-    gitVersion()
-    String gitHash = versionDetails().gitHash
+    String gitHash = getCheckedOutGitCommitHash()
     String versionLine = String.format("    <string name=\"app_version\">%s</string>", gitHash)
 
     // Find the line containing 'string name="app_version"' and completely replace it with versionLine
     ant.replaceregexp(match:'.*string name="app_version".*', replace:versionLine, flags:'g', byline:true) {
         fileset(dir: project.projectDir, includes: 'src/main/res/values/strings.xml')
     }
+}
+
+def getCheckedOutGitCommitHash() {
+    def cmd = "git rev-parse --short HEAD"
+    def proc = cmd.execute()
+    String version = proc.text.trim()
+
+    return version
 }
