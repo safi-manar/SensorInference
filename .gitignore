@@ -40,4 +40,7 @@ captures/
 
 .DS_Store
 
+# Android Studio metadata
 .idea/libraries/
+.idea/workspace.xml
+.idea/.name
