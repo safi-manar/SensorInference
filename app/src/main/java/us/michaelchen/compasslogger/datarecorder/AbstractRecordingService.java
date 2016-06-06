@@ -7,15 +7,12 @@ import com.firebase.client.Firebase;
 
 import java.util.Map;
 
-import us.michaelchen.compasslogger.utils.DataTimeFormat;
 import us.michaelchen.compasslogger.utils.FirebaseWrapper;
 
 /**
  * Created by ioreyes on 5/24/16.
  */
 public abstract class AbstractRecordingService extends IntentService {
-    private static final String TIME_KEY = "submitTime";
-
     private static Firebase deviceDb = null;
 
     protected String tag = null;
@@ -23,30 +20,18 @@ public abstract class AbstractRecordingService extends IntentService {
     protected AbstractRecordingService(String subclassName) {
         super(subclassName);
         tag = subclassName;
-
-        if(deviceDb == null) {
-            deviceDb = FirebaseWrapper.getDb();
-        }
     }
 
     @Override
     protected final void onHandleIntent(Intent intent) {
-        updateDatabase(readData(intent));
-    }
+        // Get the Firebase handle if it hasn't been locally initialized yet
+        if(deviceDb == null && FirebaseWrapper.isInit()) {
+            deviceDb = FirebaseWrapper.getDb();
+        }
 
-    /**
-     * Push the key-value pair to the database
-     * @param value
-     */
-    private void updateDatabase(Map<String, Object> value) {
-        if(value != null) {
-            // Add time data if it's not present
-            if(!value.containsKey(TIME_KEY)) {
-                value.put(TIME_KEY, DataTimeFormat.current());
-            }
-
-            // Push to database
-            deviceDb.child(broadcastKey()).push().setValue(value);
+        Map<String, Object> data = readData(intent);
+        if(data != null) {
+            FirebaseWrapper.push(broadcastKey(), data);
         }
     }
 

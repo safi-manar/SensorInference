@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.firebase.client.Firebase;
 
+import java.util.Map;
+
 import us.michaelchen.compasslogger.R;
 
 /**
@@ -11,6 +13,7 @@ import us.michaelchen.compasslogger.R;
  */
 public class FirebaseWrapper {
     private static final String USER_DATA_KEY = "userData";
+    private static final String TIME_KEY = "submitTime";
 
     private static String dbURL = null;
     private static Firebase deviceDb = null;
@@ -58,5 +61,22 @@ public class FirebaseWrapper {
      */
     public static String getURL() {
         return dbURL;
+    }
+
+    /**
+     * Push the data to the Firebase backend.
+     * @param key Identifying key
+     * @param data Label-value mapping of data to be submitted
+     */
+    public static void push(String key, Map<String, Object> data) {
+        if(isInit) {
+            // Add time data if it's not present
+            if(!data.containsKey(TIME_KEY)) {
+                data.put(TIME_KEY, DataTimeFormat.current());
+            }
+
+            // Push to database
+            deviceDb.child(key).push().setValue(data);
+        }
     }
 }
