@@ -7,18 +7,15 @@ import com.firebase.client.Firebase;
 
 import java.util.Map;
 
-import us.michaelchen.compasslogger.R;
 import us.michaelchen.compasslogger.utils.DataTimeFormat;
-import us.michaelchen.compasslogger.utils.DeviceID;
+import us.michaelchen.compasslogger.utils.FirebaseWrapper;
 
 /**
  * Created by ioreyes on 5/24/16.
  */
 public abstract class AbstractRecordingService extends IntentService {
-    private static final String USER_DATA_KEY = "userData";
     private static final String TIME_KEY = "submitTime";
 
-    private static String deviceId = null;
     private static Firebase deviceDb = null;
 
     protected String tag = null;
@@ -26,29 +23,15 @@ public abstract class AbstractRecordingService extends IntentService {
     protected AbstractRecordingService(String subclassName) {
         super(subclassName);
         tag = subclassName;
+
+        if(deviceDb == null) {
+            deviceDb = FirebaseWrapper.getDb();
+        }
     }
 
     @Override
     protected final void onHandleIntent(Intent intent) {
-        init();
         updateDatabase(readData(intent));
-    }
-
-    /**
-     * Initialize required fields like the device ID and database handle
-     */
-    private void init() {
-        // Get the installation-persistent random device ID
-        if(deviceId == null) {
-            deviceId = DeviceID.get(this);
-        }
-
-        // Set up the database connection
-        if(deviceDb == null) {
-            String dbURL = getResources().getString(R.string.firebase_url);
-            Firebase fb = new Firebase(dbURL);
-            deviceDb = fb.child(USER_DATA_KEY).child(deviceId);
-        }
     }
 
     /**
