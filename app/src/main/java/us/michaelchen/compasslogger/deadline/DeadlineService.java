@@ -36,11 +36,11 @@ public class DeadlineService extends IntentService {
 
     /*Returns whether the deadline has been reached.*/
     private boolean isPassedDeadline() {
-        long currentTime = currentTime = System.currentTimeMillis();
+        long currentTime = System.currentTimeMillis();
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, 0);
         long deadlineTime = prefs.getLong(PREFS_UNINSTALL_DEADLINE, 0);
 
-        Log.d("DeadlineService", "CurrentTime: " + currentTime );
+        Log.d("DeadlineService", "CurrentTime:  " + currentTime);
         Log.d("DeadlineService", "DeadlineTime: " + deadlineTime);
 
         return (currentTime > deadlineTime);

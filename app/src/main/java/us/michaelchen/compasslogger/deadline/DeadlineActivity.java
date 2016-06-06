@@ -49,8 +49,24 @@ public class DeadlineActivity extends Activity {
                 }
             });
         builder.setMessage(R.string.uninstall_message).setTitle(R.string.uninstall_message_title);
+
+        /*To avoid a bug where the back button on the dialog takes the user to the
+        * transparent activity screen where interaction does nothing (and gives the
+        * impression that the phone is locked up / crashing), override the back button
+        * to close the activity. */
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                Log.d("DeadlineActivity", "Back button pressed inside of dialog.");
+                moveTaskToBack(true);
+                finish();
+            }
+        });
+
         return builder.create();
     }
+
+
 
 }
 
