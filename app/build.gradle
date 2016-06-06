@@ -47,6 +47,8 @@ android {
 }
 
 dependencies {
+    updateVersion()
+
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.0.1'
@@ -56,23 +58,15 @@ dependencies {
     compile 'com.android.support:design:23.0.1'
 
     compile 'ch.acra:acra:4.9.0'
-
-    versionPrinter()
 }
 
+def updateVersion() {
+    gitVersion()
+    String gitHash = versionDetails().gitHash
+    String versionLine = String.format("    <string name=\"app_version\">%s</string>", gitHash)
 
-
-def versionPrinter() {
-    println("Current version info: ")
-    def details = versionDetails()
-    println("gitHash: " + details.gitHash)
-    println("lastTag: " + details.lastTag)
-    println("commitDistance: " + details.commitDistance)
-    println("gitVersion(): " + gitVersion())
-
-}
-
-
-def replaceVersion() {
-
+    // Find the line containing 'string name="app_version"' and completely replace it with versionLine
+    ant.replaceregexp(match:'.*string name="app_version".*', replace:versionLine, flags:'g', byline:true) {
+        fileset(dir: project.projectDir, includes: 'src/main/res/values/strings.xml')
+    }
 }

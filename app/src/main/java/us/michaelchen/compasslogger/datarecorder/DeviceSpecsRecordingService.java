@@ -21,6 +21,7 @@ public class DeviceSpecsRecordingService extends AbstractRecordingService {
     private static final String SDK_NUM_KEY = "sdkLevel";
     private static final String SENSOR_COUNT_KEY = "sensorCount";
     private static final String SENSOR_KEY = "sensor-%d";
+    private static final String VERSION_KEY = "gitBuild";
 
     public DeviceSpecsRecordingService() {
         super("DeviceSpecsRecordingService");
@@ -51,7 +52,7 @@ public class DeviceSpecsRecordingService extends AbstractRecordingService {
         }
 
         // The hash value from Strings.xml will be replaced by Gradle build
-        data.put(getString(R.string.git_build), getString(R.string.git_hash));
+        data.put(VERSION_KEY, getString(R.string.app_version));
 
         return data;
     }
