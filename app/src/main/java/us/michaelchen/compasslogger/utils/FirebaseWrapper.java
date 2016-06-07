@@ -8,12 +8,9 @@ import java.util.Map;
 
 import us.michaelchen.compasslogger.R;
 
-/**
- * Created by ioreyes on 6/6/16.
- */
+
 public class FirebaseWrapper {
     private static final String USER_DATA_KEY = "userData";
-    private static final String TIME_KEY = "submitTime";
 
     private static String dbURL = null;
     private static Firebase deviceDb = null;
@@ -70,13 +67,16 @@ public class FirebaseWrapper {
      */
     public static void push(String key, Map<String, Object> data) {
         if(isInit) {
-            // Add time data if it's not present
-            if(!data.containsKey(TIME_KEY)) {
-                data.put(TIME_KEY, DataTimeFormat.current());
-            }
+            // Pushes to the Firebase with a hierarchy as follows:
+            /*
+            *   UUID
+            *       Sensor
+            *           TimeStamp
+            *               DataEntry.
+            * */
+            String timeStamp = DataTimeFormat.current();
+            deviceDb.child(key).child(timeStamp).setValue(data);
 
-            // Push to database
-            deviceDb.child(key).push().setValue(data);
         }
     }
 }
