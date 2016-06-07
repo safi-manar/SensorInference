@@ -5,15 +5,13 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.widget.Toast;
 
 import us.michaelchen.compasslogger.datarecorder.DeviceSpecsRecordingService;
 import us.michaelchen.compasslogger.receiver.GenericIntentReceiver;
 import us.michaelchen.compasslogger.receiver.PeriodicReceiver;
+import us.michaelchen.compasslogger.stepkeepalive.StepSensorKeepAliveService;
 
 /**
  * Created by ioreyes on 6/2/16.
@@ -52,17 +50,6 @@ public class MasterSwitch {
 
     // Used by step counter
     private static SensorManager sensorManager = null;
-    private static SensorEventListener STEP_LISTENER = new SensorEventListener() {
-        @Override
-        public void onSensorChanged(SensorEvent event) {
-            // Do nothing, just keep the sensor alive
-        }
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-            // Do nothing, just keep the sensor alive
-        }
-    };
 
     /**
      * Turns on all the data collection services
@@ -166,12 +153,9 @@ public class MasterSwitch {
      * @param c Calling Android context
      */
     private static void startStepCounter(Context c) {
-        if(sensorManager == null) {
-            sensorManager = (SensorManager) c.getSystemService(Context.SENSOR_SERVICE);
-        }
+        Intent intent = new Intent(c, StepSensorKeepAliveService.class);
 
-        Sensor stepSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-        sensorManager.registerListener(STEP_LISTENER, stepSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        c.startService(intent);
     }
 
     /**
@@ -179,11 +163,10 @@ public class MasterSwitch {
      * @param c Calling Android context
      */
     private static void stopStepCounter(Context c) {
-        if(sensorManager == null) {
-            sensorManager = (SensorManager) c.getSystemService(Context.SENSOR_SERVICE);
-        }
+        Intent intent = new Intent(c, StepSensorKeepAliveService.class);
+        intent.putExtra(StepSensorKeepAliveService.DEACTIVATE_EXTRA, true);
 
-        sensorManager.unregisterListener(STEP_LISTENER);
+        c.startService(intent);
     }
 
     /**

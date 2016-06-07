@@ -107,6 +107,11 @@
             android:exported="false"
             android:enabled="true"
             android:permission="android.p" />
+
+        <service
+            android:name=".stepkeepalive.StepSensorKeepAliveService"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>

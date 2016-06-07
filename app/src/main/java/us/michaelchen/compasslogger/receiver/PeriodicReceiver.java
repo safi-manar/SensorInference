@@ -3,7 +3,6 @@ package us.michaelchen.compasslogger.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import us.michaelchen.compasslogger.datarecorder.GenericEventRecordingService;
 import us.michaelchen.compasslogger.datarecorder.LightSensorRecordingService;
@@ -14,12 +13,16 @@ import us.michaelchen.compasslogger.datarecorder.RotationSensorRecordingService;
 import us.michaelchen.compasslogger.datarecorder.ScreenRecordingService;
 import us.michaelchen.compasslogger.datarecorder.StepSensorRecordingService;
 import us.michaelchen.compasslogger.deadline.DeadlineService;
+import us.michaelchen.compasslogger.stepkeepalive.StepSensorKeepAliveService;
 
 /**
  * Receiver used for periodic sensor polling
  */
 public class PeriodicReceiver extends BroadcastReceiver {
     private static final Class[] PERIODICS = new Class[] {
+            // Keep the step counter is alive at each periodic
+            StepSensorKeepAliveService.class,
+
             GenericEventRecordingService.class,
 
             ScreenRecordingService.class,
@@ -42,6 +45,5 @@ public class PeriodicReceiver extends BroadcastReceiver {
         for(Class c : PERIODICS) {
             context.startService(new Intent(context, c));
         }
-        Log.d("PeriodicService", "Periodics are working properly.");
     }
 }
