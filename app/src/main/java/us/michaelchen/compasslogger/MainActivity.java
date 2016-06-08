@@ -10,14 +10,11 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
-
-import com.firebase.client.Firebase;
 
 import us.michaelchen.compasslogger.utils.DeviceID;
 import us.michaelchen.compasslogger.utils.MasterSwitch;
@@ -56,15 +53,19 @@ public class MainActivity extends AppCompatActivity {
             dialog.show();
         }
 
-        displayUUID();
+        displayUUIDandBuild();
     }
 
     /**
-     * Put the UUID on the main screen
+     * Put the UUID and build on the main screen
      */
-    private void displayUUID() {
-        TextView uuidView = (TextView) findViewById(R.id.uuidText);
-        uuidView.setText(DeviceID.get(this));
+    private void displayUUIDandBuild() {
+        TextView infoView = (TextView) findViewById(R.id.infoText);
+
+        String uuid = DeviceID.get(this);
+        String build = getString(R.string.app_version);
+        String text = String.format("ID: %s%nBuild: %s", uuid, build);
+        infoView.setText(text);
     }
 
     /*Determines whether the user has given consent to the experiment by checking
