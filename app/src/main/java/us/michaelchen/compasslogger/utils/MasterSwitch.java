@@ -22,8 +22,6 @@ public class MasterSwitch {
     private static boolean running = false;
 
     // Used by periodics
-    private static final int BROADCAST_MINUTES = 1;
-    private static final int BROADCAST_PERIOD = 1000 * 60 * BROADCAST_MINUTES;
     private static PendingIntent periodicIntent = null;
 
     // Used by asynchronous
@@ -106,7 +104,7 @@ public class MasterSwitch {
         AlarmManager manager = (AlarmManager) c.getSystemService(Context.ALARM_SERVICE);
         manager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
                 System.currentTimeMillis(),
-                BROADCAST_PERIOD,
+                TimeConstants.PERIODIC_LENGTH,
                 periodicIntent);
 
         Toast.makeText(c, "Alarms Set", Toast.LENGTH_SHORT).show();

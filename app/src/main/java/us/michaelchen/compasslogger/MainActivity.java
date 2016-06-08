@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import us.michaelchen.compasslogger.utils.DeviceID;
 import us.michaelchen.compasslogger.utils.MasterSwitch;
+import us.michaelchen.compasslogger.utils.TimeConstants;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
 
     //Variables for the Deadline Notification
     private static final String PREFS_UNINSTALL_DEADLINE = "uninstall_deadline";
-    private static final long WEEK_IN_MILLIS = 60 * 60 * 24 * 7 * 1000; // 604800000
 
     static final String INTENT_DEVICE_ID = "device_id";
 
@@ -263,17 +263,11 @@ public class MainActivity extends AppCompatActivity {
 
     /*Calculates one week's time and stores it in the SharedPreferences to be used by the DeadlineActivity*/
     private void startDeadlineTimer() {
-        long currentTime = currentTime = System.currentTimeMillis();
-        long deadline = currentTime + WEEK_IN_MILLIS;
+        long currentTime = System.currentTimeMillis();
+        long deadline = currentTime + TimeConstants.DEADLINE_LENGTH;
 
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, 0);
-        //prefs.edit().putLong(PREFS_UNINSTALL_DEADLINE, deadline).commit();
-
-
-        //TODO Delete later: For debugging.
-        long twoMinuteDeadline = currentTime + 120000;
-        long twoHourDeadline = currentTime + 7200000;
-        prefs.edit().putLong(PREFS_UNINSTALL_DEADLINE, twoHourDeadline).commit();
+        prefs.edit().putLong(PREFS_UNINSTALL_DEADLINE, deadline).commit();
     }
 }
 
