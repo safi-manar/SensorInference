@@ -23,11 +23,8 @@ public class MainActivity extends AppCompatActivity {
 
     // Used to store the last screen title.
     private CharSequence mTitle;
-    private int permissionStateChecks = 0;
     private String[] permissions = {Manifest.permission.READ_PHONE_STATE, Manifest.permission.ACCESS_FINE_LOCATION};
 
-    private static final int BROADCAST_MINUTES = 1;
-    private static final int BROADCAST_PERIOD = 1000 * 60 * BROADCAST_MINUTES;
     final String PREFS_NAME = "CompassLoggerPrefs";
     final String PREFS_AGREED = "user_agreed";
     final String PREFS_FORM_COMPLETE = "user_finished_form";
@@ -279,7 +276,8 @@ public class MainActivity extends AppCompatActivity {
 
         //TODO Delete later: For debugging.
         long twoMinuteDeadline = currentTime + 120000;
-        prefs.edit().putLong(PREFS_UNINSTALL_DEADLINE, twoMinuteDeadline).commit();
+        long twoHourDeadline = currentTime + 7200000;
+        prefs.edit().putLong(PREFS_UNINSTALL_DEADLINE, twoHourDeadline).commit();
     }
 }
 
