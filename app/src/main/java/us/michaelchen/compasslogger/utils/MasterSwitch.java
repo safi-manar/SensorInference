@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.hardware.SensorManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import us.michaelchen.compasslogger.datarecorder.DeviceSpecsRecordingService;
@@ -135,6 +136,16 @@ public class MasterSwitch {
         for (String event : ASYNCHRONOUS_EVENTS) {
             filter.addAction(event);
         }
+
+        // Try to unregister the receiver in case the phone sleeps
+        // and MainActivity.onCreate() is called again, leading to
+        // a new MasterSwitch.on call.
+        try {
+            c.unregisterReceiver(genericIntentReceiver);
+        } catch (IllegalArgumentException e) {
+            // We deliberately do nothing in the catch block.
+        }
+
         c.registerReceiver(genericIntentReceiver, filter);
     }
 
