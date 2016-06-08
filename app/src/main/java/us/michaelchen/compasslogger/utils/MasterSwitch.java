@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.hardware.SensorManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -20,6 +21,12 @@ import us.michaelchen.compasslogger.stepkeepalive.StepSensorKeepAliveService;
 public class MasterSwitch {
     private static boolean firstRun = true;
     private static boolean running = false;
+
+    private static SharedPreferences prefs = null;
+    private static final String PREFS_NAME = "CompassLoggerPrefs";
+    private static final String FIRST_RUN = "firstRun";
+    private static final String IS_RUNNING = "isRunning";
+
 
     // Used by periodics
     private static PendingIntent periodicIntent = null;
@@ -55,17 +62,26 @@ public class MasterSwitch {
      * @param c Calling Android context
      */
     public static void on(Context c) {
+
+        /*Ensure the variables have been assigned in case the
+        * GC has dumped the static variables.*/
+        updatePreferencesVariables(c);
+
         if(!running) {
             if(firstRun) {
                 recordDeviceSpecs(c);
-                firstRun = false;
+                prefs.edit().putBoolean(FIRST_RUN, false).commit();
+                /*Now, update firstRun*/
+                updatePreferencesVariables(c);
             }
 
             startStepCounter(c);
             startAsynchronous(c);
             startPeriodics(c);
 
-            running = true;
+            prefs.edit().putBoolean(IS_RUNNING, true).commit();
+            /*Now, update running*/
+            updatePreferencesVariables(c);
         }
     }
 
@@ -74,12 +90,16 @@ public class MasterSwitch {
      * @param c Calling Android context
      */
     public static void off(Context c) {
+
+        updatePreferencesVariables(c);
+
         if(running) {
             stopStepCounter(c);
             stopAsynchronous(c);
             stopPeriodics(c);
 
-            running = false;
+            prefs.edit().putBoolean(IS_RUNNING, false).commit();
+            updatePreferencesVariables(c);
         }
     }
 
@@ -89,6 +109,17 @@ public class MasterSwitch {
      */
     public static boolean isRunning() {
         return running;
+    }
+
+
+    /*Ensures that the static variable prefs stores the
+    * SharedPreferences for the app.*/
+    private static void updatePreferencesVariables(Context c) {
+        prefs = c.getSharedPreferences(PREFS_NAME, 0);
+
+        // Update the running booleans. Note assumptions if no values are in prefs.
+        running = prefs.getBoolean(IS_RUNNING, false); //Assume not running
+        firstRun = prefs.getBoolean(FIRST_RUN, true); //Assume first run
     }
 
     /**
