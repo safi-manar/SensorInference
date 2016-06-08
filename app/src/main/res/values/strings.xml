@@ -10,45 +10,56 @@
 
     <string name="agreement_title">Consent to Participate in Research\n Understanding Smartphone Sensors</string>
     <string name="agreement_message">
-        My name is Michael Chen. I am an undergraduate student working with Serge Egelman in Computer Science at the University of California, Berkeley.  We are planning to conduct a research study, which I invite you to take part in.\n\n
+        My name is Manar Safi. I am an undergraduate student working with Serge Egelman in the
+        Computer Science Department at the University of California, Berkeley.  We are planning
+        to conduct a research study, which I invite you to take part in.\n\n
+
         The purpose of this study is to examine whether we can accurately predict certain types of
         demographic information and the daily routines of smartphone users using innocuous sensor
-        data, such as from the accelerometer and compass.\n\n
+        data, such as that from the accelerometer and compass.\n\n
 
-        After downloading this app, if you agree to be in this study, you will be directed to a survey that will ask you several questions about your
-        demographics and daily routines. This app will then run in the background for one week.
-        During this time, the app will periodically take snapshots of your smartphone\'s sensor data (accelerometer, gyroscope, compass, GPS, battery state, proximity, and brightness) up to once every 30 minutes
-        to see whether any of it correlates with your survey responses. These measurements will be sent to our encrypted database. After one week, the app will
-        uninstall itself and you will be granted the bonus payment. This app will run silently,
-        will not collect any information that personally identifies you other than GPS, and will not impact your
+        After downloading this app, if you agree to be in this study, you will be directed to a
+        survey that will prompt you with several questions about your demographics and daily routines.
+        This app will then run in the background for one week. During this time, the app will
+        periodically take snapshots of your smartphone\'s sensor data (accelerometer, gyroscope,
+        compass, GPS, battery state, proximity, and brightness) up to once every 30 minutes, which we
+        will then use to determine whether any of it correlates with your survey responses. These
+        measurements will be sent to our encrypted database. After one week, the app will prompt you to
+        uninstall it, and you will be granted the bonus payment. This app will run silently, will not
+        collect any information that personally identifies you other than GPS, and will not impact your
         phone\'s performance or battery life.
 
         Participation in this study will involve a total of 5 minutes to complete the survey, and then
         leaving the app running in the background for one week.\n\n
 
-        This research will not benefit you directly, however it will indirectly benefit you and other
+        This research will not benefit you directly. However, it will indirectly benefit you and other
         smartphone users by helping system designers better understand what types of inferences
         could be made from sensor data.\n\n
 
         Some of the research questions may make you uncomfortable or upset. You are free to decline
-        to stop the study at any time. You may also uninstall the app at any time to stop the study.\n\n
+        to answer and stop the study at any time. You may also uninstall the app at any time to stop
+        the study.\n\n
 
-        The risks for this study are minimal: these involve a potential breach of confidentiality for GPS data and other location data. We will encrypt data to decrease the probability of such a breach.\n\n
+        The risks for this study are minimal: these involve a potential breach of confidentiality for
+        GPS data and other location data. We will encrypt data to decrease the probability of such a
+        breach.\n\n
 
-        Your study data will be handled as confidentially as possible. This involves storage on encrypted databases and encrypted computers. If results of this study are
-        published or presented, individual names and other personally identifiable information will
-        not be used.\n\n
+        Your study data will be handled as confidentially as possible. This involves storage on encrypted
+        databases and encrypted computers. If results of this study are published or presented, individual
+        names and other personally identifiable information will not be used.\n\n
 
         The research data will be maintained for possible use in future research by myself or others.
         The same measures described above will be taken to protect confidentiality of this study data.\n\n
 
-        You will be given $0.25 upon installing the app and entering your MTurk ID. Upon completing the study after one
-        week, you will be granted a $2.00 bonus. This app will use some background data transfer, but should incur no more than 2MB of data transfered in the one week period.\n\n
+        You will be given $0.25 upon installing the app and entering your MTurk ID. Upon completing the
+        study after one week, you will be granted a $2.00 bonus. This app will use some background data
+        transfer, but should incur no more than 2MB of data transfered in the one week period.\n\n
 
         You have the right to decline to participate or to withdraw at any point in this study without
         penalty or loss of benefits to which you are otherwise entitled.\n\n
 
-        If you have any questions or concerns about this study, you may contact Serge Egelman at egelman@cs.berkeley.edu.\n\n
+        If you have any questions or concerns about this study, you may contact Serge Egelman at
+        egelman@cs.berkeley.edu.\n\n
 
         If you have any questions or concerns about your rights and treatment as a research subject,
         you may contact the office of UC Berkeley\'s Committee for the Protection of Human
@@ -175,6 +186,6 @@
     <string name="error_not_init">Firebase connection not initialized</string>
 
     <!-- Auto-generated Git version DO NOT EDIT -->
-    <string name="app_version">2ffc996</string>
+    <string name="app_version">8ce3c24</string>
 
 </resources>
