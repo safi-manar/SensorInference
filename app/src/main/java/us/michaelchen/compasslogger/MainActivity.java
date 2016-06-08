@@ -15,6 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
 
 import com.firebase.client.Firebase;
 
@@ -55,6 +56,15 @@ public class MainActivity extends AppCompatActivity {
             dialog.show();
         }
 
+        displayUUID();
+    }
+
+    /**
+     * Put the UUID on the main screen
+     */
+    private void displayUUID() {
+        TextView uuidView = (TextView) findViewById(R.id.uuidText);
+        uuidView.setText(DeviceID.get(this));
     }
 
     /*Determines whether the user has given consent to the experiment by checking
