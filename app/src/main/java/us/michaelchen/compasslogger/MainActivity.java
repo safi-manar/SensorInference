@@ -21,8 +21,6 @@ import us.michaelchen.compasslogger.utils.MasterSwitch;
 
 public class MainActivity extends AppCompatActivity {
 
-    // Used to store the last screen title.
-    private CharSequence mTitle;
     private String[] permissions = {Manifest.permission.READ_PHONE_STATE, Manifest.permission.ACCESS_FINE_LOCATION};
 
     final String PREFS_NAME = "CompassLoggerPrefs";
@@ -40,8 +38,6 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        mTitle = getTitle();
 
         if (checkAgreementConsent()) {
             checkPermissions();

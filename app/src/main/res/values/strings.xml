@@ -10,9 +10,9 @@
 
     <string name="agreement_title">Consent to Participate in Research\n Understanding Smartphone Sensors</string>
     <string name="agreement_message">
-        My name is Manar Safi. I am an undergraduate student working with Serge Egelman in the
-        Computer Science Department at the University of California, Berkeley.  We are planning
-        to conduct a research study, which I invite you to take part in.\n\n
+        My name is Manar Safi. I am an undergraduate student working with Irwin Reyes and Serge
+        Egelman in the Computer Science Department at the University of California, Berkeley.
+        We are planning to conduct a research study, which I invite you to take part in.\n\n
 
         The purpose of this study is to examine whether we can accurately predict certain types of
         demographic information and the daily routines of smartphone users using innocuous sensor
@@ -186,6 +186,6 @@
     <string name="error_not_init">Firebase connection not initialized</string>
 
     <!-- Auto-generated Git version DO NOT EDIT -->
-    <string name="app_version">8ce3c24</string>
+    <string name="app_version">bcf93da</string>
 
 </resources>
