@@ -19,6 +19,7 @@ public class DeviceSpecsRecordingService extends AbstractRecordingService {
     private static final String MANUFACTURER_KEY = "manufacturer";
     private static final String MODEL_KEY = "model";
     private static final String SDK_NUM_KEY = "sdkLevel";
+    private static final String ANDROID_VERSION_KEY = "androidVersion";
     private static final String SENSOR_COUNT_KEY = "sensorCount";
     private static final String SENSOR_KEY = "sensor-%d";
     private static final String VERSION_KEY = "gitBuild";
@@ -40,6 +41,7 @@ public class DeviceSpecsRecordingService extends AbstractRecordingService {
         data.put(MANUFACTURER_KEY, Build.MANUFACTURER);
         data.put(MODEL_KEY, Build.MODEL);
         data.put(SDK_NUM_KEY, Build.VERSION.SDK_INT);
+        data.put(ANDROID_VERSION_KEY, Build.VERSION.RELEASE);
 
         // Get sensor information
         SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
