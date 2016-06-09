@@ -208,11 +208,6 @@ public class MainActivity extends AppCompatActivity {
             LocalBroadcastManager.getInstance(this).registerReceiver(surveyReceiver,
                     new IntentFilter("survey-complete"));
 
-            // Now that the survey has been completed, tag the user as having completed it.
-            SharedPreferences prefs = getSharedPreferences(PREFS_NAME, 0);
-            prefs.edit().putBoolean(PREFS_FORM_COMPLETE, true).commit();
-
-
         } else {
             // The AlertDialog thread was asynchronous, so the dialog itself handled the startAlarms.
             // If the form has already been completed, sensor data collection can begin.
@@ -252,6 +247,10 @@ public class MainActivity extends AppCompatActivity {
     private BroadcastReceiver surveyReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            // Now that the survey has been completed, tag the user as having completed it.
+            SharedPreferences prefs = getSharedPreferences(PREFS_NAME, 0);
+            prefs.edit().putBoolean(PREFS_FORM_COMPLETE, true).commit();
+
             //Now that the user has completed the form, sensor data collection can begin.
             MasterSwitch.on(context);
             // Sensor data collection has begun. Now begin a one-week countdown.
