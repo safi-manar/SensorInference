@@ -69,7 +69,7 @@ public class MasterSwitch {
         * GC has dumped the static variables.*/
         updatePreferencesVariables(c);
 
-        if(!isRunningTimestamp(c)) {
+        if(!isRunning(c)) {
             if(isFirstRun()) {
                 recordDeviceSpecs(c);
                 // Now, update the FIRST_RUN check.
@@ -90,7 +90,7 @@ public class MasterSwitch {
      * @param c Calling Android context
      */
     public static void off(Context c) {
-        if(isRunningTimestamp(c)) {
+        if(isRunning(c)) {
             stopStepCounter(c);
             stopAsynchronous(c);
             stopPeriodics(c);
@@ -101,13 +101,6 @@ public class MasterSwitch {
         }
     }
 
-    /**
-     *
-     * @return True if the data collection services are active
-     */
-    public static boolean isRunning() {
-        return running;
-    }
 
     /* Updates SharedPreferences with a variable that
     *  stores the current timestamp.
@@ -129,7 +122,7 @@ public class MasterSwitch {
      * greater than the safe (110%) interval of the PERIODIC_LENGTH.
      * Will logically return false when prevTimeStamp = 0.
      */
-    public static boolean isRunningTimestamp(Context c) {
+    public static boolean isRunning(Context c) {
         prefs = c.getSharedPreferences(PREFS_NAME, 0); // Update the static prefs variable
         return (getPrevTimeStamp(c) > getExpectedSafePrevTimeStamp(c));
     }
