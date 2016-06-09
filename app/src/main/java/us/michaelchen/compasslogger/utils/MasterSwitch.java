@@ -27,6 +27,8 @@ public class MasterSwitch {
     private static final String FIRST_RUN = "firstRun";
     private static final String IS_RUNNING = "isRunning";
 
+    private static final String ALARM_TIMESTAMP = "alarmTimeStamp";
+
 
     // Used by periodics
     private static PendingIntent periodicIntent = null;
@@ -67,21 +69,19 @@ public class MasterSwitch {
         * GC has dumped the static variables.*/
         updatePreferencesVariables(c);
 
-        if(!running) {
-            if(firstRun) {
+        if(!isRunningTimestamp(c)) {
+            if(isFirstRun()) {
                 recordDeviceSpecs(c);
-                prefs.edit().putBoolean(FIRST_RUN, false).commit();
-                /*Now, update firstRun*/
-                updatePreferencesVariables(c);
+                // Now, update the FIRST_RUN check.
+                setFirstRun();
             }
 
             startStepCounter(c);
             startAsynchronous(c);
             startPeriodics(c);
 
-            prefs.edit().putBoolean(IS_RUNNING, true).commit();
-            /*Now, update running*/
-            updatePreferencesVariables(c);
+            // Now, update the timestamp.
+            updateTimeStamp(c);
         }
     }
 
@@ -90,16 +90,14 @@ public class MasterSwitch {
      * @param c Calling Android context
      */
     public static void off(Context c) {
-
-        updatePreferencesVariables(c);
-
-        if(running) {
+        if(isRunningTimestamp(c)) {
             stopStepCounter(c);
             stopAsynchronous(c);
             stopPeriodics(c);
 
-            prefs.edit().putBoolean(IS_RUNNING, false).commit();
-            updatePreferencesVariables(c);
+            // Reset the timestamp for future iterations
+            // to assume a MasterSwitch.On() alarm reset.
+            prefs.edit().putLong(ALARM_TIMESTAMP, 0).commit();
         }
     }
 
@@ -110,6 +108,65 @@ public class MasterSwitch {
     public static boolean isRunning() {
         return running;
     }
+
+    /* Updates SharedPreferences with a variable that
+    *  stores the current timestamp.
+    *  @param c Calling Android context     */
+    private static void updateTimeStamp(Context c) {
+        long currentTime = getCurrentTime();
+
+        prefs = c.getSharedPreferences(PREFS_NAME, 0);
+        prefs.edit().putLong(ALARM_TIMESTAMP, currentTime).commit();
+    }
+
+
+    /**
+     *
+     * @return True if the data collection services are active by
+     * checking whether the current time is within a safe-factored
+     * PERIODIC_LENGTH of the previous time. In other words, if the
+     * alarms are active, then the previous time stamp should be
+     * greater than the safe (110%) interval of the PERIODIC_LENGTH.
+     * Will logically return false when prevTimeStamp = 0.
+     */
+    public static boolean isRunningTimestamp(Context c) {
+        prefs = c.getSharedPreferences(PREFS_NAME, 0); // Update the static prefs variable
+        return (getPrevTimeStamp(c) > getExpectedSafePrevTimeStamp(c));
+    }
+
+
+    /* Gets the what we expect the previous timestamp to be
+    *   factored by 110% of the PERIODIC_LENGTH, making it
+    *   "safe" from inexact time scheduling errors.
+    *  @param c Calling Android context     */
+    private static long getExpectedSafePrevTimeStamp(Context c) {
+        return ( getCurrentTime() -  ( (long) (TimeConstants.PERIODIC_LENGTH * TimeConstants.PERIODIC_SAFE_FACTOR)));
+    }
+
+
+    /* Gets the current system time.
+    *  @param c Calling Android context     */
+    private static long getCurrentTime() {
+        return System.currentTimeMillis();
+    }
+
+    /* Gets the previous time stamp from prefs (updated by isRunning()) .
+   *  @param c Calling Android context     */
+    private static long getPrevTimeStamp(Context c) {
+        return prefs.getLong(ALARM_TIMESTAMP, 0);
+    }
+
+
+    /* Sets the first run to false.*/
+    private static void setFirstRun() {
+        prefs.edit().putBoolean(FIRST_RUN, false).commit();
+    }
+
+    /*Determines whether the MasterSwitch.On has been called before.*/
+    private static boolean isFirstRun() {
+        return prefs.getBoolean(FIRST_RUN, false);
+    }
+
 
 
     /*Ensures that the static variable prefs stores the

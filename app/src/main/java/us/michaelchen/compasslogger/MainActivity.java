@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     final String PREFS_NAME = "CompassLoggerPrefs";
     final String PREFS_AGREED = "user_agreed";
     final String PREFS_FORM_COMPLETE = "user_finished_form";
+    private static final String ALARM_TIMESTAMP = "alarmTimeStamp";
 
     //Variables for the Deadline Notification
     private static final String PREFS_UNINSTALL_DEADLINE = "uninstall_deadline";
@@ -38,6 +39,12 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        /*Because alarms are reset upon a device restart,
+         * we'll reset the alarm timestamp so that MasterSwitch
+         * assumes that the alarms must be reset.   */
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, 0);
+        prefs.edit().putLong(ALARM_TIMESTAMP, 0).commit();
 
         if (checkAgreementConsent()) {
             checkPermissions();
