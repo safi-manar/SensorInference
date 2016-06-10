@@ -13,7 +13,10 @@ public class BootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
-            MasterSwitch.on(context);
+            //The Context that is passed to onReceive() is blocked from
+            // calling registerReceiver(), even with a null BroadcastReceiver.
+            // So, get the application context.
+            MasterSwitch.on(context.getApplicationContext());
         }
     }
 }
