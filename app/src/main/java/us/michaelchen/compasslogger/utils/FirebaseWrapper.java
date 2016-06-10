@@ -27,7 +27,7 @@ public class FirebaseWrapper {
             Firebase.setAndroidContext(c);
 
             dbURL = c.getString(R.string.firebase_url);
-            deviceId = DeviceID.get(c);
+            deviceId = PreferencesWrapper.getDeviceID();
 
             Firebase db = new Firebase(dbURL);
             deviceDb = db.child(USER_DATA_KEY).child(deviceId);

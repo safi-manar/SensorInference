@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -16,23 +15,12 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
-import us.michaelchen.compasslogger.utils.DeviceID;
 import us.michaelchen.compasslogger.utils.MasterSwitch;
+import us.michaelchen.compasslogger.utils.PreferencesWrapper;
 import us.michaelchen.compasslogger.utils.TimeConstants;
 
 public class MainActivity extends AppCompatActivity {
-
     private String[] permissions = {Manifest.permission.READ_PHONE_STATE, Manifest.permission.ACCESS_FINE_LOCATION};
-
-    final String PREFS_NAME = "CompassLoggerPrefs";
-    final String PREFS_AGREED = "user_agreed";
-    final String PREFS_FORM_COMPLETE = "user_finished_form";
-    private static final String ALARM_TIMESTAMP = "alarmTimeStamp";
-
-    //Variables for the Deadline Notification
-    private static final String PREFS_UNINSTALL_DEADLINE = "uninstall_deadline";
-
-    static final String INTENT_DEVICE_ID = "device_id";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +31,9 @@ public class MainActivity extends AppCompatActivity {
         /*Because alarms are reset upon a device restart,
          * we'll reset the alarm timestamp so that MasterSwitch
          * assumes that the alarms must be reset.   */
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, 0);
-        prefs.edit().putLong(ALARM_TIMESTAMP, 0).commit();
+        PreferencesWrapper.resetLastAlarmTimestamp();
 
-        if (checkAgreementConsent()) {
+        if (PreferencesWrapper.isUserConsented()) {
             checkPermissions();
         } else {
             AlertDialog dialog = agreementDialog();
@@ -62,34 +49,11 @@ public class MainActivity extends AppCompatActivity {
     private void displayUUIDandBuild() {
         TextView infoView = (TextView) findViewById(R.id.infoText);
 
-        String uuid = DeviceID.get(this);
+        String uuid = PreferencesWrapper.getDeviceID();
         String build = getString(R.string.app_version);
         String text = String.format("ID: %s%nBuild: %s", uuid, build);
         infoView.setText(text);
     }
-
-    /*Determines whether the user has given consent to the experiment by checking
-    * the value of PREFS_AGREED.
-    * PREFS_AGREED = true : The user has previously launched the app and accepted the consent agreement dialog.
-    * PREFS_AGREED = false: The user may or may not have launched the app; but permissions have not
-    *                       been accepted. */
-    private boolean checkAgreementConsent() {
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, 0);
-        return prefs.getBoolean(PREFS_AGREED, false);
-    }
-
-
-    /*Determines whether the Google Form has been completed by checking
-    * the value of PREFS_FORM_COMPLETE.
-    * PREFS_FORM_COMPLETE = true : The user has submitted the Google form..
-    * PREFS_FORM_COMPLETE = false: The user may or may not have viewed the Google form; but the form has not
-     *                              been submitted. */
-    private boolean checkFormComplete() {
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, 0);
-        return prefs.getBoolean(PREFS_FORM_COMPLETE, false);
-    }
-
-
 
     /* Displays the agreement ("Consent to Participate in Research..." ) dialog.*/
     private AlertDialog agreementDialog() {
@@ -99,8 +63,7 @@ public class MainActivity extends AppCompatActivity {
         // It then calls CheckPermissions() to begin the permission request.
         builder.setPositiveButton(R.string.agree, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                SharedPreferences prefs = getSharedPreferences(PREFS_NAME, 0);
-                prefs.edit().putBoolean(PREFS_AGREED, true).commit();
+                PreferencesWrapper.setUserConsented();
                 checkPermissions();
             }
         });
@@ -130,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
     * Thus, we run an independent checkPermissions() call for each invidual permission.
     * */
     private void checkPermissions() {
-       int grantedCount = 0;
         for (int i = 0; i < permissions.length; i++) {
             if (ContextCompat.checkSelfPermission(this, permissions[i]) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{permissions[i]}, i);
@@ -202,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
      * As such, phone sensor data collection should occur after submission of the form.
      * */
     private void collectSurveyFormAndSensorData() {
-        if (!checkFormComplete()) {
+        if (!PreferencesWrapper.isSurveyCompleted()) {
             // Remind the user about the survey, and since the dialog thread will be
             // asynchronous, let the AlertDialog handle the initiation of the alarms.
             AlertDialog surveyForm = surveyFormDialog(this);
@@ -235,7 +197,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int id) {
                 // Now show the WebView FormActivity
                 Intent intent = new Intent(context, FormActivity.class);
-                intent.putExtra(INTENT_DEVICE_ID, DeviceID.get(context));
                 startActivity(intent);
             }
         });
@@ -255,8 +216,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             // Now that the survey has been completed, tag the user as having completed it.
-            SharedPreferences prefs = getSharedPreferences(PREFS_NAME, 0);
-            prefs.edit().putBoolean(PREFS_FORM_COMPLETE, true).commit();
+            PreferencesWrapper.setSurveyCompleted();
 
             //Now that the user has completed the form, sensor data collection can begin.
             MasterSwitch.on(context);
@@ -271,9 +231,7 @@ public class MainActivity extends AppCompatActivity {
     private void startDeadlineTimer() {
         long currentTime = System.currentTimeMillis();
         long deadline = currentTime + TimeConstants.DEADLINE_LENGTH;
-
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, 0);
-        prefs.edit().putLong(PREFS_UNINSTALL_DEADLINE, deadline).commit();
+        PreferencesWrapper.setUninstallDeadline(deadline);
     }
 }
 

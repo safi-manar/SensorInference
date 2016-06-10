@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import us.michaelchen.compasslogger.utils.PreferencesWrapper;
+
 public class FormActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,7 +17,7 @@ public class FormActivity extends AppCompatActivity {
         setContentView(R.layout.activity_form);
         Intent i = getIntent();
 
-        String deviceId = i.getStringExtra(MainActivity.INTENT_DEVICE_ID);
+        String deviceId = PreferencesWrapper.getDeviceID();
         String formURL = getResources().getString(R.string.gdocs_url);
 
 

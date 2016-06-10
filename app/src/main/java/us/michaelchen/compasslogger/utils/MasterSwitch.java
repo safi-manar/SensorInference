@@ -5,9 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.hardware.SensorManager;
-import android.util.Log;
 import android.widget.Toast;
 
 import us.michaelchen.compasslogger.datarecorder.DeviceSpecsRecordingService;
@@ -19,14 +17,6 @@ import us.michaelchen.compasslogger.stepkeepalive.StepSensorKeepAliveService;
  * Created by ioreyes on 6/2/16.
  */
 public class MasterSwitch {
-
-    private static SharedPreferences prefs = null;
-    private static final String PREFS_NAME = "CompassLoggerPrefs";
-    private static final String FIRST_RUN = "firstRun";
-
-    private static final String ALARM_TIMESTAMP = "alarmTimeStamp";
-
-
     // Used by periodics
     private static PendingIntent periodicIntent = null;
 
@@ -62,19 +52,16 @@ public class MasterSwitch {
      */
     public static void on(Context c) {
 
-        if(!isRunning(c)) {
-            if(isFirstRun()) {
+        if(!isRunning()) {
+            if(PreferencesWrapper.isFirstRun()) {
                 recordDeviceSpecs(c);
                 // Now, update the FIRST_RUN check.
-                setFirstRun();
+                PreferencesWrapper.setFirstRun();
             }
 
             startStepCounter(c);
             startAsynchronous(c);
             startPeriodics(c);
-
-            // Now, update the timestamp.
-            updateTimeStamp(c);
         }
     }
 
@@ -83,28 +70,16 @@ public class MasterSwitch {
      * @param c Calling Android context
      */
     public static void off(Context c) {
-        if(isRunning(c)) {
+        if(isRunning()) {
             stopStepCounter(c);
             stopAsynchronous(c);
             stopPeriodics(c);
 
             // Reset the timestamp for future iterations
             // to assume a MasterSwitch.On() alarm reset.
-            prefs.edit().putLong(ALARM_TIMESTAMP, 0).commit();
+            PreferencesWrapper.resetLastAlarmTimestamp();
         }
     }
-
-
-    /* Updates SharedPreferences with a variable that
-    *  stores the current timestamp.
-    *  @param c Calling Android context     */
-    public static void updateTimeStamp(Context c) {
-        long currentTime = getCurrentTime();
-
-        prefs = c.getSharedPreferences(PREFS_NAME, 0);
-        prefs.edit().putLong(ALARM_TIMESTAMP, currentTime).commit();
-    }
-
 
     /**
      *
@@ -115,45 +90,18 @@ public class MasterSwitch {
      * greater than the safe (110%) interval of the PERIODIC_LENGTH.
      * Will logically return false when prevTimeStamp = 0.
      */
-    public static boolean isRunning(Context c) {
-        prefs = c.getSharedPreferences(PREFS_NAME, 0); // Update the static prefs variable
-        return (getPrevTimeStamp(c) > getExpectedSafePrevTimeStamp(c));
+    public static boolean isRunning() {
+        long prevTimeStamp = PreferencesWrapper.getLastAlarmTimestamp();
+
+        /* Gets the what we expect the previous timestamp to be
+        *   factored by 110% of the PERIODIC_LENGTH, making it
+        *   "safe" from inexact time scheduling errors.
+        *  */
+        long safePrevTimeStamp = System.currentTimeMillis() -
+                                 (long) (TimeConstants.PERIODIC_LENGTH * TimeConstants.PERIODIC_SAFE_FACTOR);
+
+        return prevTimeStamp > safePrevTimeStamp;
     }
-
-
-    /* Gets the what we expect the previous timestamp to be
-    *   factored by 110% of the PERIODIC_LENGTH, making it
-    *   "safe" from inexact time scheduling errors.
-    *  @param c Calling Android context     */
-    private static long getExpectedSafePrevTimeStamp(Context c) {
-        return ( getCurrentTime() -  ( (long) (TimeConstants.PERIODIC_LENGTH * TimeConstants.PERIODIC_SAFE_FACTOR)));
-    }
-
-
-    /* Gets the current system time.
-    *  @param c Calling Android context     */
-    private static long getCurrentTime() {
-        return System.currentTimeMillis();
-    }
-
-    /* Gets the previous time stamp from prefs (updated by isRunning()) .
-   *  @param c Calling Android context     */
-    private static long getPrevTimeStamp(Context c) {
-        return prefs.getLong(ALARM_TIMESTAMP, 0);
-    }
-
-
-    /* Sets the first run to false.*/
-    private static void setFirstRun() {
-        prefs.edit().putBoolean(FIRST_RUN, false).commit();
-    }
-
-    /*Determines whether the MasterSwitch.On has been called before.*/
-    private static boolean isFirstRun() {
-        return prefs.getBoolean(FIRST_RUN, false);
-    }
-
-
 
     /**
      * Start periodic events
@@ -172,6 +120,9 @@ public class MasterSwitch {
                 periodicIntent);
 
         Toast.makeText(c, "Alarms Set", Toast.LENGTH_SHORT).show();
+
+        // Note that the periodic started at this time
+        PreferencesWrapper.updateLastAlarmTimestamp();
     }
 
     /**

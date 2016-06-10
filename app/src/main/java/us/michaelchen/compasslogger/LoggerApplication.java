@@ -8,6 +8,7 @@ import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
 
 import us.michaelchen.compasslogger.utils.FirebaseWrapper;
+import us.michaelchen.compasslogger.utils.PreferencesWrapper;
 
 /**
  * Created by ioreyes on 6/2/16.
@@ -34,6 +35,7 @@ public class LoggerApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        PreferencesWrapper.init(this);
         FirebaseWrapper.init(this);
         ACRA.init(this);
     }

@@ -2,17 +2,14 @@ package us.michaelchen.compasslogger.deadline;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.SystemClock;
 import android.util.Log;
+
+import us.michaelchen.compasslogger.utils.PreferencesWrapper;
 
 /**
  * Created by Manar on 6/3/2016.
  */
 public class DeadlineService extends IntentService {
-
-    private static final String PREFS_NAME = "CompassLoggerPrefs";
-    private static final String PREFS_UNINSTALL_DEADLINE = "uninstall_deadline";
 
     public DeadlineService() {
         super("DeadlineService");
@@ -37,8 +34,7 @@ public class DeadlineService extends IntentService {
     /*Returns whether the deadline has been reached.*/
     private boolean isPassedDeadline() {
         long currentTime = System.currentTimeMillis();
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, 0);
-        long deadlineTime = prefs.getLong(PREFS_UNINSTALL_DEADLINE, 0);
+        long deadlineTime = PreferencesWrapper.getUninstallDeadline();
 
         Log.d("DeadlineService", "CurrentTime:  " + currentTime);
         Log.d("DeadlineService", "DeadlineTime: " + deadlineTime);
