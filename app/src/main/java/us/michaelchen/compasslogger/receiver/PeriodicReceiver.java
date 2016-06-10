@@ -14,6 +14,7 @@ import us.michaelchen.compasslogger.datarecorder.ScreenRecordingService;
 import us.michaelchen.compasslogger.datarecorder.StepSensorRecordingService;
 import us.michaelchen.compasslogger.deadline.DeadlineService;
 import us.michaelchen.compasslogger.stepkeepalive.StepSensorKeepAliveService;
+import us.michaelchen.compasslogger.utils.MasterSwitch;
 
 /**
  * Receiver used for periodic sensor polling
@@ -45,5 +46,9 @@ public class PeriodicReceiver extends BroadcastReceiver {
         for(Class c : PERIODICS) {
             context.startService(new Intent(context, c));
         }
+
+        // Now that the services have recorded new updates,
+        // update the timestamp to reflect the latest update.
+        MasterSwitch.updateTimeStamp(context);
     }
 }

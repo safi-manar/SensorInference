@@ -19,13 +19,10 @@ import us.michaelchen.compasslogger.stepkeepalive.StepSensorKeepAliveService;
  * Created by ioreyes on 6/2/16.
  */
 public class MasterSwitch {
-    private static boolean firstRun = true;
-    private static boolean running = false;
 
     private static SharedPreferences prefs = null;
     private static final String PREFS_NAME = "CompassLoggerPrefs";
     private static final String FIRST_RUN = "firstRun";
-    private static final String IS_RUNNING = "isRunning";
 
     private static final String ALARM_TIMESTAMP = "alarmTimeStamp";
 
@@ -65,10 +62,6 @@ public class MasterSwitch {
      */
     public static void on(Context c) {
 
-        /*Ensure the variables have been assigned in case the
-        * GC has dumped the static variables.*/
-        updatePreferencesVariables(c);
-
         if(!isRunning(c)) {
             if(isFirstRun()) {
                 recordDeviceSpecs(c);
@@ -105,7 +98,7 @@ public class MasterSwitch {
     /* Updates SharedPreferences with a variable that
     *  stores the current timestamp.
     *  @param c Calling Android context     */
-    private static void updateTimeStamp(Context c) {
+    public static void updateTimeStamp(Context c) {
         long currentTime = getCurrentTime();
 
         prefs = c.getSharedPreferences(PREFS_NAME, 0);
@@ -161,16 +154,6 @@ public class MasterSwitch {
     }
 
 
-
-    /*Ensures that the static variable prefs stores the
-    * SharedPreferences for the app.*/
-    private static void updatePreferencesVariables(Context c) {
-        prefs = c.getSharedPreferences(PREFS_NAME, 0);
-
-        // Update the running booleans. Note assumptions if no values are in prefs.
-        running = prefs.getBoolean(IS_RUNNING, false); //Assume not running
-        firstRun = prefs.getBoolean(FIRST_RUN, true); //Assume first run
-    }
 
     /**
      * Start periodic events
