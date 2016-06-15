@@ -85,15 +85,23 @@
 
 
         <service
+            android:name=".datarecorder.AccelerometerSensorRecordingService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".datarecorder.GyroscopeSensorRecordingService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
             android:name=".datarecorder.LightSensorRecordingService"
             android:enabled="true"
             android:exported="false" />
         <service
-            android:name=".datarecorder.ProximitySensorRecordingService"
+            android:name=".datarecorder.MagneticSensorRecordingService"
             android:enabled="true"
             android:exported="false" />
         <service
-            android:name=".datarecorder.RotationSensorRecordingService"
+            android:name=".datarecorder.ProximitySensorRecordingService"
             android:enabled="true"
             android:exported="false" />
         <service
