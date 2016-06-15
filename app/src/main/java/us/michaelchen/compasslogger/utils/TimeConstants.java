@@ -14,5 +14,7 @@ public class TimeConstants {
     // Fields used to set periodic length and uninstall time
     public static long PERIODIC_LENGTH = ONE_MINUTE;
     public static long DEADLINE_LENGTH = ONE_HOUR * 2;
+
     public static double PERIODIC_SAFE_FACTOR = 1.10;
+    public static long PERIODIC_SAFE_INTERVAL = (long) (PERIODIC_LENGTH * PERIODIC_SAFE_FACTOR);
 }

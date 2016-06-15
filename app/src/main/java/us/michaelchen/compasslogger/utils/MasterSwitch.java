@@ -92,15 +92,12 @@ public class MasterSwitch {
      */
     public static boolean isRunning() {
         long prevTimeStamp = PreferencesWrapper.getLastAlarmTimestamp();
+        long currentTimeStamp = System.currentTimeMillis();
+        long interval = currentTimeStamp - prevTimeStamp;
 
-        /* Gets the what we expect the previous timestamp to be
-        *   factored by 110% of the PERIODIC_LENGTH, making it
-        *   "safe" from inexact time scheduling errors.
-        *  */
-        long safePrevTimeStamp = System.currentTimeMillis() -
-                                 (long) (TimeConstants.PERIODIC_LENGTH * TimeConstants.PERIODIC_SAFE_FACTOR);
-
-        return prevTimeStamp > safePrevTimeStamp;
+        // The service is considered to still be running if the last periodic was within
+        // the last period length (plus a TimeConstants.PERIODIC_SAFE_FACTOR tolerance)
+        return interval < TimeConstants.PERIODIC_SAFE_INTERVAL;
     }
 
     /**
