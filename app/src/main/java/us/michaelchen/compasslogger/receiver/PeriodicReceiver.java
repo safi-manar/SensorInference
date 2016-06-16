@@ -16,7 +16,6 @@ import us.michaelchen.compasslogger.datarecorder.ScreenRecordingService;
 import us.michaelchen.compasslogger.datarecorder.StepSensorRecordingService;
 import us.michaelchen.compasslogger.deadline.DeadlineService;
 import us.michaelchen.compasslogger.periodicupdate.PeriodicTimeUpdateService;
-import us.michaelchen.compasslogger.stepkeepalive.StepSensorKeepAliveService;
 
 /**
  * Receiver used for periodic sensor polling
@@ -25,9 +24,6 @@ public class PeriodicReceiver extends BroadcastReceiver {
     private static final Class[] PERIODICS = new Class[] {
             // To keep track of when the periodic last happened
             PeriodicTimeUpdateService.class,
-
-            // Keep the step counter is alive at each periodic
-            StepSensorKeepAliveService.class,
 
             // To record various system-broadcasted events
             GenericEventRecordingService.class,

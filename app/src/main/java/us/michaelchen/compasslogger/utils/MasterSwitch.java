@@ -5,13 +5,15 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.widget.Toast;
 
 import us.michaelchen.compasslogger.datarecorder.DeviceSpecsRecordingService;
 import us.michaelchen.compasslogger.receiver.GenericIntentReceiver;
 import us.michaelchen.compasslogger.receiver.PeriodicReceiver;
-import us.michaelchen.compasslogger.stepkeepalive.StepSensorKeepAliveService;
 
 /**
  * Created by ioreyes on 6/2/16.
@@ -41,27 +43,44 @@ public class MasterSwitch {
             Intent.ACTION_POWER_DISCONNECTED,
             Intent.ACTION_SHUTDOWN,
     };
-    private static GenericIntentReceiver genericIntentReceiver = null;
+    private static final GenericIntentReceiver GENERIC_INTENT_RECEIVER = new GenericIntentReceiver();
 
-    // Used by step counter
-    private static SensorManager sensorManager = null;
+    // Used by the step counter
+    private static final SensorEventListener DO_NOTHING_LISTENER = new SensorEventListener() {
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            // Do nothing, just keep the sensor alive
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+            // Do nothing, just keep the sensor alive
+        }
+    };
+
+    private static Context app = null;
 
     /**
      * Turns on all the data collection services
      * @param c Calling Android context
      */
     public static void on(Context c) {
+        // Associate all spawned services and receivers to the Application,
+        // not component Activities and Services (which have much shorter lifespans)
+        if(app == null) {
+            app = c.getApplicationContext();
+        }
 
         if(!isRunning()) {
             if(PreferencesWrapper.isFirstRun()) {
-                recordDeviceSpecs(c);
+                recordDeviceSpecs();
                 // Now, update the FIRST_RUN check.
                 PreferencesWrapper.setFirstRun();
             }
 
-            startStepCounter(c);
-            startAsynchronous(c);
-            startPeriodics(c);
+            startStepCounter();
+            startAsynchronous();
+            startPeriodics();
         }
     }
 
@@ -70,10 +89,16 @@ public class MasterSwitch {
      * @param c Calling Android context
      */
     public static void off(Context c) {
+        // Associate all spawned services and receivers to the Application,
+        // not component Activities and Services (which have much shorter lifespans)
+        if(app == null) {
+            app = c.getApplicationContext();
+        }
+
         if(isRunning()) {
-            stopStepCounter(c);
-            stopAsynchronous(c);
-            stopPeriodics(c);
+            stopStepCounter();
+            stopAsynchronous();
+            stopPeriodics();
 
             // Reset the timestamp for future iterations
             // to assume a MasterSwitch.On() alarm reset.
@@ -102,21 +127,20 @@ public class MasterSwitch {
 
     /**
      * Start periodic events
-     * @param c Calling Android context
      */
-    private static void startPeriodics(Context c) {
+    private static void startPeriodics() {
         if(periodicIntent == null) {
-            Intent alarmIntent = new Intent(c, PeriodicReceiver.class);
-            periodicIntent = PendingIntent.getBroadcast(c, 0, alarmIntent, 0);
+            Intent alarmIntent = new Intent(app, PeriodicReceiver.class);
+            periodicIntent = PendingIntent.getBroadcast(app, 0, alarmIntent, 0);
         }
 
-        AlarmManager manager = (AlarmManager) c.getSystemService(Context.ALARM_SERVICE);
+        AlarmManager manager = (AlarmManager) app.getSystemService(Context.ALARM_SERVICE);
         manager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
                 System.currentTimeMillis(),
                 TimeConstants.PERIODIC_LENGTH,
                 periodicIntent);
 
-        Toast.makeText(c, "Alarms Set", Toast.LENGTH_SHORT).show();
+        Toast.makeText(app, "Alarms Set", Toast.LENGTH_SHORT).show();
 
         // Note that the periodic started at this time
         PreferencesWrapper.updateLastAlarmTimestamp();
@@ -124,24 +148,18 @@ public class MasterSwitch {
 
     /**
      * Stop periodic events
-     * @param c Calling Android context
      */
-    private static void stopPeriodics(Context c) {
+    private static void stopPeriodics() {
         if(periodicIntent != null) {
-            AlarmManager manager = (AlarmManager) c.getSystemService(Context.ALARM_SERVICE);
+            AlarmManager manager = (AlarmManager) app.getSystemService(Context.ALARM_SERVICE);
             manager.cancel(periodicIntent);
         }
     }
 
     /**
      * Start listening to asynchronous events associated with intents
-     * @param c Calling Android context
      */
-    private static void startAsynchronous(Context c) {
-        if(genericIntentReceiver  == null) {
-            genericIntentReceiver = new GenericIntentReceiver();
-        }
-
+    private static void startAsynchronous() {
         IntentFilter filter = new IntentFilter();
         for (String event : ASYNCHRONOUS_EVENTS) {
             filter.addAction(event);
@@ -151,51 +169,45 @@ public class MasterSwitch {
         // and MainActivity.onCreate() is called again, leading to
         // a new MasterSwitch.on call.
         try {
-            c.unregisterReceiver(genericIntentReceiver);
+            app.unregisterReceiver(GENERIC_INTENT_RECEIVER);
         } catch (IllegalArgumentException e) {
             // We deliberately do nothing in the catch block.
         }
 
-        c.registerReceiver(genericIntentReceiver, filter);
+        app.registerReceiver(GENERIC_INTENT_RECEIVER, filter);
     }
 
     /**
      * Stop listening to asynchronous events
-     * @param c Calling Android context
      */
-    private static void stopAsynchronous(Context c) {
-        if(genericIntentReceiver != null) {
-            c.unregisterReceiver(genericIntentReceiver);
-        }
+    private static void stopAsynchronous() {
+        app.unregisterReceiver(GENERIC_INTENT_RECEIVER);
     }
 
     /**
      * Activate the step sensor
-     * @param c Calling Android context
      */
-    private static void startStepCounter(Context c) {
-        Intent intent = new Intent(c, StepSensorKeepAliveService.class);
+    private static void startStepCounter() {
+        SensorManager sensorManager = (SensorManager) app.getSystemService(Context.SENSOR_SERVICE);
+        Sensor stepSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
-        c.startService(intent);
+        sensorManager.registerListener(DO_NOTHING_LISTENER, stepSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     /**
      * Deactivate the step sensor
-     * @param c Calling Android context
      */
-    private static void stopStepCounter(Context c) {
-        Intent intent = new Intent(c, StepSensorKeepAliveService.class);
-        intent.putExtra(StepSensorKeepAliveService.DEACTIVATE_EXTRA, true);
+    private static void stopStepCounter() {
+        SensorManager sensorManager = (SensorManager) app.getSystemService(Context.SENSOR_SERVICE);
 
-        c.startService(intent);
+        sensorManager.unregisterListener(DO_NOTHING_LISTENER);
     }
 
     /**
      * Launches service to get device hardware/software information
-     * @param c Calling Android context
      */
-    private static void recordDeviceSpecs(Context c) {
-        Intent intent = new Intent(c, DeviceSpecsRecordingService.class);
-        c.startService(intent);
+    private static void recordDeviceSpecs() {
+        Intent intent = new Intent(app, DeviceSpecsRecordingService.class);
+        app.startService(intent);
     }
 }

@@ -29,7 +29,7 @@ public class PreferencesWrapper {
      * @param c Calling Android context
      */
     public static void init(Context c) {
-        prefs = c.getSharedPreferences(PREFS_NAME, 0);
+        prefs = c.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
     }
 
     /**

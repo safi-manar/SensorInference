@@ -117,10 +117,6 @@
             android:permission="android.p" />
 
         <service
-            android:name=".stepkeepalive.StepSensorKeepAliveService"
-            android:enabled="true"
-            android:exported="false" />
-        <service
             android:name=".periodicupdate.PeriodicTimeUpdateService"
             android:enabled="true"
             android:exported="false" />
