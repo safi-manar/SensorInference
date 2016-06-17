@@ -9,6 +9,8 @@ import android.hardware.SensorManager;
 import java.util.HashMap;
 import java.util.Map;
 
+import us.michaelchen.compasslogger.utils.TimeConstants;
+
 /**
  * Created by ioreyes on 5/25/16.
  */
@@ -35,7 +37,8 @@ public abstract class AbstractSensorRecordingService extends AbstractRecordingSe
     protected final Map<String, Object> readData(Intent intent) {
         // Activate the sensor until a readout is collected from it
         registerSensorListener();
-        while(data == null) {
+        long stopTime = System.currentTimeMillis() + TimeConstants.MAX_SENSOR_TIME;
+        while(data == null && System.currentTimeMillis() < stopTime) {
 
         }
         unregisterSensorListener();

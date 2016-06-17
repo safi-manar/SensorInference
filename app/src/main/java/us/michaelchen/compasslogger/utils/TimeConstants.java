@@ -17,4 +17,7 @@ public class TimeConstants {
 
     public static double PERIODIC_SAFE_FACTOR = 1.10;
     public static long PERIODIC_SAFE_INTERVAL = (long) (PERIODIC_LENGTH * PERIODIC_SAFE_FACTOR);
+
+    // The maximum amount of time to keep a sensor open without an onSensorChanged event
+    public static long MAX_SENSOR_TIME = ONE_SECOND * 3;
 }
