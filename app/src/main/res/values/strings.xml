@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CompassLogger</string>
+    <string name="app_name">Sensor Monitor</string>
 
     <string name="title_section1">Info</string>
     <string name="title_section2">Settings</string>
@@ -186,6 +186,6 @@
     <string name="error_not_init">Firebase connection not initialized</string>
 
     <!-- Auto-generated Git version DO NOT EDIT -->
-    <string name="app_version">7a91746</string>
+    <string name="app_version">4be79fd</string>
 
 </resources>

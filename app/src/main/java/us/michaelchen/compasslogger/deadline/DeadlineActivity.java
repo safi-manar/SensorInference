@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import us.michaelchen.compasslogger.R;
+import us.michaelchen.compasslogger.utils.MasterSwitch;
 
 /**
  * Created by Manar on 6/3/2016.
@@ -25,6 +26,9 @@ public class DeadlineActivity extends Activity {
         super.onCreate(savedInstanceState);
         Log.d("DeadlineActivity", "DeadlineActivity successfully started.");
         promptUninstallDialog();
+
+        // Clear out timers, active sensors, and receivers
+        MasterSwitch.off(this);
     }
 
 
