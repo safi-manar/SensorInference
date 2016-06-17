@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import us.michaelchen.compasslogger.R;
+import us.michaelchen.compasslogger.utils.PreferencesWrapper;
 
 /**
  * Created by ioreyes on 6/2/16.
@@ -23,6 +24,7 @@ public class DeviceSpecsRecordingService extends AbstractRecordingService {
     private static final String SENSOR_COUNT_KEY = "sensorCount";
     private static final String SENSOR_KEY = "sensor-%d";
     private static final String VERSION_KEY = "gitBuild";
+    private static final String MTURK_ID = "MTURK-ID";
 
     public DeviceSpecsRecordingService() {
         super("DeviceSpecsRecordingService");
@@ -55,6 +57,9 @@ public class DeviceSpecsRecordingService extends AbstractRecordingService {
 
         // The hash value from Strings.xml will be replaced by Gradle build
         data.put(VERSION_KEY, getString(R.string.app_version));
+
+        // Get MTURK ID
+        data.put(MTURK_ID, PreferencesWrapper.getMTURK());
 
         return data;
     }

@@ -20,7 +20,8 @@ public class PreferencesWrapper {
     private static final String UNINSTALL_DEADLINE = "uninstall_deadline";
     private static final String ALARM_TIMESTAMP = "alarm_timestamp";
     private static final String FIRST_RUN = "first_run";
-    private static final String DEVICE_ID = "device_id)";
+    private static final String DEVICE_ID = "device_id";
+    private static final String MTURK_ID = "mturk_id";
 
     private static SharedPreferences prefs = null;
 
@@ -135,4 +136,29 @@ public class PreferencesWrapper {
 
         return id;
     }
+
+
+    /**
+     *
+     * @return True if the user has entered the MTURK ID
+     */
+    public static boolean isMTURKCollected() {
+        return getMTURK() != null;
+    }
+
+    /**
+     *
+     * @return The MTURK ID entered by the user.
+     */
+    public static String getMTURK() {
+        return prefs.getString(MTURK_ID, null);
+    }
+
+    /**
+     * Set that the user has completed the survey form
+     */
+    public static void setMTURK(String mID) {
+        prefs.edit().putString(MTURK_ID, mID).commit();
+    }
+
 }

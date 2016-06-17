@@ -91,6 +91,29 @@
         <b>Please note: You will not be paid the $2.00 bonus without participating in this portion of the study.</b>\n\n
     </string>
 
+    <!-- For the MTURK ID dialog-->
+    <string name="MTURK_form_title">MTURK ID</string>
+
+    <string name="MTURK_form_message">
+        Please enter your <b>MTURK ID</b>.
+        \nYour MTURK ID can be located on your MTURK dashboard.
+
+        \n\nYou must enter your MTURK ID correctly. We need your MTURK ID to direct the payments for participation
+        in the study.
+        \n\n<b><i>If you do not enter your valid MTURK ID, we will not be able to send you
+        your payments!!</i></b>
+
+    </string>
+
+    <!--For the MTURK message on the MainActivity screen-->
+    <string name="MTURK_ID_notice">
+        \n\n*The MTURK ID that you submitted to us is printed above.
+        \nIf this ID is incorrect, please email manar@icsi.berkeley.edu with subject \"MTURK ID\"
+        with your correct MTURK ID. Please also include what the MTURK ID was. We will need your correct MTURK ID
+        for you to receive your payment.
+    </string>
+
+
     <!-- For the survey form prompt dialog-->
     <string name="survey_form_title">Required Survey Form</string>
 
