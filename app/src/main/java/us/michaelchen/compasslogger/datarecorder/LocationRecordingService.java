@@ -14,6 +14,7 @@ import java.util.Map;
 
 import us.michaelchen.compasslogger.utils.BetterLocation;
 import us.michaelchen.compasslogger.utils.DataTimeFormat;
+import us.michaelchen.compasslogger.utils.TimeConstants;
 
 /**
  * Created by ioreyes on 5/27/16.
@@ -24,12 +25,7 @@ public class LocationRecordingService extends AbstractRecordingService {
     private static final String LONGITUDE_KEY = "lon";
     private static final String PROVIDER_KEY = "provider";
 
-    private static final int POLL_INTERVAL_MS = 500;
-    private static final int FIX_WINDOW_SECS = 3;
-    private static final int FIX_WINDOW_MS = FIX_WINDOW_SECS * 1000;
-
     private Location bestLocation = null;
-    private long endTime = Long.MIN_VALUE;
     private boolean hasPermissions = false;
     private LocationManager locationManager = null;
 
@@ -68,11 +64,11 @@ public class LocationRecordingService extends AbstractRecordingService {
 
     @Override
     protected Map<String, Object> readData(Intent intent) {
-        // Open up the GPS for FIX_WINDOW seconds and grab the best location in that time
         registerLocationListener();
+        long endTime = System.currentTimeMillis() + TimeConstants.MAX_SENSOR_TIME;
         while(hasPermissions && System.currentTimeMillis() < endTime) {
             try {
-                Thread.sleep(POLL_INTERVAL_MS);
+                Thread.sleep(TimeConstants.SENSOR_DATA_POLL_INTERVAL);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -94,7 +90,6 @@ public class LocationRecordingService extends AbstractRecordingService {
      * Starts updates from the location service
      */
     private void registerLocationListener() {
-        endTime = System.currentTimeMillis() + FIX_WINDOW_MS;
         hasPermissions = false;
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 

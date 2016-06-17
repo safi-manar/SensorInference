@@ -39,7 +39,11 @@ public abstract class AbstractSensorRecordingService extends AbstractRecordingSe
         registerSensorListener();
         long stopTime = System.currentTimeMillis() + TimeConstants.MAX_SENSOR_TIME;
         while(data == null && System.currentTimeMillis() < stopTime) {
-
+            try {
+                Thread.sleep(TimeConstants.SENSOR_DATA_POLL_INTERVAL);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         unregisterSensorListener();
 
@@ -54,7 +58,7 @@ public abstract class AbstractSensorRecordingService extends AbstractRecordingSe
 
         SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         Sensor sensor = sensorManager.getDefaultSensor(getSensorType());
-        sensorManager.registerListener(SENSOR_LISTENER, sensor, SensorManager.SENSOR_DELAY_UI);
+        sensorManager.registerListener(SENSOR_LISTENER, sensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     /**
