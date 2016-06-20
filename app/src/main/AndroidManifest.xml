@@ -54,72 +54,83 @@
 
         <!-- For the Deadline Notification -->
         <service
-            android:name=".deadline.DeadlineService"
+            android:name=".periodicservices.deadline.DeadlineService"
             android:enabled="true"
             android:exported="false" />
 
         <activity
-            android:name=".deadline.DeadlineActivity"
+            android:name=".periodicservices.deadline.DeadlineActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
 
 
         <!-- Refactored services and receivers -->
         <service
-            android:name=".datarecorder.DeviceSpecsRecordingService"
+            android:name=".periodicservices.datarecording.DeviceSpecsRecordingService"
             android:enabled="true"
             android:exported="false" />
 
         <service
-            android:name=".datarecorder.ScreenRecordingService"
+            android:name=".periodicservices.datarecording.ScreenRecordingService"
             android:enabled="true"
             android:exported="false" />
         <service
-            android:name=".datarecorder.PowerRecordingService"
+            android:name=".periodicservices.datarecording.PowerRecordingService"
             android:enabled="true"
             android:exported="false" />
         <service
-            android:name=".datarecorder.GenericEventRecordingService"
-            android:enabled="true"
-            android:exported="false" />
-
-
-        <service
-            android:name=".datarecorder.AccelerometerSensorRecordingService"
-            android:enabled="true"
-            android:exported="false" />
-        <service
-            android:name=".datarecorder.GyroscopeSensorRecordingService"
-            android:enabled="true"
-            android:exported="false" />
-        <service
-            android:name=".datarecorder.LightSensorRecordingService"
-            android:enabled="true"
-            android:exported="false" />
-        <service
-            android:name=".datarecorder.MagneticSensorRecordingService"
-            android:enabled="true"
-            android:exported="false" />
-        <service
-            android:name=".datarecorder.ProximitySensorRecordingService"
-            android:enabled="true"
-            android:exported="false" />
-        <service
-            android:name=".datarecorder.StepSensorRecordingService"
+            android:name=".periodicservices.datarecording.GenericEventRecordingService"
             android:enabled="true"
             android:exported="false" />
 
 
         <service
-            android:name=".datarecorder.LocationRecordingService"
+            android:name=".periodicservices.datarecording.AccelerometerSensorRecordingService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".periodicservices.datarecording.GyroscopeSensorRecordingService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".periodicservices.datarecording.LightSensorRecordingService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".periodicservices.datarecording.MagneticSensorRecordingService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".periodicservices.datarecording.ProximitySensorRecordingService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".periodicservices.datarecording.StepSensorRecordingService"
+            android:enabled="true"
+            android:exported="false" />
+
+
+        <service
+            android:name=".periodicservices.datarecording.LocationRecordingService"
             android:exported="false"
             android:enabled="true"
             android:permission="android.p" />
 
         <service
-            android:name=".periodicupdate.PeriodicTimeUpdateService"
+            android:name=".periodicservices.PeriodicTimeUpdateService"
             android:enabled="true"
             android:exported="false" />
+
+        <!-- keep-alive services -->
+        <service
+            android:name=".periodicservices.keepalive.GenericReceiverKeepAliveService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".periodicservices.keepalive.StepSensorKeepAliveService"
+            android:enabled="true"
+            android:exported="false" />
+
     </application>
 
 </manifest>

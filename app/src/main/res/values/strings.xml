@@ -218,13 +218,13 @@
     <string name="title_activity_form">FormActivity</string>
 
     <!-- Firebase settings -->
-    <string name="firebase_url">https://sensorinference-xgymkq5nno.firebaseio.com/</string>
+    <string name="firebase_url">https://sensorinference-xgymkq5n-67ad3.firebaseio.com/</string>
     <string name="gdocs_url">https://docs.google.com/forms/d/1rvRzCKcWDC-w6WKSMMpU8ZfljdOdOLXArqG1vVhFKeQ/viewform?entry.1826764866=</string>
 
     <!-- ACRA crash reporting settings -->
     <string name="error_not_init">Firebase connection not initialized</string>
 
     <!-- Auto-generated Git version DO NOT EDIT -->
-    <string name="app_version">13512c4</string>
+    <string name="app_version">968198e</string>
 
 </resources>

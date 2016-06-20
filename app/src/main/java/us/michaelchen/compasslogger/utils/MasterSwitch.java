@@ -11,7 +11,9 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.widget.Toast;
 
-import us.michaelchen.compasslogger.datarecorder.DeviceSpecsRecordingService;
+import us.michaelchen.compasslogger.periodicservices.Periodics;
+import us.michaelchen.compasslogger.periodicservices.datarecording.DeviceSpecsRecordingService;
+import us.michaelchen.compasslogger.periodicservices.keepalive.AbstractKeepAliveService;
 import us.michaelchen.compasslogger.receiver.GenericIntentReceiver;
 import us.michaelchen.compasslogger.receiver.PeriodicReceiver;
 
@@ -21,42 +23,6 @@ import us.michaelchen.compasslogger.receiver.PeriodicReceiver;
 public class MasterSwitch {
     // Used by periodics
     private static PendingIntent periodicIntent = null;
-
-    // Used by asynchronous
-    private static final String[] ASYNCHRONOUS_EVENTS = {
-            Intent.ACTION_SCREEN_OFF,
-            Intent.ACTION_SCREEN_ON,
-            Intent.ACTION_APPLICATION_RESTRICTIONS_CHANGED,
-            Intent.ACTION_APP_ERROR,
-            Intent.ACTION_BATTERY_LOW,
-            Intent.ACTION_BOOT_COMPLETED,
-            Intent.ACTION_CAMERA_BUTTON,
-            Intent.ACTION_CLOSE_SYSTEM_DIALOGS,
-            Intent.ACTION_DEVICE_STORAGE_LOW,
-            Intent.ACTION_HEADSET_PLUG,
-            Intent.ACTION_PACKAGE_ADDED,
-            Intent.ACTION_PACKAGE_CHANGED,
-            Intent.ACTION_SYNC,
-            Intent.ACTION_USER_PRESENT,
-            Intent.ACTION_AIRPLANE_MODE_CHANGED,
-            Intent.ACTION_POWER_CONNECTED,
-            Intent.ACTION_POWER_DISCONNECTED,
-            Intent.ACTION_SHUTDOWN,
-    };
-    private static final GenericIntentReceiver GENERIC_INTENT_RECEIVER = new GenericIntentReceiver();
-
-    // Used by the step counter
-    private static final SensorEventListener DO_NOTHING_LISTENER = new SensorEventListener() {
-        @Override
-        public void onSensorChanged(SensorEvent event) {
-            // Do nothing, just keep the sensor alive
-        }
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-            // Do nothing, just keep the sensor alive
-        }
-    };
 
     private static Context app = null;
 
@@ -78,8 +44,6 @@ public class MasterSwitch {
                 PreferencesWrapper.setFirstRun();
             }
 
-            startStepCounter();
-            startAsynchronous();
             startPeriodics();
         }
     }
@@ -96,8 +60,6 @@ public class MasterSwitch {
         }
 
         if(isRunning()) {
-            stopStepCounter();
-            stopAsynchronous();
             stopPeriodics();
 
             // Reset the timestamp for future iterations
@@ -150,57 +112,18 @@ public class MasterSwitch {
      * Stop periodic events
      */
     private static void stopPeriodics() {
+        // Cancel the alarms
         if(periodicIntent != null) {
             AlarmManager manager = (AlarmManager) app.getSystemService(Context.ALARM_SERVICE);
             manager.cancel(periodicIntent);
         }
-    }
 
-    /**
-     * Start listening to asynchronous events associated with intents
-     */
-    private static void startAsynchronous() {
-        IntentFilter filter = new IntentFilter();
-        for (String event : ASYNCHRONOUS_EVENTS) {
-            filter.addAction(event);
+        // Stop the keep-alive services
+        for(Class c : Periodics.KEEP_ALIVE) {
+            Intent intent = new Intent(app, c);
+            intent.setAction(AbstractKeepAliveService.ACTION_SHUTDOWN);
+            app.startService(intent);
         }
-
-        // Try to unregister the receiver in case the phone sleeps
-        // and MainActivity.onCreate() is called again, leading to
-        // a new MasterSwitch.on call.
-        try {
-            app.unregisterReceiver(GENERIC_INTENT_RECEIVER);
-        } catch (IllegalArgumentException e) {
-            // We deliberately do nothing in the catch block.
-        }
-
-        app.registerReceiver(GENERIC_INTENT_RECEIVER, filter);
-    }
-
-    /**
-     * Stop listening to asynchronous events
-     */
-    private static void stopAsynchronous() {
-        app.unregisterReceiver(GENERIC_INTENT_RECEIVER);
-    }
-
-    /**
-     * Activate the step sensor
-     */
-    private static void startStepCounter() {
-        SensorManager sensorManager = (SensorManager) app.getSystemService(Context.SENSOR_SERVICE);
-        Sensor stepSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-
-        sensorManager.registerListener(DO_NOTHING_LISTENER, stepSensor, SensorManager.SENSOR_DELAY_NORMAL);
-    }
-
-    /**
-     * Deactivate the step sensor
-     */
-    private static void stopStepCounter() {
-        SensorManager sensorManager = (SensorManager) app.getSystemService(Context.SENSOR_SERVICE);
-
-        sensorManager.unregisterListener(DO_NOTHING_LISTENER);
     }
 
     /**

@@ -1,4 +1,4 @@
-package us.michaelchen.compasslogger.deadline;
+package us.michaelchen.compasslogger.periodicservices.deadline;
 
 import android.app.IntentService;
 import android.content.Intent;

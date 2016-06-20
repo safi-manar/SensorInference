@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import us.michaelchen.compasslogger.datarecorder.GenericEventRecordingService;
+import us.michaelchen.compasslogger.periodicservices.datarecording.GenericEventRecordingService;
 
 /**
  * Receiver used for on-demand event recording

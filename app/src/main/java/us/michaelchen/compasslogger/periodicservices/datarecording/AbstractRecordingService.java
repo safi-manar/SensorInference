@@ -1,4 +1,4 @@
-package us.michaelchen.compasslogger.datarecorder;
+package us.michaelchen.compasslogger.periodicservices.datarecording;
 
 import android.app.IntentService;
 import android.content.Intent;

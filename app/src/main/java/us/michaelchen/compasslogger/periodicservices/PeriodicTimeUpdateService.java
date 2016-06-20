@@ -1,4 +1,4 @@
-package us.michaelchen.compasslogger.periodicupdate;
+package us.michaelchen.compasslogger.periodicservices;
 
 import android.app.IntentService;
 import android.content.Intent;

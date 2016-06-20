@@ -1,6 +1,5 @@
-package us.michaelchen.compasslogger.datarecorder;
+package us.michaelchen.compasslogger.periodicservices.datarecording;
 
-import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
@@ -46,7 +45,7 @@ public class DeviceSpecsRecordingService extends AbstractRecordingService {
         data.put(ANDROID_VERSION_KEY, Build.VERSION.RELEASE);
 
         // Get sensor information
-        SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         List<Sensor> sensorList = sensorManager.getSensorList(Sensor.TYPE_ALL);
         data.put(SENSOR_COUNT_KEY, sensorList.size());
 
