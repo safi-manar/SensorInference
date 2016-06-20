@@ -121,7 +121,7 @@
 
 
     <!-- For the deadline notification uninstall prompt dialog-->
-    <string name="uninstall_message_title">Sensory Privacy Research Complete!</string>
+    <string name="uninstall_message_title">UCB Sensor Research Complete!</string>
     <string name="uninstall_message">
         Thank you for participating in our research project! \n\n
         One week has passed since you installed our app, so you are officially done with your participation.
@@ -209,6 +209,6 @@
     <string name="error_not_init">Firebase connection not initialized</string>
 
     <!-- Auto-generated Git version DO NOT EDIT -->
-    <string name="app_version">d1ef7e9</string>
+    <string name="app_version">bf54192</string>
 
 </resources>
