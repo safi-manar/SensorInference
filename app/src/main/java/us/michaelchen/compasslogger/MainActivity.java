@@ -182,13 +182,14 @@ public class MainActivity extends AppCompatActivity {
     private void collectMturkID() {
 
         if (!PreferencesWrapper.isMTURKCollected()) {
-            // Remind the user about the survey, and since the dialog thread will be
-            // asynchronous, let the AlertDialog handle the initiation of the alarms.
+            // Collect MTURK if not collected yet.
             AlertDialog mturkForm = mturkIDDialog(this);
             mturkForm.show();
 
         } else {
             //Otherwise, proceed with the collectSurveyForm flow.
+            // Remind the user about the survey, and since the dialog thread will be
+            // asynchronous, let the AlertDialog handle the initiation of the alarms.
             collectSurveyFormAndSensorData();
         }
 
@@ -200,7 +201,6 @@ public class MainActivity extends AppCompatActivity {
     * study by entering their MTURK ID. */
     private AlertDialog mturkIDDialog(final Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Title");
 
         // Set up the input
         final EditText input = new EditText(this);
@@ -213,9 +213,37 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String mID = input.getText().toString();
+
+                // Do not store the ID yet (so that isMTURKCollected() functions correctly).
+                // Prompt the user to confirm.
+                AlertDialog mturkConfirmation = confirmMTURK(context, mID);
+                mturkConfirmation.show();
+
+            }
+        });
+
+        builder.setMessage(R.string.MTURK_form_message)
+                .setTitle(R.string.MTURK_form_title);
+
+        return builder.create();
+    }
+
+
+    /* This message is displayed prompting the user to confirm the
+    * MTURK ID. If correct, the flow continues to the survey form.
+     * Otherwise, the flow is reset back to mturkIDDialog.      */
+    private AlertDialog confirmMTURK(final Context context, final String mID) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // Set up the buttons
+        builder.setPositiveButton("Correct", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                // mID has been confirmed. Now, set it in preferences.
                 PreferencesWrapper.setMTURK(mID);
 
-                // MTURK ID has been collected.
+                // MTURK ID has been collected and confirmed. Now display it.
                 displayMTURK();
                 // The app must now prompt the user to fill out the Google Form and collect sensor data.
                 collectSurveyFormAndSensorData();
@@ -223,8 +251,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        builder.setMessage(R.string.MTURK_form_message)
-                .setTitle(R.string.MTURK_form_title);
+        builder.setNegativeButton("Incorrect", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // The user entered the wrong ID. Redo the collection.
+                AlertDialog mturkForm = mturkIDDialog(context);
+                mturkForm.show();
+            }
+        });
+
+        String message = String.format(getString(R.string.MTURK_confirm_message), mID);
+
+        builder.setMessage(message)
+                .setTitle(R.string.MTURK_confirm_title);
+
+
 
         return builder.create();
     }

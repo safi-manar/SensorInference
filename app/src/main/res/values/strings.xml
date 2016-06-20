@@ -105,6 +105,22 @@
 
     </string>
 
+    <string name="MTURK_confirm_title">Confirm MTURK ID</string>
+
+    <string name="MTURK_confirm_message">
+        You entered the following as your MTURK ID.
+        \n\n
+
+        <!-- Auto-formatted MTURK ID, DO NOT EDIT -->
+        \t %s
+
+        \n\n
+        Please confirm that this is correct.
+
+    </string>
+
+
+
     <!--For the MTURK message on the MainActivity screen-->
     <string name="MTURK_ID_notice">
         \n\n*The MTURK ID that you submitted to us is printed above.
@@ -209,6 +225,6 @@
     <string name="error_not_init">Firebase connection not initialized</string>
 
     <!-- Auto-generated Git version DO NOT EDIT -->
-    <string name="app_version">bf54192</string>
+    <string name="app_version">13512c4</string>
 
 </resources>
