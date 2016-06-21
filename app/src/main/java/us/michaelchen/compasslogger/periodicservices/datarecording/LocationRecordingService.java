@@ -20,7 +20,8 @@ import us.michaelchen.compasslogger.utils.TimeConstants;
  * Created by ioreyes on 5/27/16.
  */
 public class LocationRecordingService extends AbstractRecordingService {
-    private static final String FIX_TIME_KEY = "fixTime";
+    private static final String FIX_TIMESTAMP_KEY = "fixTimeStamp";
+    private static final String READABLE_FIX_TIME_KEY = "fixTimeReadable";
     private static final String LATITUDE_KEY = "lat";
     private static final String LONGITUDE_KEY = "lon";
     private static final String PROVIDER_KEY = "provider";
@@ -77,7 +78,10 @@ public class LocationRecordingService extends AbstractRecordingService {
 
         Map<String, Object> data = new HashMap<>();
         if(bestLocation != null) {
-            data.put(FIX_TIME_KEY, DataTimeFormat.format(bestLocation.getTime()));
+            long timestamp = bestLocation.getTime();
+
+            data.put(FIX_TIMESTAMP_KEY, timestamp);
+            data.put(READABLE_FIX_TIME_KEY, DataTimeFormat.format(timestamp));
             data.put(LATITUDE_KEY, bestLocation.getLatitude());
             data.put(LONGITUDE_KEY, bestLocation.getLongitude());
             data.put(PROVIDER_KEY, bestLocation.getProvider());

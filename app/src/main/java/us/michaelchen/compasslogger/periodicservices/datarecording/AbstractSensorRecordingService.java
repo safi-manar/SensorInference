@@ -5,16 +5,22 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.SystemClock;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import us.michaelchen.compasslogger.utils.DataTimeFormat;
 import us.michaelchen.compasslogger.utils.TimeConstants;
 
 /**
  * Created by ioreyes on 5/25/16.
  */
 public abstract class AbstractSensorRecordingService extends AbstractRecordingService {
+    private static final String READABLE_EVENT_TIME_KEY = "eventTimeReadable";
+    private static final String EVENT_TIMESTAMP_KEY = "eventTimeStamp";
+    private static final String VALUES_KEY = "values-%d";
+
     private Map<String, Object> data = null;
 
     private final SensorEventListener SENSOR_LISTENER = new SensorEventListener() {
@@ -74,13 +80,33 @@ public abstract class AbstractSensorRecordingService extends AbstractRecordingSe
      * @param event
      * @return A map of labels and corresponding values
      */
-    protected Map<String, Object> processSensorData(SensorEvent event) {
-        float value = event.values[0];
+    protected final Map<String, Object> processSensorData(SensorEvent event) {
+        long timestamp = toTimestampUTC(event.timestamp);
+        float[] values = event.values;
 
         Map<String, Object> data = new HashMap<>();
-        data.put(broadcastKey(), value);
+        data.put(EVENT_TIMESTAMP_KEY, timestamp);
+        data.put(READABLE_EVENT_TIME_KEY, DataTimeFormat.format(timestamp));
+
+        for(int n = 0; n < values.length; n++) {
+            String valuesKey = String.format(VALUES_KEY, n);
+            data.put(valuesKey, values[n]);
+        }
 
         return data;
+    }
+
+    /**
+     *
+     * @param eventTimestamp Timestamp from the SensorEvent in nanoseconds since uptime
+     * @return Equivalent timestamp in milliseconds since epoch
+     */
+    private long toTimestampUTC(long eventTimestamp) {
+        long currentMS = System.currentTimeMillis();
+        long uptimeMS = SystemClock.elapsedRealtime();
+        long timestampMS = eventTimestamp / 1000000; // ns to ms
+
+        return currentMS - uptimeMS + timestampMS;
     }
 
     /**
