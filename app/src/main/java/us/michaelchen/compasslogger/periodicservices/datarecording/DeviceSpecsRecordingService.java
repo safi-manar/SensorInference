@@ -51,7 +51,17 @@ public class DeviceSpecsRecordingService extends AbstractRecordingService {
 
         int index = 0;
         for(Sensor s : sensorList) {
-            data.put(String.format(SENSOR_KEY, index++), s.getName());
+            String sensorKey = String.format(SENSOR_KEY, index++);
+            data.put(sensorKey, s.getName());
+
+            // Get hardware FIFO information for builds that have it
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                String fifoMaxKey = sensorKey + "-fifoMax";
+                String fifoReservedKey = sensorKey + "-fifoReserved";
+
+                data.put(fifoMaxKey, s.getFifoMaxEventCount());
+                data.put(fifoReservedKey, s.getFifoReservedEventCount());
+            }
         }
 
         // The hash value from Strings.xml will be replaced by Gradle build
