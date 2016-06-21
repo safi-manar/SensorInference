@@ -32,6 +32,11 @@
             android:enabled="true"
             android:exported="true"
             android:process=":remote" />
+        <receiver
+            android:name=".receiver.PeriodicGroundTruthReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":remote" />
 
         <activity
             android:name=".SettingsActivity"

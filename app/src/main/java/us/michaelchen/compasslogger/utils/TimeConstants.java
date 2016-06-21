@@ -11,12 +11,16 @@ public class TimeConstants {
     private static long ONE_DAY = ONE_HOUR * 24;
     private static long ONE_WEEK = ONE_DAY * 7;
 
-    // Fields used to set periodic length and uninstall time
-    public static long PERIODIC_LENGTH = ONE_MINUTE;
-    public static long DEADLINE_LENGTH = ONE_HOUR * 2;
+    // Sensor reporting period
+    public static long PERIODIC_LENGTH = ONE_MINUTE * 5;
+    public static long LOCATION_PERIODIC_LENGTH = PERIODIC_LENGTH;
 
+    // Periodic active/inactive status checking
     public static double PERIODIC_SAFE_FACTOR = 1.10;
     public static long PERIODIC_SAFE_INTERVAL = (long) (PERIODIC_LENGTH * PERIODIC_SAFE_FACTOR);
+
+    // App lifespan until uninstallation
+    public static long DEADLINE_LENGTH = ONE_DAY * 2;
 
     // The maximum amount of time to keep a sensor open without an onSensorChanged event
     public static long MAX_SENSOR_TIME = ONE_SECOND * 3;

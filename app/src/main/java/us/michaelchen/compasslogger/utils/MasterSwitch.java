@@ -4,17 +4,12 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.widget.Toast;
 
 import us.michaelchen.compasslogger.periodicservices.Periodics;
 import us.michaelchen.compasslogger.periodicservices.datarecording.DeviceSpecsRecordingService;
 import us.michaelchen.compasslogger.periodicservices.keepalive.AbstractKeepAliveService;
-import us.michaelchen.compasslogger.receiver.GenericIntentReceiver;
+import us.michaelchen.compasslogger.receiver.PeriodicGroundTruthReceiver;
 import us.michaelchen.compasslogger.receiver.PeriodicReceiver;
 
 /**
@@ -23,6 +18,7 @@ import us.michaelchen.compasslogger.receiver.PeriodicReceiver;
 public class MasterSwitch {
     // Used by periodics
     private static PendingIntent periodicIntent = null;
+    private static PendingIntent locationPeriodicIntent = null;
 
     private static Context app = null;
 
@@ -96,11 +92,20 @@ public class MasterSwitch {
             periodicIntent = PendingIntent.getBroadcast(app, 0, alarmIntent, 0);
         }
 
+        if(locationPeriodicIntent == null) {
+            Intent alarmIntent = new Intent(app, PeriodicGroundTruthReceiver.class);
+            locationPeriodicIntent = PendingIntent.getBroadcast(app, 0, alarmIntent, 0);
+        }
+
         AlarmManager manager = (AlarmManager) app.getSystemService(Context.ALARM_SERVICE);
         manager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
                 System.currentTimeMillis(),
                 TimeConstants.PERIODIC_LENGTH,
                 periodicIntent);
+        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+                System.currentTimeMillis(),
+                TimeConstants.LOCATION_PERIODIC_LENGTH,
+                locationPeriodicIntent);
 
         Toast.makeText(app, "Alarms Set", Toast.LENGTH_SHORT).show();
 
@@ -113,9 +118,12 @@ public class MasterSwitch {
      */
     private static void stopPeriodics() {
         // Cancel the alarms
+        AlarmManager manager = (AlarmManager) app.getSystemService(Context.ALARM_SERVICE);
         if(periodicIntent != null) {
-            AlarmManager manager = (AlarmManager) app.getSystemService(Context.ALARM_SERVICE);
             manager.cancel(periodicIntent);
+        }
+        if(locationPeriodicIntent != null) {
+            manager.cancel(locationPeriodicIntent);
         }
 
         // Stop the keep-alive services

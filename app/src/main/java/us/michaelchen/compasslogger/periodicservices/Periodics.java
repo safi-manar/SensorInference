@@ -41,9 +41,6 @@ public class Periodics {
             ProximitySensorRecordingService.class,
             StepSensorRecordingService.class,
 
-            // This requires additional permissions from the user
-            LocationRecordingService.class,
-
             // For the deadline package.
             DeadlineService.class,
     };
