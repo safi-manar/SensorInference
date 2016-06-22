@@ -21,7 +21,7 @@ public class DeviceSpecsRecordingService extends AbstractRecordingService {
     private static final String SDK_NUM_KEY = "sdkLevel";
     private static final String ANDROID_VERSION_KEY = "androidVersion";
     private static final String SENSOR_COUNT_KEY = "sensorCount";
-    private static final String SENSOR_KEY = "sensor-%d";
+    private static final String SENSOR_KEY = "sensor-%02d";
     private static final String VERSION_KEY = "gitBuild";
     private static final String MTURK_ID = "MTURK-ID";
 

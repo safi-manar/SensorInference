@@ -17,11 +17,11 @@ import us.michaelchen.compasslogger.utils.TimeConstants;
  * Created by ioreyes on 5/25/16.
  */
 public abstract class AbstractSensorRecordingService extends AbstractRecordingService {
-    private static final String VALUES_KEY = "values-%d";
+    protected static final String VALUES_KEY = "values-%02d";
 
     private Map<String, Object> data = null;
 
-    private final SensorEventListener SENSOR_LISTENER = new SensorEventListener() {
+    protected final SensorEventListener SENSOR_LISTENER = new SensorEventListener() {
 
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -38,7 +38,7 @@ public abstract class AbstractSensorRecordingService extends AbstractRecordingSe
     }
 
     @Override
-    protected final Map<String, Object> readData(Intent intent) {
+    protected Map<String, Object> readData(Intent intent) {
         // Activate the sensor until a readout is collected from it
         registerSensorListener();
         long stopTime = System.currentTimeMillis() + TimeConstants.MAX_SENSOR_TIME;
@@ -78,7 +78,7 @@ public abstract class AbstractSensorRecordingService extends AbstractRecordingSe
      * @param event
      * @return A map of labels and corresponding values
      */
-    protected final Map<String, Object> processSensorData(SensorEvent event) {
+    protected Map<String, Object> processSensorData(SensorEvent event) {
         long timestamp = toTimestampUTC(event.timestamp);
         float[] values = event.values;
 
@@ -99,7 +99,7 @@ public abstract class AbstractSensorRecordingService extends AbstractRecordingSe
      * @param eventTimestamp Timestamp from the SensorEvent in nanoseconds since uptime
      * @return Equivalent timestamp in milliseconds since epoch
      */
-    private long toTimestampUTC(long eventTimestamp) {
+    protected final long toTimestampUTC(long eventTimestamp) {
         long currentMS = System.currentTimeMillis();
         long uptimeMS = SystemClock.elapsedRealtime();
         long timestampMS = eventTimestamp / 1000000; // ns to ms

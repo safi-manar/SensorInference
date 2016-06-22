@@ -5,7 +5,7 @@ import android.hardware.Sensor;
 /**
  * Created by ioreyes on 6/15/16.
  */
-public class GyroscopeSensorRecordingService extends AbstractSensorRecordingService {
+public class GyroscopeSensorRecordingService extends AbstractMotionSensorRecordingService {
     public GyroscopeSensorRecordingService() {
         super("GyroscopeSensorRecordingService");
     }

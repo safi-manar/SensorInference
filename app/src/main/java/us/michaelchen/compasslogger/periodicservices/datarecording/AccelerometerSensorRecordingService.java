@@ -5,7 +5,7 @@ import android.hardware.Sensor;
 /**
  * Created by ioreyes on 6/15/16.
  */
-public class AccelerometerSensorRecordingService extends AbstractSensorRecordingService {
+public class AccelerometerSensorRecordingService extends AbstractMotionSensorRecordingService {
     public AccelerometerSensorRecordingService() {
         super("AccelerometerSensorRecordingService");
     }
