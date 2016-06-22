@@ -17,8 +17,6 @@ import us.michaelchen.compasslogger.utils.TimeConstants;
  * Created by ioreyes on 5/25/16.
  */
 public abstract class AbstractSensorRecordingService extends AbstractRecordingService {
-    private static final String READABLE_EVENT_TIME_KEY = "eventTimeReadable";
-    private static final String EVENT_TIMESTAMP_KEY = "eventTimeStamp";
     private static final String VALUES_KEY = "values-%d";
 
     private Map<String, Object> data = null;
@@ -85,8 +83,8 @@ public abstract class AbstractSensorRecordingService extends AbstractRecordingSe
         float[] values = event.values;
 
         Map<String, Object> data = new HashMap<>();
-        data.put(EVENT_TIMESTAMP_KEY, timestamp);
-        data.put(READABLE_EVENT_TIME_KEY, DataTimeFormat.format(timestamp));
+        data.put(super.TIMESTAMP_KEY, timestamp);
+        data.put(super.READABLE_TIME_KEY, DataTimeFormat.format(timestamp));
 
         for(int n = 0; n < values.length; n++) {
             String valuesKey = String.format(VALUES_KEY, n);

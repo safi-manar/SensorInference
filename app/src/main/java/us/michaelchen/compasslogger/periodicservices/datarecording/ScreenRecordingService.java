@@ -9,6 +9,8 @@ import android.view.Display;
 import java.util.HashMap;
 import java.util.Map;
 
+import us.michaelchen.compasslogger.utils.DataTimeFormat;
+
 /**
  * Created by ioreyes on 5/31/16.
  */
@@ -41,6 +43,8 @@ public class ScreenRecordingService extends AbstractRecordingService {
             screenOn = powerManager.isScreenOn();
         }
 
+        data.put(super.TIMESTAMP_KEY, System.currentTimeMillis());
+        data.put(super.READABLE_TIME_KEY, DataTimeFormat.current());
         if(screenOn) {
             data.put(SCREEN_STATE, "on");
         } else {

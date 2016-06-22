@@ -7,6 +7,8 @@ import android.os.BatteryManager;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import us.michaelchen.compasslogger.utils.DataTimeFormat;
+
 /**
  * Created by ioreyes on 5/27/16.
  */
@@ -50,6 +52,8 @@ public class PowerRecordingService extends AbstractRecordingService {
 
         // Record the data
         Map<String, Object> data = new LinkedHashMap<>();
+        data.put(super.TIMESTAMP_KEY, System.currentTimeMillis());
+        data.put(super.READABLE_TIME_KEY, DataTimeFormat.current());
         data.put(CHARGING_KEY, isCharging);
         data.put(CHARGING_USB_KEY, onUSB);
         data.put(CHARGING_AC_KEY, onAC);

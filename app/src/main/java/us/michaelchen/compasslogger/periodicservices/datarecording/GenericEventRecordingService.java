@@ -27,7 +27,7 @@ public class GenericEventRecordingService extends AbstractRecordingService {
     @Override
     protected Map<String, Object> readData(Intent intent) {
         if(intent.hasExtra(BUFFER_EXTRA)) {
-            EVENT_BUFFER.put(DataTimeFormat.current(), intent.getAction());
+            EVENT_BUFFER.put(System.currentTimeMillis() + "", intent.getAction());
 
             return null;
         } else {

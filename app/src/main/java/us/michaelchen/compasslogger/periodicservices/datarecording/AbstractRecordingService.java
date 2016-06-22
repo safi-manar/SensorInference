@@ -15,6 +15,9 @@ import us.michaelchen.compasslogger.utils.FirebaseWrapper;
 public abstract class AbstractRecordingService extends IntentService {
     private static Firebase deviceDb = null;
 
+    protected static final String TIMESTAMP_KEY = "timestamp";
+    protected static final String READABLE_TIME_KEY = "timeReadable";
+
     protected String tag = null;
 
     protected AbstractRecordingService(String subclassName) {

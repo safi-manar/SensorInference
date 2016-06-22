@@ -110,6 +110,10 @@
             android:enabled="true"
             android:exported="false" />
         <service
+            android:name=".periodicservices.datarecording.RotationVectorSensorRecordingService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
             android:name=".periodicservices.datarecording.StepSensorRecordingService"
             android:enabled="true"
             android:exported="false" />

@@ -8,6 +8,7 @@ import us.michaelchen.compasslogger.periodicservices.datarecording.LocationRecor
 import us.michaelchen.compasslogger.periodicservices.datarecording.MagneticSensorRecordingService;
 import us.michaelchen.compasslogger.periodicservices.datarecording.PowerRecordingService;
 import us.michaelchen.compasslogger.periodicservices.datarecording.ProximitySensorRecordingService;
+import us.michaelchen.compasslogger.periodicservices.datarecording.RotationVectorSensorRecordingService;
 import us.michaelchen.compasslogger.periodicservices.datarecording.ScreenRecordingService;
 import us.michaelchen.compasslogger.periodicservices.datarecording.StepSensorRecordingService;
 import us.michaelchen.compasslogger.periodicservices.deadline.DeadlineService;
@@ -39,6 +40,7 @@ public class Periodics {
             LightSensorRecordingService.class,
             MagneticSensorRecordingService.class,
             ProximitySensorRecordingService.class,
+            RotationVectorSensorRecordingService.class,
             StepSensorRecordingService.class,
 
             // For the deadline package.

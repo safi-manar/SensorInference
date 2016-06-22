@@ -12,7 +12,7 @@ public class TimeConstants {
     private static long ONE_WEEK = ONE_DAY * 7;
 
     // Sensor reporting period
-    public static long PERIODIC_LENGTH = ONE_MINUTE * 1;
+    public static long PERIODIC_LENGTH = ONE_MINUTE * 5;
     public static long LOCATION_PERIODIC_LENGTH = PERIODIC_LENGTH;
 
     // Periodic active/inactive status checking
