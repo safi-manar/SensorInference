@@ -7,14 +7,14 @@ import com.firebase.client.Firebase;
 
 import java.util.Map;
 
+import us.michaelchen.compasslogger.periodicservices.datadestination.AbstractDataDestination;
+import us.michaelchen.compasslogger.periodicservices.datadestination.FirebaseDestination;
 import us.michaelchen.compasslogger.utils.FirebaseWrapper;
 
 /**
  * Created by ioreyes on 5/24/16.
  */
 public abstract class AbstractRecordingService extends IntentService {
-    private static Firebase deviceDb = null;
-
     protected static final String TIMESTAMP_KEY = "timestamp";
     protected static final String READABLE_TIME_KEY = "timeReadable";
 
@@ -27,15 +27,10 @@ public abstract class AbstractRecordingService extends IntentService {
 
     @Override
     protected final void onHandleIntent(Intent intent) {
-        // Get the Firebase handle if it hasn't been locally initialized yet
-        if(deviceDb == null && FirebaseWrapper.isInit()) {
-            deviceDb = FirebaseWrapper.getDb();
-        }
-
+        String label = broadcastKey();
         Map<String, Object> data = readData(intent);
-        if(data != null) {
-            FirebaseWrapper.push(broadcastKey(), data);
-        }
+
+        getDataDestination().submit(label, data);
     }
 
     /**
@@ -50,4 +45,12 @@ public abstract class AbstractRecordingService extends IntentService {
      * @return A map of labeled readouts from the data source
      */
     protected abstract Map<String, Object> readData(Intent intent);
+
+    /**
+     * Defines where recorded data will be saved (override in subclasses to change)
+     * @return An object representing where data will be saved
+     */
+    protected AbstractDataDestination getDataDestination() {
+        return FirebaseDestination.DESTINATION;
+    }
 }
