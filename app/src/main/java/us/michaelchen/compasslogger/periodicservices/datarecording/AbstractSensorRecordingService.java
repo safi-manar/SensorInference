@@ -17,11 +17,11 @@ import us.michaelchen.compasslogger.utils.TimeConstants;
  * Created by ioreyes on 5/25/16.
  */
 public abstract class AbstractSensorRecordingService extends AbstractRecordingService {
-    protected static final String VALUES_KEY = "values-%02d";
+    private static final String VALUES_KEY = "values-%02d";
 
     private Map<String, Object> data = null;
 
-    protected final SensorEventListener SENSOR_LISTENER = new SensorEventListener() {
+    private final SensorEventListener SENSOR_LISTENER = new SensorEventListener() {
 
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -78,7 +78,7 @@ public abstract class AbstractSensorRecordingService extends AbstractRecordingSe
      * @param event
      * @return A map of labels and corresponding values
      */
-    protected Map<String, Object> processSensorData(SensorEvent event) {
+    protected final Map<String, Object> processSensorData(SensorEvent event) {
         long timestamp = toTimestampUTC(event.timestamp);
         float[] values = event.values;
 
@@ -99,7 +99,7 @@ public abstract class AbstractSensorRecordingService extends AbstractRecordingSe
      * @param eventTimestamp Timestamp from the SensorEvent in nanoseconds since uptime
      * @return Equivalent timestamp in milliseconds since epoch
      */
-    protected final long toTimestampUTC(long eventTimestamp) {
+    private long toTimestampUTC(long eventTimestamp) {
         long currentMS = System.currentTimeMillis();
         long uptimeMS = SystemClock.elapsedRealtime();
         long timestampMS = eventTimestamp / 1000000; // ns to ms

@@ -225,6 +225,6 @@
     <string name="error_not_init">Firebase connection not initialized</string>
 
     <!-- Auto-generated Git version DO NOT EDIT -->
-    <string name="app_version">c510c17</string>
+    <string name="app_version">5bd9d99</string>
 
 </resources>
