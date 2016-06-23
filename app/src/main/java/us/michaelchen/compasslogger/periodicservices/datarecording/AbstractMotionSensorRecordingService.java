@@ -10,6 +10,7 @@ import android.os.Handler;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
 
 import us.michaelchen.compasslogger.utils.TimeConstants;
 
@@ -24,17 +25,22 @@ public abstract class AbstractMotionSensorRecordingService extends AbstractSenso
     private final SensorEventListener BATCH_SENSOR_LISTENER = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent event) {
+            // Atomically update the batch
+            putInBatch(event);
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+            // Do nothing
+        }
+
+        private synchronized void putInBatch(SensorEvent event) {
             // Process event and add to static batch
             Map<String, Object> data = processSensorData(event);
             Map<String, Object> batch = getStaticBatch();
 
             String key = String.format(BATCH_KEY, batch.size());
             batch.put(key, data);
-        }
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-            // Do nothing
         }
     };
     private final Handler UNREGISTER_HANDLER = new Handler();
@@ -112,5 +118,5 @@ public abstract class AbstractMotionSensorRecordingService extends AbstractSenso
      *
      * @return A static map in which batch data will be stored and persist between service instances
      */
-    protected abstract Map<String, Object> getStaticBatch();
+    protected abstract ConcurrentMap<String, Object> getStaticBatch();
 }

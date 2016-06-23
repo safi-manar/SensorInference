@@ -2,14 +2,14 @@ package us.michaelchen.compasslogger.periodicservices.datarecording;
 
 import android.hardware.Sensor;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Created by ioreyes on 6/15/16.
  */
 public class AccelerometerSensorRecordingService extends AbstractMotionSensorRecordingService {
-    private static final Map<String, Object> ACCELEROMETER_BATCH = new LinkedHashMap<>();
+    private static final ConcurrentMap<String, Object> ACCELEROMETER_BATCH = new ConcurrentHashMap<>();
 
     public AccelerometerSensorRecordingService() {
         super("AccelerometerSensorRecordingService");
@@ -26,7 +26,7 @@ public class AccelerometerSensorRecordingService extends AbstractMotionSensorRec
     }
 
     @Override
-    protected Map<String, Object> getStaticBatch() {
+    protected ConcurrentMap<String, Object> getStaticBatch() {
         return ACCELEROMETER_BATCH;
     }
 }
