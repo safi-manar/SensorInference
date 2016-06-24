@@ -5,6 +5,43 @@
     <string name="title_section2">Settings</string>
     <string name="title_section3">Feedback</string>
 
+
+
+    <!--MTURK: For the token inquiry and confirmation dialogs -->
+
+    <string name="MTURK_inquiry_title">MTURK?</string>
+    <string name="MTURK_inquiry">Were you prompted to install this app from Amazon MTURK?
+
+        \n\n<b>Please note: We will not be able to pay you for your participation without properly answering this question.</b>
+
+    </string>
+    <!--MTURK: For choosing Yes -->
+    <string name="yes">Yes</string>
+    <string name="MTURK_verification_title">Your MTURK Token</string>
+    <string name="MTURK_verification_confirm">I have entered my MTURK token!</string>
+    <string name="MTURK_verification_message">Your MTURK token is printed below.
+        \nYou will need to enter
+        this token on the Amazon MTURK page to get your payment!
+        \n\n\t
+    </string>
+    <!--MTURK: For choosing No -->
+    <string name="no">No</string>
+    <string name="MTURK_confirm_title">Confirm MTURK Status</string>
+
+    <string name="MTURK_confirm_message">
+        You marked that you were <b>not</b> redirected to this app from MTURK.
+
+        \n\nPlease confirm that this is correct.
+    </string>
+
+    <string name="correct">CORRECT</string>
+    <string name="incorrect">INCORRECT</string>
+
+
+
+
+    <!--For the Agreement consent dialog-->
+
     <string name="agree">Agree</string>
     <string name="cancel">Cancel</string>
 
@@ -70,7 +107,10 @@
     </string>
 
 
+
     <!-- For the Permission Denied dialog-->
+
+    <string name="denied_permission_title">Permissions Denied Warning</string>
     <string name="denied_permission_response">
         You chose to deny permissions that this app needs to collect data.\n
         Please recall that the app will not collect any personally identifiable information besides GPS. All data
@@ -80,10 +120,14 @@
 
         The app will now close. If this is a mistake, you may restart the app and accept the permissions.
     </string>
-
-    <string name="denied_permission_title">Permissions Denied Warning</string>
     <string name="ok">Ok</string>
 
+
+    <!-- For the survey form prompt dialog-->
+
+    <string name="survey_form_title">Required Survey Form</string>
+
+    <string name="survey_form_response">formResponse</string>
     <string name="survey_form_message">
         You will now be directed to complete a short survey for some demographic information needed for this research.
         As always, your data will be kept securely and confidentially.\n\n
@@ -93,46 +137,8 @@
 
 
 
-    <!--For the MTURK ID token-->
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <string name="MTURK_inquiry">Were you prompted to install this app from Amazon MTURK?
-
-        \n\n<b>Please note: We will not be able to pay you for your participation without properly answering this question.</b>
-
-    </string>
-    <string name="MTURK_inquiry_title">MTURK?</string>
-
-
-    <string name="MTURK_verification_confirm">I have entered my MTURK token!</string>
-    <string name="MTURK_verification_message">Your MTURK token is printed below.
-        \nYou will need to enter
-        this token on the Amazon MTURK page to get your payment!
-        \n\n\t
-    </string>
-    <string name="MTURK_verification_title">Your MTURK Token</string>
-
-
-    <!-- For the MTURK status confirmation dialog-->
-    <string name="MTURK_confirm_title">Confirm MTURK Status</string>
-
-    <string name="MTURK_confirm_message">
-        You marked that you were <b>not</b> redirected to this app from MTURK.
-
-        \n\nPlease confirm that this is correct.
-    </string>
-
-    <string name="correct">CORRECT</string>
-    <string name="incorrect">INCORRECT</string>
-
 
     <!--For the MTURK message on the MainActivity screen-->
-    <string name="MTURK_ID_notice">
-        \n\n*The MTURK ID that you submitted to us is printed above.
-        \nIf this ID is incorrect, please email manar@icsi.berkeley.edu with subject \"MTURK ID\"
-        with your correct MTURK ID. Please also include what the MTURK ID was. We will need your correct MTURK ID
-        for you to receive your payment.
-    </string>
 
     <string name="MTURK_user_yes">
         MTURK Status: <b>[ VERIFIED ]</b>
@@ -151,13 +157,10 @@
 
 
 
-    <!-- For the survey form prompt dialog-->
-    <string name="survey_form_title">Required Survey Form</string>
-
-    <string name="survey_form_response">formResponse</string>
 
 
     <!-- For the deadline notification uninstall prompt dialog-->
+
     <string name="uninstall_message_title">UCB Sensor Research Complete!</string>
     <string name="uninstall_message">
         Thank you for participating in our research project! \n\n
@@ -171,6 +174,27 @@
         This application will log various sensor data over the course of one week.
     </string>
 
+
+
+
+    <!-- Firebase settings -->
+    <string name="firebase_url">https://sensorinference-xgymkq5n-67ad3.firebaseio.com/</string>
+    <string name="gdocs_url">https://docs.google.com/forms/d/1rvRzCKcWDC-w6WKSMMpU8ZfljdOdOLXArqG1vVhFKeQ/viewform?entry.1826764866=</string>
+
+    <!-- ACRA crash reporting settings -->
+    <string name="error_not_init">Firebase connection not initialized</string>
+
+    <!-- Auto-generated Git version DO NOT EDIT -->
+    <string name="app_version">58bc1f9</string>
+
+
+
+
+
+    <!--                                                     -->
+    <!--The following are all used by the various xml files. -->
+    <!--                                                     -->
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
@@ -178,8 +202,6 @@
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_settings">Settings</string>
-
-    <!-- Strings related to Settings -->
 
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
@@ -238,14 +260,6 @@
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="title_activity_form">FormActivity</string>
 
-    <!-- Firebase settings -->
-    <string name="firebase_url">https://sensorinference-xgymkq5n-67ad3.firebaseio.com/</string>
-    <string name="gdocs_url">https://docs.google.com/forms/d/1rvRzCKcWDC-w6WKSMMpU8ZfljdOdOLXArqG1vVhFKeQ/viewform?entry.1826764866=</string>
 
-    <!-- ACRA crash reporting settings -->
-    <string name="error_not_init">Firebase connection not initialized</string>
-
-    <!-- Auto-generated Git version DO NOT EDIT -->
-    <string name="app_version">0fe8fcf</string>
 
 </resources>
