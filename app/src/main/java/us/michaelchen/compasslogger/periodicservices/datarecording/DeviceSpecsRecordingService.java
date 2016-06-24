@@ -23,7 +23,8 @@ public class DeviceSpecsRecordingService extends AbstractRecordingService {
     private static final String SENSOR_COUNT_KEY = "sensorCount";
     private static final String SENSOR_KEY = "sensor-%02d";
     private static final String VERSION_KEY = "gitBuild";
-    private static final String MTURK_ID = "MTURK-ID";
+    private static final String MTURK_STATUS = "MTURK-Status";
+    private static final String MTURK_TOKEN = "MTURK-Token";
 
     public DeviceSpecsRecordingService() {
         super("DeviceSpecsRecordingService");
@@ -67,8 +68,12 @@ public class DeviceSpecsRecordingService extends AbstractRecordingService {
         // The hash value from Strings.xml will be replaced by Gradle build
         data.put(VERSION_KEY, getString(R.string.app_version));
 
-        // Get MTURK ID
-        data.put(MTURK_ID, PreferencesWrapper.getMTURK());
+        // Collect MTURK data (status and if a user, token)
+        data.put(MTURK_STATUS, PreferencesWrapper.isMTURKUser());
+
+        if (PreferencesWrapper.isMTURKUser()) {
+            data.put(MTURK_TOKEN, PreferencesWrapper.getMTURKToken());
+        }
 
         return data;
     }

@@ -91,34 +91,39 @@
         <b>Please note: You will not be paid the $2.00 bonus without participating in this portion of the study.</b>\n\n
     </string>
 
-    <!-- For the MTURK ID dialog-->
-    <string name="MTURK_form_title">MTURK ID</string>
 
-    <string name="MTURK_form_message">
-        Please enter your <b>MTURK ID</b>.
-        \nYour MTURK ID can be located on your MTURK dashboard.
 
-        \n\nYou must enter your MTURK ID correctly. We need your MTURK ID to direct the payments for participation
-        in the study.
-        \n\n<b><i>If you do not enter your valid MTURK ID, we will not be able to send you
-        your payments!!</i></b>
+    <!--For the MTURK ID token-->
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="MTURK_inquiry">Were you prompted to install this app from Amazon MTURK?
+
+        \n\n<b>Please note: We will not be able to pay you for your participation without properly answering this question.</b>
 
     </string>
+    <string name="MTURK_inquiry_title">MTURK?</string>
 
-    <string name="MTURK_confirm_title">Confirm MTURK ID</string>
+
+    <string name="MTURK_verification_confirm">I have entered my MTURK token!</string>
+    <string name="MTURK_verification_message">Your MTURK token is printed below.
+        \nYou will need to enter
+        this token on the Amazon MTURK page to get your payment!
+        \n\n\t
+    </string>
+    <string name="MTURK_verification_title">Your MTURK Token</string>
+
+
+    <!-- For the MTURK status confirmation dialog-->
+    <string name="MTURK_confirm_title">Confirm MTURK Status</string>
 
     <string name="MTURK_confirm_message">
-        You entered the following as your MTURK ID.
-        \n\n
+        You marked that you were <b>not</b> redirected to this app from MTURK.
 
-        <!-- Auto-formatted MTURK ID, DO NOT EDIT -->
-        \t %s
-
-        \n\n
-        Please confirm that this is correct.
-
+        \n\nPlease confirm that this is correct.
     </string>
 
+    <string name="correct">CORRECT</string>
+    <string name="incorrect">INCORRECT</string>
 
 
     <!--For the MTURK message on the MainActivity screen-->
@@ -128,6 +133,22 @@
         with your correct MTURK ID. Please also include what the MTURK ID was. We will need your correct MTURK ID
         for you to receive your payment.
     </string>
+
+    <string name="MTURK_user_yes">
+        MTURK Status: <b>[ VERIFIED ]</b>
+        \n\nYou marked that you <b>are</b> an MTURK user and that you submitted your verification code on the MTURK HIT page.
+        \n<b><i>This information must be correct in order for you to receive your payment in the study.</i></b>
+        \nIf there is a mistake, please email <b>manar@icsi.berkeley.edu</b> and explain the case. Include your UUID in the email.
+    </string>
+
+    <string name="MTURK_user_no">
+        MTURK Status: <b>[ NOT VERIFIED ]</b>
+        \n\nYou marked that you <b>are not</b> an MTURK user and we have <b>not</b> collected a verification code on our MTURK HIT page.
+        \n<b><i>However, if you are indeed an MTURK user, we will need to correct this mistake ASAP for you to receive your payment
+            in the study.</i></b>
+        \nIf there is a mistake, please email <b>manar@icsi.berkeley.edu</b> and explain the case. Include your UUID in the email.
+    </string>
+
 
 
     <!-- For the survey form prompt dialog-->
@@ -225,6 +246,6 @@
     <string name="error_not_init">Firebase connection not initialized</string>
 
     <!-- Auto-generated Git version DO NOT EDIT -->
-    <string name="app_version">d260b52</string>
+    <string name="app_version">0fe8fcf</string>
 
 </resources>

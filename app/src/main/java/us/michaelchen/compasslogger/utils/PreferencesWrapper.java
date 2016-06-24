@@ -22,6 +22,9 @@ public class PreferencesWrapper {
     private static final String FIRST_RUN = "first_run";
     private static final String DEVICE_ID = "device_id";
     private static final String MTURK_ID = "mturk_id";
+    private static final String MTURK_STATUS_VERIFIED = "mturk_status_verified";
+    private static final String MTURK_STATUS = "mturk_status";
+    private static final String MTURK_TOKEN = "mturk_token";
 
     private static SharedPreferences prefs = null;
 
@@ -137,28 +140,49 @@ public class PreferencesWrapper {
         return id;
     }
 
-
     /**
-     *
-     * @return True if the user has entered the MTURK ID
-     */
-    public static boolean isMTURKCollected() {
-        return getMTURK() != null;
+     * Sets a checkpoint for verification of the MTURK status of the user
+     * (ie, that the app has already asked if the subject is an MTURK user). */
+    public static void setMTURKCheckpoint(boolean status) {
+        prefs.edit().putBoolean(MTURK_STATUS_VERIFIED, true).commit();
+
+        prefs.edit().putBoolean(MTURK_STATUS, status).commit();
     }
 
     /**
      *
-     * @return The MTURK ID entered by the user.
+     * @return true if the the user has passed the askMTURKStatus() dialog.
      */
-    public static String getMTURK() {
-        return prefs.getString(MTURK_ID, null);
+    public static Boolean getMTURKCheckpoint() {
+        return prefs.getBoolean(MTURK_STATUS_VERIFIED, false);
+    }
+
+
+    private static String generateMTURKToken() {
+        return "[ TOKEN PLACEHOLDER ]";
     }
 
     /**
-     * Set that the user has completed the survey form
+     *
+     * @return The user's MTURK token to be used as a verification code on MTURK.
      */
-    public static void setMTURK(String mID) {
-        prefs.edit().putString(MTURK_ID, mID).commit();
+    public static String getMTURKToken() {
+
+        String token = prefs.getString(MTURK_TOKEN, null);
+        if (token == null) {
+            token = generateMTURKToken();
+            prefs.edit().putString(MTURK_TOKEN, token).commit();
+        }
+        return token;
+    }
+
+
+    /**
+     *
+     * @return true if the user marked "Yes" to the askMTURKStatus() dialog question.
+     */
+    public static boolean isMTURKUser() {
+        return prefs.getBoolean(MTURK_STATUS, false);
     }
 
 }

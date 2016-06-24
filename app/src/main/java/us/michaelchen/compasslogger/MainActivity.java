@@ -37,15 +37,19 @@ public class MainActivity extends AppCompatActivity {
          * assumes that the alarms must be reset.   */
         PreferencesWrapper.resetLastAlarmTimestamp();
 
-        if (PreferencesWrapper.isUserConsented()) {
+
+        if (PreferencesWrapper.getMTURKCheckpoint() && PreferencesWrapper.isUserConsented()) {
             checkPermissions();
+        } else if (PreferencesWrapper.getMTURKCheckpoint()) {
+            AlertDialog agreementDialog = agreementDialog();
+            agreementDialog.show();
         } else {
-            AlertDialog dialog = agreementDialog();
-            dialog.show();
+            AlertDialog mturkStatusDialog = askMTURKStatus();
+            mturkStatusDialog.show();
         }
 
         displayUUIDandBuild();
-        displayMTURK();
+        displayMTURKStatus();
 
     }
 
@@ -62,18 +66,102 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Put the MTURK ID on the main screen
+     * Put the MTURK status of the user on the main screen
      */
-    private void displayMTURK() {
-        if (PreferencesWrapper.isMTURKCollected()) {
+    private void displayMTURKStatus() {
+        if (PreferencesWrapper.getMTURKCheckpoint()) {
             TextView mturkView = (TextView) findViewById(R.id.mturkmessage);
 
-            String mID = PreferencesWrapper.getMTURK();
-            String text = String.format("*MTURK ID: %s", mID);
-            text = text + getString(R.string.MTURK_ID_notice);
-            mturkView.setText(text);
+            if (PreferencesWrapper.isMTURKUser()) {
+                mturkView.setText(R.string.MTURK_user_yes);
+            } else {
+                mturkView.setText(R.string.MTURK_user_no);
+            }
         }
     }
+
+    /* Displays a dialog that will ask if the user is an MTURK user.
+        If so, prompts the user with a dialog to submit a MTURK token.*/
+    private AlertDialog askMTURKStatus() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+
+        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                AlertDialog mturkTokenDialog = provideMturkToken();
+                mturkTokenDialog.show();
+            }
+        });
+
+        // Prompt a confirmation that the user is not MTURK
+        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                AlertDialog confirmDialog = confirmNotMTURK();
+                confirmDialog.show();
+            }
+        });
+
+        builder.setMessage(R.string.MTURK_inquiry)
+                .setTitle(R.string.MTURK_inquiry_title);
+
+        AlertDialog dialog = builder.create();
+        return dialog;
+    }
+
+    /* Displays a dialog that will ask for confirmation if the user marked
+        No to the askMTURKStatus() dialog.          */
+    private AlertDialog confirmNotMTURK() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // The user is not an MTURK user, so proceed with the study consent.
+        builder.setPositiveButton(R.string.correct, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                PreferencesWrapper.setMTURKCheckpoint(false);
+                // Now, show the agreement consent dialog.
+                AlertDialog agreementDialog = agreementDialog();
+                agreementDialog.show();
+            }
+        });
+
+        // The user misentered status information. Redirect back to the status dialog.
+        builder.setNegativeButton(R.string.incorrect, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                AlertDialog mturkStatusDialog = askMTURKStatus();
+                mturkStatusDialog.show();
+            }
+        });
+
+        builder.setMessage(R.string.MTURK_confirm_message)
+                .setTitle(R.string.MTURK_confirm_title);
+
+        AlertDialog dialog = builder.create();
+        return dialog;
+    }
+
+
+    /* Displays a dialog that will give the user a unique token to be used
+        for verification of app installation on MTURK.                  .*/
+    private AlertDialog provideMturkToken() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setNeutralButton(R.string.MTURK_verification_confirm, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                PreferencesWrapper.setMTURKCheckpoint(true);
+                // User has entered the token on MTURK. Now, show them the agreement consent.
+                AlertDialog agreementDialog = agreementDialog();
+                agreementDialog.show();
+            }
+        });
+
+        String tokenMessage = getString(R.string.MTURK_verification_message) + PreferencesWrapper.getMTURKToken();
+
+        builder.setMessage(tokenMessage)
+                .setTitle(R.string.MTURK_verification_title);
+
+        AlertDialog dialog = builder.create();
+        return dialog;
+    }
+
 
 
     /* Displays the agreement ("Consent to Participate in Research..." ) dialog.*/
@@ -125,8 +213,10 @@ public class MainActivity extends AppCompatActivity {
 
         /*Since denied permissions handling is done by onRequestPermissionsResult, if the code has
         * gotten this far, then the user must have accepted all the permissions.
-        * The app must now prompt the user to enter the MTURK ID*/
-        collectMturkID();
+        * The app must now prompt the user to fill out the Google Form and collect sensor data. */
+        // Update MTURK status on main screen
+        displayMTURKStatus();
+        collectSurveyFormAndSensorData();
     }
 
 
@@ -173,101 +263,6 @@ public class MainActivity extends AppCompatActivity {
 
         AlertDialog dialog = builder.create();
         return dialog;
-    }
-
-
-    /*
-
-     */
-    private void collectMturkID() {
-
-        if (!PreferencesWrapper.isMTURKCollected()) {
-            // Collect MTURK if not collected yet.
-            AlertDialog mturkForm = mturkIDDialog(this);
-            mturkForm.show();
-
-        } else {
-            //Otherwise, proceed with the collectSurveyForm flow.
-            // Remind the user about the survey, and since the dialog thread will be
-            // asynchronous, let the AlertDialog handle the initiation of the alarms.
-            collectSurveyFormAndSensorData();
-        }
-
-
-    }
-
-
-    /* This message is displayed prompting the user to continue with the
-    * study by entering their MTURK ID. */
-    private AlertDialog mturkIDDialog(final Context context) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        // Set up the input
-        final EditText input = new EditText(this);
-        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        builder.setView(input);
-
-        // Set up the buttons
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String mID = input.getText().toString();
-
-                // Do not store the ID yet (so that isMTURKCollected() functions correctly).
-                // Prompt the user to confirm.
-                AlertDialog mturkConfirmation = confirmMTURK(context, mID);
-                mturkConfirmation.show();
-
-            }
-        });
-
-        builder.setMessage(R.string.MTURK_form_message)
-                .setTitle(R.string.MTURK_form_title);
-
-        return builder.create();
-    }
-
-
-    /* This message is displayed prompting the user to confirm the
-    * MTURK ID. If correct, the flow continues to the survey form.
-     * Otherwise, the flow is reset back to mturkIDDialog.      */
-    private AlertDialog confirmMTURK(final Context context, final String mID) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        // Set up the buttons
-        builder.setPositiveButton("Correct", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                // mID has been confirmed. Now, set it in preferences.
-                PreferencesWrapper.setMTURK(mID);
-
-                // MTURK ID has been collected and confirmed. Now display it.
-                displayMTURK();
-                // The app must now prompt the user to fill out the Google Form and collect sensor data.
-                collectSurveyFormAndSensorData();
-
-            }
-        });
-
-        builder.setNegativeButton("Incorrect", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // The user entered the wrong ID. Redo the collection.
-                AlertDialog mturkForm = mturkIDDialog(context);
-                mturkForm.show();
-            }
-        });
-
-        String message = String.format(getString(R.string.MTURK_confirm_message), mID);
-
-        builder.setMessage(message)
-                .setTitle(R.string.MTURK_confirm_title);
-
-
-
-        return builder.create();
     }
 
 
