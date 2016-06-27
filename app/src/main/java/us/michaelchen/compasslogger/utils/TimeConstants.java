@@ -25,4 +25,8 @@ public class TimeConstants {
     // The maximum amount of time to keep a sensor open without an onSensorChanged event
     public static long MAX_SENSOR_TIME = ONE_SECOND * 3;
     public static long SENSOR_DATA_POLL_INTERVAL = 200; // milliseconds, corresponds to SENSOR_DELAY_NORMAL
+
+    // Used to determine epoch and boot timestamps
+    public static long FORTY_YEARS_MS = ONE_DAY * 365 * 40;    // It's been at least 40 years since the Unix epoch
+    public static long FORTY_YEARS_NS = FORTY_YEARS_MS * (long)1e6;
 }
