@@ -12,6 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
+import us.michaelchen.compasslogger.periodicservices.datadestination.AbstractDataDestination;
 import us.michaelchen.compasslogger.utils.TimeConstants;
 
 /**
@@ -119,4 +120,17 @@ public abstract class AbstractMotionSensorRecordingService extends AbstractSenso
      * @return A static map in which batch data will be stored and persist between service instances
      */
     protected abstract ConcurrentMap<String, Object> getStaticBatch();
+
+    @Override
+    protected final AbstractDataDestination getDataDestination() {
+        // Use disk-and-wifi-upload destination if batching is available, the default if not
+        final SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        Sensor sensor = sensorManager.getDefaultSensor(getSensorType());
+        if(getBatchSize(sensor) > 0) {
+            // TODO Uncommment when the Firebase storage is available
+            // return new WifiUploadDestination(this);
+        }
+
+        return super.getDataDestination();
+    }
 }
