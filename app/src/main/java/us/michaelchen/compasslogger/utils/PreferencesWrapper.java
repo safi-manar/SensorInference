@@ -141,6 +141,18 @@ public class PreferencesWrapper {
     }
 
     /**
+     *
+     * @return The first block of the install-persistent random UUID for this device
+     */
+    public static String getShortDeviceID() {
+        String id = getDeviceID();
+
+        String[] blocks = id.split("-");  // The "-" symbol delimits the different UUID blocks
+
+        return blocks[0];
+    }
+
+    /**
      * Sets a checkpoint for verification of the MTURK status of the user
      * (ie, that the app has already asked if the subject is an MTURK user). */
     public static void setMTURKCheckpoint(boolean status) {
