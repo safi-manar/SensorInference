@@ -156,7 +156,7 @@ public abstract class AbstractSensorRecordingService extends AbstractRecordingSe
         } else if(isBootNS) {
             timestampMS = epochMS - bootMS + (eventTimestamp / (long)1e6);  // ns to ms
             timestampReadable = DataTimeFormat.format(timestampMS);
-            timestampType = TimestampType.BOOT_MS.name();
+            timestampType = TimestampType.BOOT_NS.name();
         } else if(isArbitrary) {
             timestampMS = -1;   // Con't convert to epoch time
             timestampReadable = ""; // Nothing to convert
