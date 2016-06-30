@@ -3,13 +3,10 @@ package us.michaelchen.compasslogger.periodicservices.datarecording;
 import android.app.IntentService;
 import android.content.Intent;
 
-import com.firebase.client.Firebase;
-
 import java.util.Map;
 
 import us.michaelchen.compasslogger.periodicservices.datadestination.AbstractDataDestination;
 import us.michaelchen.compasslogger.periodicservices.datadestination.FirebaseDestination;
-import us.michaelchen.compasslogger.utils.FirebaseWrapper;
 
 /**
  * Created by ioreyes on 5/24/16.

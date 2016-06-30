@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 
 import java.util.UUID;
 
+import us.michaelchen.compasslogger.R;
+
 /**
  * Created by ioreyes on 6/9/16.
  */
@@ -25,6 +27,7 @@ public class PreferencesWrapper {
     private static final String MTURK_STATUS_VERIFIED = "mturk_status_verified";
     private static final String MTURK_STATUS = "mturk_status";
     private static final String MTURK_TOKEN = "mturk_token";
+    private static final String DB_ADDRESS = "db_address";
 
     private static SharedPreferences prefs = null;
 
@@ -34,6 +37,10 @@ public class PreferencesWrapper {
      */
     public static void init(Context c) {
         prefs = c.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+
+        // Put the database address in the prefs
+        String dbAddress = c.getString(R.string.firebase_url);
+        prefs.edit().putString(DB_ADDRESS, dbAddress).commit();
     }
 
     /**
@@ -195,6 +202,14 @@ public class PreferencesWrapper {
      */
     public static boolean isMTURKUser() {
         return prefs.getBoolean(MTURK_STATUS, false);
+    }
+
+    /**
+     *
+     * @return The address to the database
+     */
+    public static String getDbAddress() {
+        return prefs.getString(DB_ADDRESS, "");
     }
 
 }

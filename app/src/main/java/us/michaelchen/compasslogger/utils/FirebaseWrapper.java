@@ -1,36 +1,32 @@
 package us.michaelchen.compasslogger.utils;
 
-import android.content.Context;
-
-import com.firebase.client.Firebase;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Map;
-
-import us.michaelchen.compasslogger.R;
 
 
 public class FirebaseWrapper {
     private static final String USER_DATA_KEY = "userData";
 
     private static String dbURL = null;
-    private static Firebase deviceDb = null;
+    private static DatabaseReference deviceDb = null;
     private static String deviceId = null;
 
     private static boolean isInit = false;
 
     /**
      * Initialize the Firebase connection
-     * @param c Android context
      */
-    public static void init(Context c) {
+    public static void init() {
         if(!isInit) {
-            Firebase.setAndroidContext(c);
-
-            dbURL = c.getString(R.string.firebase_url);
+            dbURL = PreferencesWrapper.getDbAddress();
             deviceId = PreferencesWrapper.getDeviceID();
 
-            Firebase db = new Firebase(dbURL);
-            deviceDb = db.child(USER_DATA_KEY).child(deviceId);
+            FirebaseDatabase db = FirebaseDatabase.getInstance();
+            db.setPersistenceEnabled(true);
+            DatabaseReference dbRef = db.getReferenceFromUrl(dbURL);
+            deviceDb = dbRef.child(USER_DATA_KEY).child(deviceId);
 
             isInit = true;
         }
@@ -48,7 +44,7 @@ public class FirebaseWrapper {
      *
      * @return A handle to this device's entry in the Firebase backend
      */
-    public static Firebase getDb() {
+    public static DatabaseReference getDb() {
         return deviceDb;
     }
 
@@ -76,7 +72,6 @@ public class FirebaseWrapper {
             * */
             String timeStamp = DataTimeFormat.current();
             deviceDb.child(key).child(timeStamp).setValue(data);
-
         }
     }
 }

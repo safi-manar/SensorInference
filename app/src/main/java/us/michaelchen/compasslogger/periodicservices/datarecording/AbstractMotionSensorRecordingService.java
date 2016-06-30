@@ -20,7 +20,7 @@ import us.michaelchen.compasslogger.utils.TimeConstants;
  */
 public abstract class AbstractMotionSensorRecordingService extends AbstractSensorRecordingService {
     private static final int MAX_EVENTS_PER_PERIOD = (int) (TimeConstants.PERIODIC_LENGTH / TimeConstants.SENSOR_DATA_POLL_INTERVAL);
-    private static final int MAX_EVENTS_PER_PERIOD_WITH_TOLERANCE = (int) Math.floor(MAX_EVENTS_PER_PERIOD * 0.95);
+    private static final int MAX_EVENTS_PER_PERIOD_WITH_TOLERANCE = (int) Math.floor(MAX_EVENTS_PER_PERIOD * 0.99);
     private static final String BATCH_KEY = "batch-%05d";
 
     private final SensorEventListener BATCH_SENSOR_LISTENER = new SensorEventListener() {

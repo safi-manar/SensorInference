@@ -8,17 +8,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import android.text.InputType;
-import android.util.Log;
-import android.widget.EditText;
 import android.widget.TextView;
 
+import us.michaelchen.compasslogger.utils.FirebaseWrapper;
 import us.michaelchen.compasslogger.utils.MasterSwitch;
 import us.michaelchen.compasslogger.utils.PreferencesWrapper;
 import us.michaelchen.compasslogger.utils.TimeConstants;
@@ -30,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        FirebaseWrapper.init();
+
         setContentView(R.layout.activity_main);
 
         /*Because alarms are reset upon a device restart,

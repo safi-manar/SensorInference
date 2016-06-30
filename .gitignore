@@ -45,3 +45,5 @@ captures/
 .idea/workspace.xml
 .idea/.name
 app/app.iml
+/app/google-services.json
+/.swp
