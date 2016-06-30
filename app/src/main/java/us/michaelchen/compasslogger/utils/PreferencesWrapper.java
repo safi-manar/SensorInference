@@ -27,7 +27,9 @@ public class PreferencesWrapper {
     private static final String MTURK_STATUS_VERIFIED = "mturk_status_verified";
     private static final String MTURK_STATUS = "mturk_status";
     private static final String MTURK_TOKEN = "mturk_token";
+
     private static final String DB_ADDRESS = "db_address";
+    private static final String STORAGE_ADDRESS = "storage_address";
 
     private static SharedPreferences prefs = null;
 
@@ -38,9 +40,12 @@ public class PreferencesWrapper {
     public static void init(Context c) {
         prefs = c.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 
-        // Put the database address in the prefs
+        // Put the database and storage address in the prefs
         String dbAddress = c.getString(R.string.firebase_url);
         prefs.edit().putString(DB_ADDRESS, dbAddress).commit();
+
+        String storageAddress = c.getString(R.string.firebase_storage_url);
+        prefs.edit().putString(STORAGE_ADDRESS, storageAddress).commit();
     }
 
     /**
@@ -210,6 +215,14 @@ public class PreferencesWrapper {
      */
     public static String getDbAddress() {
         return prefs.getString(DB_ADDRESS, "");
+    }
+
+    /**
+     *
+     * @return The reference to the remote storage
+     */
+    public static String getStorageAddress() {
+        return prefs.getString(STORAGE_ADDRESS, "");
     }
 
 }

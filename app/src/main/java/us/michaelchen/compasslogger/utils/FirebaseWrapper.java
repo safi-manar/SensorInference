@@ -1,17 +1,21 @@
 package us.michaelchen.compasslogger.utils;
 
+import android.net.Uri;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
 import java.util.Map;
 
 
 public class FirebaseWrapper {
     private static final String USER_DATA_KEY = "userData";
 
-    private static String dbURL = null;
     private static DatabaseReference deviceDb = null;
-    private static String deviceId = null;
+    private static StorageReference deviceStore = null;
 
     private static boolean isInit = false;
 
@@ -20,13 +24,16 @@ public class FirebaseWrapper {
      */
     public static void init() {
         if(!isInit) {
-            dbURL = PreferencesWrapper.getDbAddress();
-            deviceId = PreferencesWrapper.getDeviceID();
+            String deviceId = PreferencesWrapper.getDeviceID();
 
             FirebaseDatabase db = FirebaseDatabase.getInstance();
             db.setPersistenceEnabled(true);
-            DatabaseReference dbRef = db.getReferenceFromUrl(dbURL);
+            DatabaseReference dbRef = db.getReferenceFromUrl(PreferencesWrapper.getDbAddress());
             deviceDb = dbRef.child(USER_DATA_KEY).child(deviceId);
+
+            FirebaseStorage store = FirebaseStorage.getInstance();
+            StorageReference storeRef = store.getReferenceFromUrl(PreferencesWrapper.getStorageAddress());
+            deviceStore = storeRef.child(deviceId);
 
             isInit = true;
         }
@@ -38,22 +45,6 @@ public class FirebaseWrapper {
      */
     public static boolean isInit() {
         return isInit;
-    }
-
-    /**
-     *
-     * @return A handle to this device's entry in the Firebase backend
-     */
-    public static DatabaseReference getDb() {
-        return deviceDb;
-    }
-
-    /**
-     *
-     * @return The URL to the Firebase backend
-     */
-    public static String getURL() {
-        return dbURL;
     }
 
     /**
@@ -72,6 +63,18 @@ public class FirebaseWrapper {
             * */
             String timeStamp = DataTimeFormat.current();
             deviceDb.child(key).child(timeStamp).setValue(data);
+        }
+    }
+
+    /**
+     * Uplaod the file to the Firebase Storage backend
+     * @param file Reference to the file to upload
+     */
+    public static void upload(File file) {
+        if(isInit) {
+            Uri uri = Uri.fromFile(file);
+            StorageReference fileStore = deviceStore.child(uri.getLastPathSegment());
+            fileStore.putFile(uri);
         }
     }
 }

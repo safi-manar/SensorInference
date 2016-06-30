@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
 import us.michaelchen.compasslogger.periodicservices.datadestination.AbstractDataDestination;
+import us.michaelchen.compasslogger.periodicservices.datadestination.WifiUploadDestination;
 import us.michaelchen.compasslogger.utils.TimeConstants;
 
 /**
@@ -127,8 +128,7 @@ public abstract class AbstractMotionSensorRecordingService extends AbstractSenso
         final SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         Sensor sensor = sensorManager.getDefaultSensor(getSensorType());
         if(getBatchSize(sensor) > 0) {
-            // TODO Uncommment when the Firebase storage is available
-            // return new WifiUploadDestination(this);
+            return new WifiUploadDestination(this);
         }
 
         return super.getDataDestination();

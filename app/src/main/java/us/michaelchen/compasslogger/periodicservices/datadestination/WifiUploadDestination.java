@@ -8,7 +8,6 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -19,6 +18,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import us.michaelchen.compasslogger.utils.DataTimeFormat;
+import us.michaelchen.compasslogger.utils.FirebaseWrapper;
 import us.michaelchen.compasslogger.utils.PreferencesWrapper;
 
 /**
@@ -108,8 +108,8 @@ public class WifiUploadDestination extends AbstractDataDestination {
     private void uploadAndClearCache(String label) {
         File sensorCacheFolder = new File(appContext.getCacheDir(), label);
         if(sensorCacheFolder.exists()) {
-            // Compress the data
             try {
+                // Compress the data
                 String shortID = PreferencesWrapper.getShortDeviceID();
                 String readableTime = DataTimeFormat.current();
                 String zipFilename = String.format("%s--%s--%s.zip", label, shortID, readableTime);
@@ -136,18 +136,18 @@ public class WifiUploadDestination extends AbstractDataDestination {
 
                 zip.close();
                 fos.close();
+
+                // Upload to remote server
+                FirebaseWrapper.upload(zipFile);
+
+                // Clear cache
+                for(File inCache : sensorCacheFolder.listFiles()) {
+                    inCache.delete();
+                }
             } catch(IOException e) {
                 // Log any file-writing problems
                 String tag = getClass().getSimpleName();
                 Log.w(tag, e.getMessage());
-            }
-
-            // Upload to remote server
-            // TODO
-
-            // Clear cache
-            for(File inCache : sensorCacheFolder.listFiles()) {
-                inCache.delete();
             }
         }
     }
