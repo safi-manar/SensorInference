@@ -98,11 +98,19 @@
             android:enabled="true"
             android:exported="false" />
         <service
+            android:name=".periodicservices.datarecording.HumiditySensorRecordingService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
             android:name=".periodicservices.datarecording.LightSensorRecordingService"
             android:enabled="true"
             android:exported="false" />
         <service
             android:name=".periodicservices.datarecording.MagneticSensorRecordingService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".periodicservices.datarecording.PressureSensorRecordingService"
             android:enabled="true"
             android:exported="false" />
         <service
@@ -115,6 +123,10 @@
             android:exported="false" />
         <service
             android:name=".periodicservices.datarecording.StepSensorRecordingService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".periodicservices.datarecording.TemperatureSensorRecordingService"
             android:enabled="true"
             android:exported="false" />
 
