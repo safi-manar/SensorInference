@@ -3,14 +3,17 @@ package us.michaelchen.compasslogger.periodicservices;
 import us.michaelchen.compasslogger.periodicservices.datarecording.AccelerometerSensorRecordingService;
 import us.michaelchen.compasslogger.periodicservices.datarecording.GenericEventRecordingService;
 import us.michaelchen.compasslogger.periodicservices.datarecording.GyroscopeSensorRecordingService;
+import us.michaelchen.compasslogger.periodicservices.datarecording.HumiditySensorRecordingService;
 import us.michaelchen.compasslogger.periodicservices.datarecording.LightSensorRecordingService;
 import us.michaelchen.compasslogger.periodicservices.datarecording.LocationRecordingService;
 import us.michaelchen.compasslogger.periodicservices.datarecording.MagneticSensorRecordingService;
 import us.michaelchen.compasslogger.periodicservices.datarecording.PowerRecordingService;
+import us.michaelchen.compasslogger.periodicservices.datarecording.PressureSensorRecordingService;
 import us.michaelchen.compasslogger.periodicservices.datarecording.ProximitySensorRecordingService;
 import us.michaelchen.compasslogger.periodicservices.datarecording.RotationVectorSensorRecordingService;
 import us.michaelchen.compasslogger.periodicservices.datarecording.ScreenRecordingService;
 import us.michaelchen.compasslogger.periodicservices.datarecording.StepSensorRecordingService;
+import us.michaelchen.compasslogger.periodicservices.datarecording.TemperatureSensorRecordingService;
 import us.michaelchen.compasslogger.periodicservices.deadline.DeadlineService;
 import us.michaelchen.compasslogger.periodicservices.keepalive.GenericReceiverKeepAliveService;
 import us.michaelchen.compasslogger.periodicservices.keepalive.StepSensorKeepAliveService;
@@ -37,11 +40,14 @@ public class Periodics {
             // To record various sensor values
             AccelerometerSensorRecordingService.class,
             GyroscopeSensorRecordingService.class,
+            HumiditySensorRecordingService.class,
             LightSensorRecordingService.class,
             MagneticSensorRecordingService.class,
+            PressureSensorRecordingService.class,
             ProximitySensorRecordingService.class,
             RotationVectorSensorRecordingService.class,
             StepSensorRecordingService.class,
+            TemperatureSensorRecordingService.class,
 
             // For the deadline package.
             DeadlineService.class,
