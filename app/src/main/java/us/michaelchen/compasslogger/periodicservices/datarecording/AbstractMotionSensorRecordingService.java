@@ -25,6 +25,8 @@ public abstract class AbstractMotionSensorRecordingService extends AbstractSenso
     private static final String BATCH_KEY = "batch-%05d";
 
     private final SensorEventListener BATCH_SENSOR_LISTENER = new SensorEventListener() {
+        private Map<String, Object> lastData = null;
+
         @Override
         public void onSensorChanged(SensorEvent event) {
             // Atomically update the batch
@@ -41,8 +43,27 @@ public abstract class AbstractMotionSensorRecordingService extends AbstractSenso
             Map<String, Object> data = processSensorData(event);
             Map<String, Object> batch = getStaticBatch();
 
-            String key = String.format(BATCH_KEY, batch.size());
-            batch.put(key, data);
+            // Enforce sampling "speed limit"
+            if(lastData != null) {
+                long currentTimestamp = (long)data.get(TIMESTAMP_KEY);
+                long lastTimestamp = (long)lastData.get(TIMESTAMP_KEY);
+                long interval = currentTimestamp - lastTimestamp;
+
+                // Make sure at least half of the polling interval has elapsed
+                if(interval >= TimeConstants.SENSOR_DATA_POLL_INTERVAL / 2l) {
+                    String key = String.format(BATCH_KEY, batch.size());
+                    batch.put(key, data);
+
+                    lastData = data;
+                }
+            } else {
+                // Just accept the first one
+                String key = String.format(BATCH_KEY, batch.size());
+                batch.put(key, data);
+
+                lastData = data;
+            }
+
         }
     };
     private final Handler UNREGISTER_HANDLER = new Handler();
