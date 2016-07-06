@@ -112,28 +112,33 @@ public abstract class AbstractSensorRecordingService extends AbstractRecordingSe
      */
     private Map<String, Object> getTimestamp(SensorEvent event) {
         // Determine the definition of the event timestamp:
-        // 1. Milliseconds since epoch
-        //    At least 40 years have elapsed and the timestamp has the same number of digits as the epoch time in millis
-        // 2. Nanoseconds since epoch
-        //    At least 40 years have elapsed and the timestamp has the same number of digits as the epoch time in nanos
-        // 3. Milliseconds since boot
+        // 1. Milliseconds since boot
         //    The event happened within 2 periodic lengths in the past and the timestamp has the same number of digits as the uptime timestamp
-        // 4. Nanoseconds since boot
-        //    The event happened within 2 periodic lenghts in the past and the timestamp has the same nubmer of digits as the uptime timestamp in nanoseconds
+        // 2. Nanoseconds since boot
+        //    The event happened within 2 periodic length in the past and the timestamp has the same nubmer of digits as the uptime timestamp in nanoseconds
+        // 3. Milliseconds since epoch
+        //    If not boot-relative, at least 40 years have elapsed and the timestamp has the same number of digits as the epoch time in millis
+        // 4. Nanoseconds since epoch
+        //    If not boot-relative, at least 40 years have elapsed and the timestamp has the same number of digits as the epoch time in nanos
         // 5. Arbitrary milliseconds or nanoseconds
         //    None of the above are true
         long eventTimestamp = event.timestamp;
+
         long epochMS = System.currentTimeMillis();
+        long epochNS = epochMS * (long)1e6;         // ms to ns
         long bootMS = SystemClock.elapsedRealtime();
+        long bootNS = bootMS * (long)1e6;           // ms to ns
+        long periodicMS = TimeConstants.PERIODIC_LENGTH;
+        long periodicNS = periodicMS * (long)1e6;   // ms to ns
 
-        int timestampDigits = (int) Math.log10(eventTimestamp);
-        int epochDigits = (int) Math.log10(epochMS);
-        int bootDigits = (int) Math.log10(bootMS);
+        int timestampDigits = (int) Math.floor(Math.log10(eventTimestamp));
+        int epochDigits = (int) Math.floor(Math.log10(epochMS));
+        int bootDigits = (int) Math.floor(Math.log10(bootMS));
 
+        boolean isBootMS = timestampDigits == bootDigits && bootMS - eventTimestamp < 2 * periodicMS;
+        boolean isBootNS = timestampDigits == bootDigits + 6 && bootNS - eventTimestamp < 2 * periodicNS;
         boolean isEpochMS = timestampDigits == epochDigits && eventTimestamp > TimeConstants.FORTY_YEARS_MS;
         boolean isEpochNS = timestampDigits == epochDigits + 6 && eventTimestamp > TimeConstants.FORTY_YEARS_NS; // 10^6 more ns than ms
-        boolean isBootMS = timestampDigits == bootDigits && bootMS - eventTimestamp < 2 * TimeConstants.PERIODIC_LENGTH;
-        boolean isBootNS = timestampDigits == bootDigits + 6 && bootMS * (long)1e6 - eventTimestamp < 2 * (long)1e6 * TimeConstants.PERIODIC_LENGTH;
         boolean isArbitrary = !(isEpochMS || isEpochNS || isBootMS || isBootNS);
 
         Map<String, Object> timestampMap = new HashMap<>();
@@ -141,7 +146,15 @@ public abstract class AbstractSensorRecordingService extends AbstractRecordingSe
         String timestampReadable = "";
         String timestampType = "";
 
-        if(isEpochMS) {
+        if(isBootMS) {
+            timestampMS = epochMS - bootMS + eventTimestamp;
+            timestampReadable = DataTimeFormat.format(timestampMS);
+            timestampType = TimestampType.BOOT_MS.name();
+        } else if(isBootNS) {
+            timestampMS = epochMS - bootMS + (eventTimestamp / (long) 1e6);  // ns to ms
+            timestampReadable = DataTimeFormat.format(timestampMS);
+            timestampType = TimestampType.BOOT_NS.name();
+        } else if(isEpochMS) {
             timestampMS = eventTimestamp;
             timestampReadable = DataTimeFormat.format(timestampMS);
             timestampType = TimestampType.EPOCH_MS.name();
@@ -149,14 +162,6 @@ public abstract class AbstractSensorRecordingService extends AbstractRecordingSe
             timestampMS = eventTimestamp / (long)1e6; // ns to ms
             timestampReadable = DataTimeFormat.format(timestampMS);
             timestampType = TimestampType.EPOCH_NS.name();
-        } else if(isBootMS) {
-            timestampMS = epochMS - bootMS + eventTimestamp;
-            timestampReadable = DataTimeFormat.format(timestampMS);
-            timestampType = TimestampType.BOOT_MS.name();
-        } else if(isBootNS) {
-            timestampMS = epochMS - bootMS + (eventTimestamp / (long)1e6);  // ns to ms
-            timestampReadable = DataTimeFormat.format(timestampMS);
-            timestampType = TimestampType.BOOT_NS.name();
         } else if(isArbitrary) {
             timestampMS = -1;   // Con't convert to epoch time
             timestampReadable = ""; // Nothing to convert
