@@ -208,21 +208,4 @@ public class PreferencesWrapper {
     public static boolean isMTURKUser() {
         return prefs.getBoolean(MTURK_STATUS, false);
     }
-
-    /**
-     *
-     * @return The address to the database
-     */
-    public static String getDbAddress() {
-        return prefs.getString(DB_ADDRESS, "");
-    }
-
-    /**
-     *
-     * @return The reference to the remote storage
-     */
-    public static String getStorageAddress() {
-        return prefs.getString(STORAGE_ADDRESS, "");
-    }
-
 }

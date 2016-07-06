@@ -28,11 +28,11 @@ public class FirebaseWrapper {
 
             FirebaseDatabase db = FirebaseDatabase.getInstance();
             db.setPersistenceEnabled(true);
-            DatabaseReference dbRef = db.getReferenceFromUrl(PreferencesWrapper.getDbAddress());
+            DatabaseReference dbRef = db.getReference();
             deviceDb = dbRef.child(USER_DATA_KEY).child(deviceId);
 
             FirebaseStorage store = FirebaseStorage.getInstance();
-            StorageReference storeRef = store.getReferenceFromUrl(PreferencesWrapper.getStorageAddress());
+            StorageReference storeRef = store.getReference();
             deviceStore = storeRef.child(deviceId);
 
             isInit = true;

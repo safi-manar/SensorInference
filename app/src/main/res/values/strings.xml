@@ -177,16 +177,14 @@
 
 
 
-    <!-- Firebase settings -->
-    <string name="firebase_url">https://sensorinference-xgymkq5n-67ad3.firebaseio.com/</string>
-    <string name="firebase_storage_url">gs://sensorinference-xgymkq5n-67ad3.appspot.com/</string>
+    <!-- Survey settings -->
     <string name="gdocs_url">https://docs.google.com/forms/d/1rvRzCKcWDC-w6WKSMMpU8ZfljdOdOLXArqG1vVhFKeQ/viewform?entry.1826764866=</string>
 
     <!-- ACRA crash reporting settings -->
     <string name="error_not_init">Firebase connection not initialized</string>
 
     <!-- Auto-generated Git version DO NOT EDIT -->
-    <string name="app_version">95c4504</string>
+    <string name="app_version">d3cd38b</string>
 
 
 
