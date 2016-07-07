@@ -163,7 +163,7 @@
         that will take 1-2 minutes of your time. \n\n
 
         Though every daily survey is optional, you will be given a <b>$1 bonus</b> for each daily survey you complete. \n
-        Would you like to complete today's survey?
+        Would you like to complete today\'s survey?
     </string>
     <string name="dailysurvey_yes">Yes!</string>
     <string name="dailysurvey_no">Not today.</string>
@@ -198,7 +198,7 @@
     <string name="error_not_init">Firebase connection not initialized</string>
 
     <!-- Auto-generated Git version DO NOT EDIT -->
-    <string name="app_version">1203628</string>
+    <string name="app_version">5f18bc1</string>
 
 
 
