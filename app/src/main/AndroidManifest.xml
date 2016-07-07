@@ -148,6 +148,10 @@
             android:enabled="true"
             android:exported="false" />
         <service
+            android:name=".periodicservices.keepalive.FirebaseKeepAliveService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
             android:name=".periodicservices.keepalive.StepSensorKeepAliveService"
             android:enabled="true"
             android:exported="false" />

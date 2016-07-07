@@ -17,13 +17,11 @@ public class FirebaseWrapper {
     private static DatabaseReference deviceDb = null;
     private static StorageReference deviceStore = null;
 
-    private static boolean isInit = false;
-
     /**
      * Initialize the Firebase connection
      */
     public static void init() {
-        if(!isInit) {
+        if(!isInit()) {
             String deviceId = PreferencesWrapper.getDeviceID();
 
             FirebaseDatabase db = FirebaseDatabase.getInstance();
@@ -34,8 +32,6 @@ public class FirebaseWrapper {
             FirebaseStorage store = FirebaseStorage.getInstance();
             StorageReference storeRef = store.getReference();
             deviceStore = storeRef.child(deviceId);
-
-            isInit = true;
         }
     }
 
@@ -44,7 +40,7 @@ public class FirebaseWrapper {
      * @return True if the Firebase connection is initialized
      */
     public static boolean isInit() {
-        return isInit;
+        return deviceDb != null && deviceStore != null;
     }
 
     /**
@@ -53,7 +49,7 @@ public class FirebaseWrapper {
      * @param data Label-value mapping of data to be submitted
      */
     public static void push(String key, Map<String, Object> data) {
-        if(isInit) {
+        if(isInit()) {
             // Pushes to the Firebase with a hierarchy as follows:
             /*
             *   UUID
@@ -67,11 +63,11 @@ public class FirebaseWrapper {
     }
 
     /**
-     * Uplaod the file to the Firebase Storage backend
+     * Upload the file to the Firebase Storage backend
      * @param file Reference to the file to upload
      */
     public static void upload(File file) {
-        if(isInit) {
+        if(isInit()) {
             Uri uri = Uri.fromFile(file);
             StorageReference fileStore = deviceStore.child(uri.getLastPathSegment());
             fileStore.putFile(uri);

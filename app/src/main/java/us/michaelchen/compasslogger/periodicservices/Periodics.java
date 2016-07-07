@@ -15,6 +15,7 @@ import us.michaelchen.compasslogger.periodicservices.datarecording.ScreenRecordi
 import us.michaelchen.compasslogger.periodicservices.datarecording.StepSensorRecordingService;
 import us.michaelchen.compasslogger.periodicservices.datarecording.TemperatureSensorRecordingService;
 import us.michaelchen.compasslogger.periodicservices.deadline.DeadlineService;
+import us.michaelchen.compasslogger.periodicservices.keepalive.FirebaseKeepAliveService;
 import us.michaelchen.compasslogger.periodicservices.keepalive.GenericReceiverKeepAliveService;
 import us.michaelchen.compasslogger.periodicservices.keepalive.StepSensorKeepAliveService;
 
@@ -28,6 +29,7 @@ public class Periodics {
 
             // To keep receivers and low-power sensors alive
             GenericReceiverKeepAliveService.class,
+            FirebaseKeepAliveService.class,
             StepSensorKeepAliveService.class,
 
             // To record various system-broadcasted events
@@ -55,6 +57,7 @@ public class Periodics {
 
     public static final Class[] KEEP_ALIVE = new Class[] {
             GenericReceiverKeepAliveService.class,
+            FirebaseKeepAliveService.class,
             StepSensorKeepAliveService.class,
     };
 }
