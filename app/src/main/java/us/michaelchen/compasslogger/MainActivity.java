@@ -329,10 +329,12 @@ public class MainActivity extends AppCompatActivity {
             // Now that the survey has been completed, tag the user as having completed it.
             PreferencesWrapper.setSurveyCompleted();
 
-            //Now that the user has completed the form, sensor data collection can begin.
-            MasterSwitch.on(context);
             // Sensor data collection has begun. Now begin a one-week countdown.
             startDeadlineTimer();
+            // Also, set today's daily survey deadline
+            PreferencesWrapper.updateDailyDeadline();
+            //Now that the user has completed the form, sensor data collection can begin.
+            MasterSwitch.on(context);
         }
     };
 
@@ -344,5 +346,7 @@ public class MainActivity extends AppCompatActivity {
         long deadline = currentTime + TimeConstants.DEADLINE_LENGTH;
         PreferencesWrapper.setUninstallDeadline(deadline);
     }
+
+
 }
 

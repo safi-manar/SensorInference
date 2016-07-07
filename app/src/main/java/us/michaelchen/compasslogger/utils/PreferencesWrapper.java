@@ -2,7 +2,12 @@ package us.michaelchen.compasslogger.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.UUID;
 
 import us.michaelchen.compasslogger.R;
@@ -27,6 +32,11 @@ public class PreferencesWrapper {
     private static final String MTURK_STATUS_VERIFIED = "mturk_status_verified";
     private static final String MTURK_STATUS = "mturk_status";
     private static final String MTURK_TOKEN = "mturk_token";
+
+    private static final String REAL_DAILY_DEADLINE = "real_daily_deadline";
+    // Nominal variable to allow calculation of deadline postponement.
+    private static final String NOMINAL_DAILY_DEADLINE = "nominal_daily_deadline";
+
 
     private static SharedPreferences prefs = null;
 
@@ -198,4 +208,54 @@ public class PreferencesWrapper {
     public static boolean isMTURKUser() {
         return prefs.getBoolean(MTURK_STATUS, false);
     }
+
+
+
+    /**
+     *
+     * @return the NOMINAL_DAILY_DEADLINE, as opposed to REAL_DAILY_DEADLINE
+     * because the nominal value may have been modified for postponement by
+     * the user.
+     */
+    public static long getDailyDeadline() {
+        return prefs.getLong(NOMINAL_DAILY_DEADLINE, 0);
+    }
+
+    /**
+     *
+     * @return the threshold time for when the daily survey will remain active.
+     */
+    public static long getDailyDeadlineThreshold() {
+        return prefs.getLong(REAL_DAILY_DEADLINE, 0) + (TimeConstants.DAILY_SURVEY_WINDOW);
+    }
+
+
+    /**
+     * Adds 24 hours to the daily deadline.
+     */
+    public static void updateDailyDeadline() {
+        // Get the real previous deadline (getDailyDeadline() would not work).
+        long prevDeadline = prefs.getLong(REAL_DAILY_DEADLINE, 0);
+
+        // If the daily deadline has not been initially set, do so here.
+        if (prevDeadline == 0) {
+            long dailyDeadlineMillis = DataTimeFormat.getDailyDeadlineInMillis();
+            prefs.edit().putLong(REAL_DAILY_DEADLINE, dailyDeadlineMillis).commit();
+            prefs.edit().putLong(NOMINAL_DAILY_DEADLINE, dailyDeadlineMillis).commit();
+        } else {
+            prefs.edit().putLong(REAL_DAILY_DEADLINE, prevDeadline + TimeConstants.ONE_DAY).commit();
+            // The nominal deadline is reset to the real deadline.
+            prefs.edit().putLong(NOMINAL_DAILY_DEADLINE, prevDeadline + TimeConstants.ONE_DAY).commit();
+        }
+
+    }
+
+
+    /**
+     * Adds DAILY_SURVEY_POSTPONEMENT to the nominal daily deadline.
+     */
+    public static void postponeDailyDeadline() {
+        prefs.edit().putLong(NOMINAL_DAILY_DEADLINE, getDailyDeadline() + TimeConstants.DAILY_SURVEY_POSTPONEMENT).commit();
+    }
+
 }

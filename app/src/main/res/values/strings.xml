@@ -156,6 +156,20 @@
     </string>
 
 
+    <!--For the daily survey dialog-->
+    <string name="dailysurvey_message_title">Daily Survey</string>
+    <string name="dailysurvey_message">
+        As part of your participation in the UCB Sensor Inference Study, we would like to give you a short survey
+        that will take 1-2 minutes of your time. \n\n
+
+        Though every daily survey is optional, you will be given a <b>$1 bonus</b> for each daily survey you complete. \n
+        Would you like to complete today's survey?
+    </string>
+    <string name="dailysurvey_yes">Yes!</string>
+    <string name="dailysurvey_no">Not today.</string>
+    <string name="dailysurvey_postpone">Remind me in an hour.</string>
+    <string name="daily_gdocs_url">https://docs.google.com/forms/d/1dHLJ3T6ljC0-6-ct_dW_PAgYmhaPtcIWeyl_Pq47QEQ/viewform?entry.1826764866=</string>
+
 
 
 
