@@ -226,7 +226,7 @@ public class PreferencesWrapper {
      * @return the threshold time for when the daily survey will remain active.
      */
     public static long getDailyDeadlineThreshold() {
-        return prefs.getLong(REAL_DAILY_DEADLINE, 0) + (TimeConstants.DAILY_SURVEY_WINDOW);
+        return (prefs.getLong(REAL_DAILY_DEADLINE, 0) + (TimeConstants.DAILY_SURVEY_WINDOW));
     }
 
 
@@ -237,17 +237,9 @@ public class PreferencesWrapper {
         // Get the real previous deadline (getDailyDeadline() would not work).
         long prevDeadline = prefs.getLong(REAL_DAILY_DEADLINE, 0);
 
-        // If the daily deadline has not been initially set, do so here.
-        if (prevDeadline == 0) {
-            long dailyDeadlineMillis = DataTimeFormat.getDailyDeadlineInMillis();
-            prefs.edit().putLong(REAL_DAILY_DEADLINE, dailyDeadlineMillis).commit();
-            prefs.edit().putLong(NOMINAL_DAILY_DEADLINE, dailyDeadlineMillis).commit();
-        } else {
-            prefs.edit().putLong(REAL_DAILY_DEADLINE, prevDeadline + TimeConstants.ONE_DAY).commit();
-            // The nominal deadline is reset to the real deadline.
-            prefs.edit().putLong(NOMINAL_DAILY_DEADLINE, prevDeadline + TimeConstants.ONE_DAY).commit();
-        }
-
+        prefs.edit().putLong(REAL_DAILY_DEADLINE, prevDeadline + TimeConstants.ONE_DAY).commit();
+        // The nominal deadline is reset to the real deadline.
+        prefs.edit().putLong(NOMINAL_DAILY_DEADLINE, prevDeadline + TimeConstants.ONE_DAY).commit();
     }
 
 
@@ -256,6 +248,21 @@ public class PreferencesWrapper {
      */
     public static void postponeDailyDeadline() {
         prefs.edit().putLong(NOMINAL_DAILY_DEADLINE, getDailyDeadline() + TimeConstants.DAILY_SURVEY_POSTPONEMENT).commit();
+    }
+
+    /**
+     * Sets the initial deadline, and guarantees that it can only be done once (to avoid
+     * issue where MainActivity.surveyReceiver is called multiple times upon multiple
+     * Google Form submit clicks).
+     */
+    public static void setInitialDailyDeadline() {
+        long prevDeadline = prefs.getLong(REAL_DAILY_DEADLINE, 0);
+        // If the daily deadline has not been initially set, do so here.
+        if (prevDeadline == 0) {
+            long dailyDeadlineMillis = DataTimeFormat.getDailyDeadlineInMillis();
+            prefs.edit().putLong(REAL_DAILY_DEADLINE, dailyDeadlineMillis).commit();
+            prefs.edit().putLong(NOMINAL_DAILY_DEADLINE, dailyDeadlineMillis).commit();
+        }
     }
 
 }

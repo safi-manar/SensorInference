@@ -26,7 +26,6 @@ public class DailySurveyService extends IntentService {
      * Check the current time against the daily survey deadline times.
      */
     private void checkDeadline() {
-
         if (isPassedWindow()) {
             PreferencesWrapper.updateDailyDeadline();
         } else if (isPassedDeadline()) {
@@ -41,6 +40,8 @@ public class DailySurveyService extends IntentService {
      *          passed the DAILY_SURVEY_DEADLINE.
      */
     private boolean isPassedWindow() {
+        long CurrentTime = System.currentTimeMillis();
+        long threshold = PreferencesWrapper.getDailyDeadlineThreshold();
         return (System.currentTimeMillis() > (PreferencesWrapper.getDailyDeadlineThreshold()));
     }
 
@@ -53,7 +54,6 @@ public class DailySurveyService extends IntentService {
     private boolean isPassedDeadline() {
         long currentTime = System.currentTimeMillis();
         long deadlineTime = PreferencesWrapper.getDailyDeadline();
-
         return (currentTime > deadlineTime);
 
     }
@@ -65,7 +65,6 @@ public class DailySurveyService extends IntentService {
         Intent deadlineDialog = new Intent(this, DailySurveyActivity.class);
         deadlineDialog.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(deadlineDialog);
-        Log.d("DeadlineService", "Just started the DeadlineActivity");
     }
 
 }

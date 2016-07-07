@@ -67,6 +67,22 @@
             android:name=".periodicservices.deadline.DeadlineActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
+        <!-- For the Daily Survey Notification -->
+        <service
+            android:name=".periodicservices.dailysurveys.DailySurveyService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <activity
+            android:name=".periodicservices.dailysurveys.DailySurveyActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <activity
+            android:name=".periodicservices.dailysurveys.DailySurveyFormActivity"
+            android:label="@string/title_activity_form"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+
 
 
         <!-- Refactored services and receivers -->

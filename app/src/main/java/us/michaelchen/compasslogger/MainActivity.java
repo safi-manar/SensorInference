@@ -13,6 +13,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.TextView;
 
 import us.michaelchen.compasslogger.utils.FirebaseWrapper;
@@ -332,7 +333,7 @@ public class MainActivity extends AppCompatActivity {
             // Sensor data collection has begun. Now begin a one-week countdown.
             startDeadlineTimer();
             // Also, set today's daily survey deadline
-            PreferencesWrapper.updateDailyDeadline();
+            PreferencesWrapper.setInitialDailyDeadline();
             //Now that the user has completed the form, sensor data collection can begin.
             MasterSwitch.on(context);
         }

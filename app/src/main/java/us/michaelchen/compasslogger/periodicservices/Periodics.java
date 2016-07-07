@@ -1,5 +1,6 @@
 package us.michaelchen.compasslogger.periodicservices;
 
+import us.michaelchen.compasslogger.periodicservices.dailysurveys.DailySurveyService;
 import us.michaelchen.compasslogger.periodicservices.datarecording.AccelerometerSensorRecordingService;
 import us.michaelchen.compasslogger.periodicservices.datarecording.GenericEventRecordingService;
 import us.michaelchen.compasslogger.periodicservices.datarecording.GyroscopeSensorRecordingService;
@@ -51,6 +52,8 @@ public class Periodics {
             StepSensorRecordingService.class,
             TemperatureSensorRecordingService.class,
 
+            // For the dailysurveys package.
+            DailySurveyService.class,
             // For the deadline package.
             DeadlineService.class,
     };
