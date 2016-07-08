@@ -73,7 +73,10 @@ public abstract class AbstractSensorRecordingService extends AbstractRecordingSe
 
         SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         Sensor sensor = sensorManager.getDefaultSensor(getSensorType());
-        sensorManager.registerListener(SENSOR_LISTENER, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+
+        if(sensor != null) {
+            sensorManager.registerListener(SENSOR_LISTENER, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+        }
     }
 
     /**

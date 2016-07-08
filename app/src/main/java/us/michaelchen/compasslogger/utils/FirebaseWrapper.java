@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
+import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -95,5 +96,22 @@ public class FirebaseWrapper {
         intent.putExtra(FirebaseSequentialUploadService.PATHS_EXTRA, pathStrings);
         intent.putExtra(FirebaseSequentialUploadService.DELETE_EXTRA, deleteOnSuccess);
         context.startService(intent);
+    }
+
+    /**
+     * Report an exception to Firebase
+     * @param e Exception describing the crash
+     */
+    public static void reportCrash(Exception e) {
+        FirebaseCrash.report(e);
+    }
+
+    /**
+     * Report a crash message to Firebase
+     * @param message Message to report to Firebase
+     */
+    public static void reportCrash(String message) {
+        Exception e = new Exception(message);
+        reportCrash(e);
     }
 }

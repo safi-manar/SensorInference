@@ -194,11 +194,8 @@
     <!-- Survey settings -->
     <string name="gdocs_url">https://docs.google.com/forms/d/1rvRzCKcWDC-w6WKSMMpU8ZfljdOdOLXArqG1vVhFKeQ/viewform?entry.1826764866=</string>
 
-    <!-- ACRA crash reporting settings -->
-    <string name="error_not_init">Firebase connection not initialized</string>
-
     <!-- Auto-generated Git version DO NOT EDIT -->
-    <string name="app_version">89ac5a7</string>
+    <string name="app_version">2e85f01</string>
 
 
 
