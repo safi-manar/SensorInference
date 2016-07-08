@@ -172,6 +172,12 @@
             android:enabled="true"
             android:exported="false" />
 
+        <!-- Firebase sequential upload service -->
+        <service
+            android:name=".utils.FirebaseSequentialUploadService"
+            android:enabled="true"
+            android:exported="false" />
+
     </application>
 
 </manifest>

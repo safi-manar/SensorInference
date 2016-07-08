@@ -10,7 +10,6 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Map;
@@ -26,13 +25,13 @@ import us.michaelchen.compasslogger.utils.PreferencesWrapper;
  */
 public class WifiUploadDestination extends AbstractDataDestination {
     private static final String JSON_EXTENSION = ".json";
-    private static final FileFilter JSON_FILTER = new FileFilter() {
+    private static final String ZIP_EXTENSION = ".zip";
+    private static final FileFilter ZIP_FILTER = new FileFilter() {
         @Override
         public boolean accept(File pathname) {
-            return pathname.getAbsolutePath().endsWith(JSON_EXTENSION);
+            return pathname.getAbsolutePath().endsWith(ZIP_EXTENSION);
         }
     };
-
 
     private static Context appContext = null;
 
@@ -71,7 +70,7 @@ public class WifiUploadDestination extends AbstractDataDestination {
     }
 
     /**
-     * Write the data as a JSON file to the app cache
+     * Write the data as a zipped JSON file in the app cache
      * @param label Sensor label
      * @param data Labeled measurements from the sensor
      */
@@ -82,17 +81,26 @@ public class WifiUploadDestination extends AbstractDataDestination {
             sensorCacheFolder.mkdirs();
         }
 
-        // Write a pretty-printed JSON file in the cache
+        String shortID = PreferencesWrapper.getShortDeviceID();
+        String readableTime = DataTimeFormat.current();
+        String baseFilename = String.format("%s--%s--%s", label, shortID, readableTime);
+
+        // Write a pretty-printed zipped JSON file in the cache
         try {
             JSONObject jsonData = toJSON(data);
 
-            String shortID = PreferencesWrapper.getShortDeviceID();
-            String readableTime = DataTimeFormat.current();
-            String jsonFilename = String.format("%s--%s--%s" + JSON_EXTENSION, label, shortID, readableTime);
+            File zipFile = new File(sensorCacheFolder, baseFilename + ZIP_EXTENSION);
+            FileOutputStream fos = new FileOutputStream(zipFile);
+            ZipOutputStream zos = new ZipOutputStream(fos);
 
-            File jsonFile = new File(sensorCacheFolder, jsonFilename);
-            FileOutputStream fos = new FileOutputStream(jsonFile);
-            fos.write(jsonData.toString(4).getBytes());     // 4 to pretty-print with tab = 4 spaces
+            ZipEntry entry = new ZipEntry(baseFilename + JSON_EXTENSION);
+            zos.putNextEntry(entry);
+
+            byte[] dataBytes = jsonData.toString(4).getBytes();  // 4 to pretty-print with 1 tab = 4 spaces
+            zos.write(dataBytes, 0, dataBytes.length);
+            zos.closeEntry();
+
+            zos.close();
             fos.close();
         } catch(IOException | JSONException e) {
             // Log any JSON or file-writing problems
@@ -102,53 +110,16 @@ public class WifiUploadDestination extends AbstractDataDestination {
     }
 
     /**
-     * Compress cached data, upload to remote server, and clear cache
+     * Upload zipped JSONs to remote server, delete on success
      * @param label Sensor label
      */
     private void uploadAndClearCache(String label) {
         File sensorCacheFolder = new File(appContext.getCacheDir(), label);
         if(sensorCacheFolder.exists()) {
-            try {
-                // Compress the data
-                String shortID = PreferencesWrapper.getShortDeviceID();
-                String readableTime = DataTimeFormat.current();
-                String zipFilename = String.format("%s--%s--%s.zip", label, shortID, readableTime);
+            File[] zipFiles = sensorCacheFolder.listFiles(ZIP_FILTER);
+            final boolean DELETE_ON_SUCCESS = true;
 
-                File zipFile = new File(sensorCacheFolder, zipFilename);
-                FileOutputStream fos = new FileOutputStream(zipFile);
-                ZipOutputStream zip = new ZipOutputStream(fos);
-
-                for(File cachedJSONFile : sensorCacheFolder.listFiles(JSON_FILTER)) {
-                    String path = cachedJSONFile.getAbsolutePath();
-                    ZipEntry entry = new ZipEntry(path);
-                    zip.putNextEntry(entry);
-
-                    FileInputStream fis = new FileInputStream(cachedJSONFile);
-                    byte[] buffer = new byte[1024];     // 1024 byte input buffer
-                    int bytesRead = -1;
-                    while((bytesRead = fis.read(buffer)) != -1) {
-                        zip.write(buffer, 0, bytesRead);
-                    }
-                    zip.flush();
-                    fis.close();
-                    zip.closeEntry();
-                }
-
-                zip.close();
-                fos.close();
-
-                // Upload to remote server
-                FirebaseWrapper.upload(zipFile);
-
-                // Clear cache
-                for(File inCache : sensorCacheFolder.listFiles()) {
-                    inCache.delete();
-                }
-            } catch(IOException e) {
-                // Log any file-writing problems
-                String tag = getClass().getSimpleName();
-                Log.w(tag, e.getMessage());
-            }
+            FirebaseWrapper.uploadSequentially(appContext, zipFiles, DELETE_ON_SUCCESS);
         }
     }
 

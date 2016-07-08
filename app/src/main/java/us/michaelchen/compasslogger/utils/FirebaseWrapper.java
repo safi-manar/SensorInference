@@ -1,15 +1,17 @@
 package us.michaelchen.compasslogger.utils;
 
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.util.Map;
-
 
 public class FirebaseWrapper {
     private static final String USER_DATA_KEY = "userData";
@@ -49,28 +51,49 @@ public class FirebaseWrapper {
      * @param data Label-value mapping of data to be submitted
      */
     public static void push(String key, Map<String, Object> data) {
-        if(isInit()) {
-            // Pushes to the Firebase with a hierarchy as follows:
-            /*
-            *   UUID
-            *       Sensor
-            *           TimeStamp
-            *               DataEntry.
-            * */
-            String timeStamp = DataTimeFormat.current();
-            deviceDb.child(key).child(timeStamp).setValue(data);
-        }
+        // Ensure that Firebase is initialized
+        init();
+
+        // Pushes to the Firebase with a hierarchy as follows:
+        /*
+        *   UUID
+        *       Sensor
+        *           TimeStamp
+        *               DataEntry.
+        * */
+        String timeStamp = DataTimeFormat.current();
+        deviceDb.child(key).child(timeStamp).setValue(data);
     }
 
     /**
      * Upload the file to the Firebase Storage backend
      * @param file Reference to the file to upload
+     * @return UploadTask to monitor the status of the upload
      */
-    public static void upload(File file) {
-        if(isInit()) {
-            Uri uri = Uri.fromFile(file);
-            StorageReference fileStore = deviceStore.child(uri.getLastPathSegment());
-            fileStore.putFile(uri);
+    public static UploadTask upload(File file) {
+        // Ensure that Firebase is initialized
+        init();
+
+        Uri uri = Uri.fromFile(file);
+        StorageReference fileStore = deviceStore.child(uri.getLastPathSegment());
+        return fileStore.putFile(uri);
+    }
+
+    /**
+     * Upload the given files sequentially
+     * @param context Calling Android context
+     * @param paths Array of files to upload
+     * @param deleteOnSuccess Set to true to delete files upon successful upload
+     */
+    public static void uploadSequentially(Context context, File[] paths, boolean deleteOnSuccess) {
+        String[] pathStrings = new String[paths.length];
+        for(int n = 0; n < paths.length; n++) {
+            pathStrings[n] = paths[n].getAbsolutePath();
         }
+
+        Intent intent = new Intent(context, FirebaseSequentialUploadService.class);
+        intent.putExtra(FirebaseSequentialUploadService.PATHS_EXTRA, pathStrings);
+        intent.putExtra(FirebaseSequentialUploadService.DELETE_EXTRA, deleteOnSuccess);
+        context.startService(intent);
     }
 }
