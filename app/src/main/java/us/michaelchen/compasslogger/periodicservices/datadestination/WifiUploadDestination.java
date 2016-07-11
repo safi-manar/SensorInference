@@ -32,8 +32,10 @@ public class WifiUploadDestination extends AbstractDataDestination {
             return pathname.getAbsolutePath().endsWith(ZIP_EXTENSION);
         }
     };
+    private static final String CACHE_SUBDIR_NAME = "wifiUploads";
 
     private static Context appContext = null;
+    private static int activeCount = 0;
 
     /**
      *
@@ -46,10 +48,11 @@ public class WifiUploadDestination extends AbstractDataDestination {
     @Override
     public void submit(String label, Map<String, Object> data) {
         if(appContext != null && data != null) {
+            increaseActive();
             saveToCache(label, data);
 
-            if(isWifiConnected()) {
-                uploadAndClearCache(label);
+            if(isLastActive() && isWifiConnected()) {
+                uploadAndClearCache();
             }
         }
     }
@@ -75,10 +78,10 @@ public class WifiUploadDestination extends AbstractDataDestination {
      * @param data Labeled measurements from the sensor
      */
     private void saveToCache(String label, Map<String, Object> data) {
-        // Make a sensor-specific folder in the cache if necessary
-        File sensorCacheFolder = new File(appContext.getCacheDir(), label);
-        if(!sensorCacheFolder.exists()) {
-            sensorCacheFolder.mkdirs();
+        // Make a subfolder in the cache if necessary
+        File wifiCacheFolder = new File(appContext.getCacheDir(), CACHE_SUBDIR_NAME);
+        if(!wifiCacheFolder.exists()) {
+            wifiCacheFolder.mkdirs();
         }
 
         String shortID = PreferencesWrapper.getShortDeviceID();
@@ -89,7 +92,7 @@ public class WifiUploadDestination extends AbstractDataDestination {
         try {
             JSONObject jsonData = toJSON(data);
 
-            File zipFile = new File(sensorCacheFolder, baseFilename + ZIP_EXTENSION);
+            File zipFile = new File(wifiCacheFolder, baseFilename + ZIP_EXTENSION);
             FileOutputStream fos = new FileOutputStream(zipFile);
             ZipOutputStream zos = new ZipOutputStream(fos);
 
@@ -111,12 +114,11 @@ public class WifiUploadDestination extends AbstractDataDestination {
 
     /**
      * Upload zipped JSONs to remote server, delete on success
-     * @param label Sensor label
      */
-    private void uploadAndClearCache(String label) {
-        File sensorCacheFolder = new File(appContext.getCacheDir(), label);
-        if(sensorCacheFolder.exists()) {
-            File[] zipFiles = sensorCacheFolder.listFiles(ZIP_FILTER);
+    private void uploadAndClearCache() {
+        File wifiCacheFolder = new File(appContext.getCacheDir(), CACHE_SUBDIR_NAME);
+        if(wifiCacheFolder.exists()) {
+            File[] zipFiles = wifiCacheFolder.listFiles(ZIP_FILTER);
             final boolean DELETE_ON_SUCCESS = true;
 
             FirebaseWrapper.uploadSequentially(appContext, zipFiles, DELETE_ON_SUCCESS);
@@ -144,5 +146,28 @@ public class WifiUploadDestination extends AbstractDataDestination {
         }
 
         return json;
+    }
+
+    /**
+     * Increment the number of active writers in a thread-safe manner
+     */
+    private synchronized void increaseActive() {
+        activeCount++;
+    }
+
+    /**
+     * Decrement the number of active writers in a thread-safe manner
+     * @return True if this was the last active writer
+     */
+    private synchronized boolean isLastActive() {
+        // Expected case
+        if(activeCount > 0) {
+            return --activeCount == 0;
+        }
+
+        // Weird case where it goes zero or negative
+        // (this shouldn't happen, but checking for sanity's sake)
+        activeCount = 0;
+        return true;
     }
 }
