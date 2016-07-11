@@ -23,7 +23,7 @@ public class TimeConstants {
     public static long DEADLINE_LENGTH = ONE_DAY * 2;
 
     // The scheduling time for daily surveys in HH:mm:ss format.
-    public static String DAILY_SURVEY_DEADLINE = "20:00:00";
+    public static String DAILY_SURVEY_DEADLINE = "20-00-00";
     public static long DAILY_SURVEY_WINDOW = ONE_HOUR * 4;
     public static long DAILY_SURVEY_POSTPONEMENT = ONE_HOUR;
 
