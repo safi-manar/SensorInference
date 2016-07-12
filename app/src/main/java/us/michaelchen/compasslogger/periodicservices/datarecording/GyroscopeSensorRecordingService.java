@@ -2,14 +2,16 @@ package us.michaelchen.compasslogger.periodicservices.datarecording;
 
 import android.hardware.Sensor;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by ioreyes on 6/15/16.
  */
 public class GyroscopeSensorRecordingService extends AbstractMotionSensorRecordingService {
-    private static final ConcurrentMap<String, Object> GYROSCOPE_BATCH = new ConcurrentHashMap<>();
+    private static final List<Map<String, Object>> GYROSCOPE_BATCH = Collections.synchronizedList(new LinkedList<Map<String, Object>>());
 
     public GyroscopeSensorRecordingService() {
         super("GyroscopeSensorRecordingService");
@@ -26,7 +28,8 @@ public class GyroscopeSensorRecordingService extends AbstractMotionSensorRecordi
     }
 
     @Override
-    protected ConcurrentMap<String, Object> getStaticBatch() {
+    protected List<Map<String, Object>> getStaticList() {
         return GYROSCOPE_BATCH;
     }
 }
+
