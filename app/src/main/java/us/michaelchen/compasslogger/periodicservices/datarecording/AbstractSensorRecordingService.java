@@ -17,8 +17,8 @@ import us.michaelchen.compasslogger.utils.TimeConstants;
  * Created by ioreyes on 5/25/16.
  */
 public abstract class AbstractSensorRecordingService extends AbstractRecordingService {
-    private static final String TIMESTAMP_TYPE_KEY = "timestampType";
-    private static final String TIMESTAMP_RAW_KEY = "timestampRaw";
+    protected static final String TIMESTAMP_TYPE_KEY = "timestampType";
+    protected static final String TIMESTAMP_RAW_KEY = "timestampRaw";
 
     private enum TimestampType {
         EPOCH_MS,

@@ -8,9 +8,11 @@ import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Handler;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentMap;
 
 import us.michaelchen.compasslogger.periodicservices.datadestination.AbstractDataDestination;
 import us.michaelchen.compasslogger.periodicservices.datadestination.WifiUploadDestination;
@@ -21,49 +23,38 @@ import us.michaelchen.compasslogger.utils.TimeConstants;
  */
 public abstract class AbstractMotionSensorRecordingService extends AbstractSensorRecordingService {
     private static final int MAX_EVENTS_PER_PERIOD = (int) (TimeConstants.PERIODIC_LENGTH / TimeConstants.SENSOR_DATA_POLL_INTERVAL);
-    private static final int MAX_EVENTS_PER_PERIOD_WITH_TOLERANCE = (int) Math.floor(MAX_EVENTS_PER_PERIOD * 0.99);
+    private static final int MAX_EVENTS_PER_PERIOD_WITH_TOLERANCE = (int) Math.floor(MAX_EVENTS_PER_PERIOD * 0.95);
+    private static final long MIN_INTERVAL_BETWEEN_EVENTS_WITH_TOLERANCE = (long) Math.floor(TimeConstants.SENSOR_DATA_POLL_INTERVAL * 0.75);
     private static final String BATCH_KEY = "batch-%05d";
 
     private final SensorEventListener BATCH_SENSOR_LISTENER = new SensorEventListener() {
-        private Map<String, Object> lastData = null;
-
         @Override
         public void onSensorChanged(SensorEvent event) {
             // Atomically update the batch
-            putInBatch(event);
+            Map<String, Object> data = processSensorData(event);
+            List<Map<String, Object>> batch = getStaticList();
+            synchronized (batch) {
+                batch.add(data);
+            }
         }
 
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
             // Do nothing
         }
+    };
+    private final Comparator<Map<String, Object>> BATCH_ENTRY_COMPARATOR = new Comparator() {
 
-        private synchronized void putInBatch(SensorEvent event) {
-            // Process event and add to static batch
-            Map<String, Object> data = processSensorData(event);
-            Map<String, Object> batch = getStaticBatch();
+        @Override
+        public int compare(Object lhs, Object rhs) {
+            Map<String, Object> left = (Map<String, Object>)lhs;
+            Map<String, Object> right = (Map<String, Object>)rhs;
 
-            // Enforce sampling "speed limit"
-            if(lastData != null) {
-                long currentTimestamp = (long)data.get(TIMESTAMP_KEY);
-                long lastTimestamp = (long)lastData.get(TIMESTAMP_KEY);
-                long interval = currentTimestamp - lastTimestamp;
+            // Compare batch data by timestamp
+            long leftTimestamp = (long)left.get(TIMESTAMP_RAW_KEY);
+            long rightTimestamp = (long)right.get(TIMESTAMP_RAW_KEY);
 
-                // Make sure at least half of the polling interval has elapsed
-                if(interval >= TimeConstants.SENSOR_DATA_POLL_INTERVAL / 2l) {
-                    String key = String.format(BATCH_KEY, batch.size());
-                    batch.put(key, data);
-
-                    lastData = data;
-                }
-            } else {
-                // Just accept the first one
-                String key = String.format(BATCH_KEY, batch.size());
-                batch.put(key, data);
-
-                lastData = data;
-            }
-
+            return (int)(leftTimestamp - rightTimestamp);
         }
     };
     private final Handler UNREGISTER_HANDLER = new Handler();
@@ -81,12 +72,8 @@ public abstract class AbstractMotionSensorRecordingService extends AbstractSenso
 
         if(batchSize > 0 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             // Make a copy of any existing data in the batch and reset it
-            Map<String, Object> batch = getStaticBatch();
-            Map<String, Object> previousBatch = null;
-            if(!batch.isEmpty()) {
-                previousBatch = new LinkedHashMap<>(batch);
-            }
-            batch.clear();
+            Map<String, Object> previousBatch = getDownsampledBatch();
+            getStaticList().clear();
 
             // Set up the sensor to use the hardware FIFO batch queue
             int samplingPeriodMs = (int)TimeConstants.SENSOR_DATA_POLL_INTERVAL;
@@ -139,9 +126,9 @@ public abstract class AbstractMotionSensorRecordingService extends AbstractSenso
 
     /**
      *
-     * @return A static map in which batch data will be stored and persist between service instances
+     * @return A static list of processed batch data that persists between service invocations
      */
-    protected abstract ConcurrentMap<String, Object> getStaticBatch();
+    protected abstract List<Map<String, Object>> getStaticList();
 
     @Override
     protected final AbstractDataDestination getDataDestination() {
@@ -153,5 +140,37 @@ public abstract class AbstractMotionSensorRecordingService extends AbstractSenso
         }
 
         return super.getDataDestination();
+    }
+
+    /**
+     *
+     * @return An ordered mapping of data points, where consecutive points have at least
+     * MIN_INTERVAL_BETWEEN_EVENTS_WITH_TOLERANCE amount of time between them. Null if empty.
+     */
+    private synchronized Map<String, Object> getDownsampledBatch() {
+        List<Map<String, Object>> batch = getStaticList();
+
+        if(!batch.isEmpty()) {
+            Collections.sort(batch, BATCH_ENTRY_COMPARATOR);
+
+            Map<String, Object> downsampled = new LinkedHashMap<>();
+            long lastTimestamp = -1l;
+
+            for(Map<String, Object> data : batch) {
+                long currentTimestamp = (long)data.get(TIMESTAMP_KEY);
+                long interval = currentTimestamp - lastTimestamp;
+
+                if(lastTimestamp < 0l || interval >= MIN_INTERVAL_BETWEEN_EVENTS_WITH_TOLERANCE) {
+                    String batchLabel = String.format(BATCH_KEY, downsampled.size());
+                    downsampled.put(batchLabel, data);
+
+                    lastTimestamp = currentTimestamp;
+                }
+            }
+
+            return downsampled;
+        }
+
+        return null;
     }
 }
