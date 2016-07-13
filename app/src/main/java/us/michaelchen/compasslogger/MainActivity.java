@@ -13,7 +13,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.TextView;
 
 import us.michaelchen.compasslogger.utils.FirebaseWrapper;
@@ -105,6 +104,9 @@ public class MainActivity extends AppCompatActivity {
         builder.setMessage(R.string.MTURK_inquiry)
                 .setTitle(R.string.MTURK_inquiry_title);
 
+        // Prevent users from dismissing the dialog by tapping outside it
+        builder.setCancelable(false);
+
         AlertDialog dialog = builder.create();
         return dialog;
     }
@@ -135,6 +137,9 @@ public class MainActivity extends AppCompatActivity {
         builder.setMessage(R.string.MTURK_confirm_message)
                 .setTitle(R.string.MTURK_confirm_title);
 
+        // Prevent users from dismissing the dialog by tapping outside it
+        builder.setCancelable(false);
+
         AlertDialog dialog = builder.create();
         return dialog;
     }
@@ -158,6 +163,9 @@ public class MainActivity extends AppCompatActivity {
 
         builder.setMessage(tokenMessage)
                 .setTitle(R.string.MTURK_verification_title);
+
+        // Prevent users from dismissing the dialog by tapping outside it
+        builder.setCancelable(false);
 
         AlertDialog dialog = builder.create();
         return dialog;
@@ -189,6 +197,9 @@ public class MainActivity extends AppCompatActivity {
 
         builder.setMessage(R.string.agreement_message)
                 .setTitle(R.string.agreement_title);
+
+        // Prevent users from dismissing the dialog by tapping outside it
+        builder.setCancelable(false);
 
         AlertDialog dialog = builder.create();
         return dialog;
@@ -262,6 +273,9 @@ public class MainActivity extends AppCompatActivity {
         builder.setMessage(R.string.denied_permission_response)
                 .setTitle(R.string.denied_permission_title);
 
+        // Prevent users from dismissing the dialog by tapping outside it
+        builder.setCancelable(false);
+
         AlertDialog dialog = builder.create();
         return dialog;
     }
@@ -316,6 +330,9 @@ public class MainActivity extends AppCompatActivity {
 
         builder.setMessage(R.string.survey_form_message)
                 .setTitle(R.string.survey_form_title);
+
+        // Prevent users from dismissing the dialog by tapping outside it
+        builder.setCancelable(false);
 
         AlertDialog dialog = builder.create();
         return dialog;
