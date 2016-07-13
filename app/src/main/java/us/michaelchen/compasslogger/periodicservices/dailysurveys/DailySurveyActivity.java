@@ -57,6 +57,8 @@ public class DailySurveyActivity extends Activity {
                 // Now show the WebView FormActivity
                 Intent intent = new Intent(context, DailySurveyFormActivity.class);
                 startActivity(intent);
+                // Assume the user finishes the survey. Update the schedule.
+                PreferencesWrapper.updateDailyDeadline();
             }
         });
 
