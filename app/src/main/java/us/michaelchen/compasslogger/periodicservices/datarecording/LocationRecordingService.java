@@ -12,8 +12,9 @@ import android.support.v4.content.ContextCompat;
 import java.util.HashMap;
 import java.util.Map;
 
-import us.michaelchen.compasslogger.utils.BetterLocation;
+import us.michaelchen.compasslogger.utils.LocationUtils;
 import us.michaelchen.compasslogger.utils.DataTimeFormat;
+import us.michaelchen.compasslogger.utils.PreferencesWrapper;
 import us.michaelchen.compasslogger.utils.TimeConstants;
 
 /**
@@ -28,11 +29,13 @@ public class LocationRecordingService extends AbstractRecordingService {
     private boolean hasPermissions = false;
     private LocationManager locationManager = null;
 
+    private static Location lastLocation = null;
+
     private final LocationListener LOCATION_LISTENER = new LocationListener() {
 
         @Override
         public void onLocationChanged(Location location) {
-            bestLocation = BetterLocation.compare(location, bestLocation);
+            bestLocation = LocationUtils.compare(location, bestLocation);
         }
 
         @Override
@@ -76,6 +79,11 @@ public class LocationRecordingService extends AbstractRecordingService {
 
         Map<String, Object> data = new HashMap<>();
         if(bestLocation != null) {
+            // Record the distance if available
+            if(lastLocation != null) {
+                PreferencesWrapper.setGPSDistanceAndTime(bestLocation, lastLocation);
+            }
+
             long timestamp = bestLocation.getTime();
 
             data.put(super.TIMESTAMP_KEY, timestamp);
@@ -83,6 +91,8 @@ public class LocationRecordingService extends AbstractRecordingService {
             data.put(LATITUDE_KEY, bestLocation.getLatitude());
             data.put(LONGITUDE_KEY, bestLocation.getLongitude());
             data.put(PROVIDER_KEY, bestLocation.getProvider());
+
+            lastLocation = bestLocation;
         }
 
         return data;
@@ -104,7 +114,7 @@ public class LocationRecordingService extends AbstractRecordingService {
 
                 // Get the best last known location from all the providers
                 Location loc = locationManager.getLastKnownLocation(provider);
-                bestLocation = BetterLocation.compare(loc, bestLocation);
+                bestLocation = LocationUtils.compare(loc, bestLocation);
             }
         }
     }

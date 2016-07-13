@@ -6,7 +6,7 @@ import android.location.Location;
  * Taken from https://developer.android.com/guide/topics/location/strategies.html
  * Created by ioreyes on 5/31/16.
  */
-public class BetterLocation {
+public class LocationUtils {
     private static final int TWO_MINUTES = 1000 * 60 * 2;
 
     /** Determines whether one Location reading is better than the current Location fix
@@ -65,5 +65,4 @@ public class BetterLocation {
         }
         return provider1.equals(provider2);
     }
-
 }

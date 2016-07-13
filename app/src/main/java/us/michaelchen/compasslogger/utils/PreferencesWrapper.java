@@ -2,15 +2,10 @@ package us.michaelchen.compasslogger.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.util.Log;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 import java.util.UUID;
-
-import us.michaelchen.compasslogger.R;
 
 /**
  * Created by ioreyes on 6/9/16.
@@ -37,6 +32,8 @@ public class PreferencesWrapper {
     // Nominal variable to allow calculation of deadline postponement.
     private static final String NOMINAL_DAILY_DEADLINE = "nominal_daily_deadline";
 
+    private static final String LAST_GPS_DISTANCE = "last_gps_distance";
+    private static final String LAST_GPS_INTERVAL  = "last_gps_interval";
 
     private static SharedPreferences prefs = null;
 
@@ -265,4 +262,49 @@ public class PreferencesWrapper {
         }
     }
 
+    /**
+     * Store a distance and time between GPS coordinates
+     * @param loc1
+     * @param loc2
+     */
+    public static void setGPSDistanceAndTime(Location loc1, Location loc2) {
+        float distance = loc1.distanceTo(loc2);
+        prefs.edit().putFloat(LAST_GPS_DISTANCE, distance).commit();
+        prefs.edit().putLong(LAST_GPS_INTERVAL, Math.abs(loc1.getTime() - loc2.getTime())).commit();
+    }
+
+    /**
+     *
+     * @return The last stored distance between GPS coordinates in meters. -1.0 if not set.
+     */
+    public static float getGPSDistance() {
+        return prefs.getFloat(LAST_GPS_DISTANCE, -1.0f);
+    }
+
+    /**
+     *
+     * @return The time in milliseconds between the recorded GPS coordinates. -1 if not set.
+     */
+    public static long getGPSTime() {
+        return prefs.getLong(LAST_GPS_INTERVAL, -1l);
+    }
+
+    /**
+     *
+     * @return The speed taken between along the last stored distance between GPS coordinates in
+     * km/h. -1.0 if unavailable.
+     */
+    public static float getGPSSpeed() {
+        float distanceM = getGPSDistance();
+        long timeMS = getGPSTime();
+
+        if(distanceM > 0.0f && timeMS > 1l) {
+            float distanceKM = distanceM / 1000.0f;
+            int timeHR = (int) (timeMS / 1000 / 60 / 60);
+
+            return distanceKM / timeHR;
+        }
+
+        return -1.0f;
+    }
 }
