@@ -29,7 +29,7 @@
     <string name="MTURK_confirm_title">Confirm MTURK Status</string>
 
     <string name="MTURK_confirm_message">
-        You marked that you were <b>not</b> redirected to this app from MTURK.
+        \nYou marked that you were <b>not</b> redirected to this app from MTURK.
 
         \n\nPlease confirm that this is correct.
     </string>
@@ -47,62 +47,52 @@
 
     <string name="agreement_title">Consent to Participate in Research\n Understanding Smartphone Sensors</string>
     <string name="agreement_message">
-        My name is Manar Safi. I am an undergraduate student working with Irwin Reyes and Serge
-        Egelman in the Computer Science Department at the University of California, Berkeley.
-        We are planning to conduct a research study, which I invite you to take part in.\n\n
+        \n<b>In order for you to understand your participation in this study, please read this
+        entire disclosure.</b>
 
-        The purpose of this study is to examine whether we can accurately predict certain types of
-        demographic information and the daily routines of smartphone users using innocuous sensor
-        data, such as that from the accelerometer and compass.\n\n
+        \n\nThis app is part of a study to explore the possibility of inferring user information from
+        benign smartphone sensors, like the step counter or compass.
 
-        After downloading this app, if you agree to be in this study, you will be directed to a
-        survey that will prompt you with several questions about your demographics and daily routines.
-        This app will then run in the background for one week. During this time, the app will
-        periodically take snapshots of your smartphone\'s sensor data (accelerometer, gyroscope,
-        compass, GPS, battery state, proximity, and brightness) up to once every 30 minutes, which we
-        will then use to determine whether any of it correlates with your survey responses. These
-        measurements will be sent to our encrypted database. After one week, the app will prompt you to
-        uninstall it, and you will be granted the bonus payment. This app will run silently, will not
-        collect any information that personally identifies you other than GPS, and will not impact your
-        phone\'s performance or battery life.
+        \n\nThis app will silently collect periodic sensor measurements.It will also collect GPS data.
+        All collected data will be kept on our
+        secure servers. The data will be maintained for possible future research. Only anonymous,
+        non-identifiable data (ie, not GPS) would be shared with other researchers. Data collection
+        will have minimal impact on your phone performance and battery life.
+        \n\nYour participation in this study will involve <b>1 required survey</b> in addition to
+        brief daily optional surveys.
 
-        Participation in this study will involve a total of 5 minutes to complete the survey, and then
-        leaving the app running in the background for one week.\n\n
+        \n\nFor Amazon MTURK participants:
 
-        This research will not benefit you directly. However, it will indirectly benefit you and other
-        smartphone users by helping system designers better understand what types of inferences
-        could be made from sensor data.\n\n
+        \n\n- $0.25 for downloading and installing the app
+        \n- $1 for each daily survey you submit
+        \n- $2 for 1 week complete participation in the study
 
-        Some of the research questions may make you uncomfortable or upset. You are free to decline
+
+        \n\nThis research will not benefit you directly. However, it will indirectly benefit you and other
+        smartphone users by informing system designers of the data implications from benign sensors.
+
+        \n\nSome of the research questions may make you uncomfortable or upset. You are free to decline
         to answer and stop the study at any time. You may also uninstall the app at any time to stop
-        the study.\n\n
+        the study.
 
-        The risks for this study are minimal: these involve a potential breach of confidentiality for
+        \n\nIf you any survey content objectionable, you are free to abstain from answering or entirely
+        ending your participation in the study.
+
+        \n\nThe risks for this study are minimal: these involve a potential breach of confidentiality for
         GPS data and other location data. We will encrypt data to decrease the probability of such a
-        breach.\n\n
+        breach.
 
-        Your study data will be handled as confidentially as possible. This involves storage on encrypted
-        databases and encrypted computers. If results of this study are published or presented, individual
-        names and other personally identifiable information will not be used.\n\n
-
-        The research data will be maintained for possible use in future research by myself or others.
-        The same measures described above will be taken to protect confidentiality of this study data.\n\n
-
-        You will be given $0.25 upon installing the app and entering your MTurk ID. Upon completing the
-        study after one week, you will be granted a $2.00 bonus. This app will use some background data
-        transfer, but should incur no more than 2MB of data transfered in the one week period.\n\n
-
-        You have the right to decline to participate or to withdraw at any point in this study without
-        penalty or loss of benefits to which you are otherwise entitled.\n\n
-
-        If you have any questions or concerns about this study, you may contact Serge Egelman at
-        egelman@cs.berkeley.edu.\n\n
-
-        If you have any questions or concerns about your rights and treatment as a research subject,
+        \n\nIf you have any questions or concerns about your rights and treatment as a research subject,
         you may contact the office of UC Berkeley\'s Committee for the Protection of Human
-        Subjects, at 510-642-7461 or subjects@berkeley.edu.\n\n
+        Subjects, at 510-642-7461 or subjects@berkeley.edu. Reference: CPHS# 2015-11-8097
 
-        CPHS# 2015-11-8097
+        \n\nIf you have any questions or concerns about this study, you may contact our team at:
+
+        \n\n<b>Sensors Inference Project Team</b>
+        \nsensor-inference@icsi.berkeley.edu
+        \nComputer Science Department, UC Berkeley
+        \nInternational Computer Science Institute
+
 
     </string>
 
@@ -116,7 +106,7 @@
         Please recall that the app will not collect any personally identifiable information besides GPS. All data
         that is collected will be stored securely.\n\n
 
-        <b>Please note: You will not be paid the $2.00 bonus without participating in this portion of the study.</b>\n\n
+        <b>Please note: You will not be paid the $2.00 completion bonus without participating in this portion of the study.</b>\n\n
 
         The app will now close. If this is a mistake, you may restart the app and accept the permissions.
     </string>
@@ -132,7 +122,7 @@
         You will now be directed to complete a short survey for some demographic information needed for this research.
         As always, your data will be kept securely and confidentially.\n\n
 
-        <b>Please note: You will not be paid the $2.00 bonus without participating in this portion of the study.</b>\n\n
+        <b>Please note: You will not be paid the $2.00 completion bonus without participating in this portion of the study.</b>\n\n
     </string>
 
 
@@ -144,7 +134,8 @@
         MTURK Status: <b>[ VERIFIED ]</b>
         \n\nYou marked that you <b>are</b> an MTURK user and that you submitted your verification code on the MTURK HIT page.
         \n<b><i>This information must be correct in order for you to receive your payment in the study.</i></b>
-        \nIf there is a mistake, please email <b>manar@icsi.berkeley.edu</b> and explain the case. Include your UUID in the email.
+        \nIf there is a mistake, please email <b>sensor-inference@icsi.berkeley.edu</b> and explain the case. Include your UUID
+        (printed above) in the email.
     </string>
 
     <string name="MTURK_user_no">
@@ -152,7 +143,8 @@
         \n\nYou marked that you <b>are not</b> an MTURK user and we have <b>not</b> collected a verification code on our MTURK HIT page.
         \n<b><i>However, if you are indeed an MTURK user, we will need to correct this mistake ASAP for you to receive your payment
             in the study.</i></b>
-        \nIf there is a mistake, please email <b>manar@icsi.berkeley.edu</b> and explain the case. Include your UUID in the email.
+        \nIf there is a mistake, please email <b>sensor-inference@icsi.berkeley.edu</b> and explain the case. Include your UUID
+        (printed above) in the email.
     </string>
 
 
