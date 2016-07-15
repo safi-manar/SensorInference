@@ -307,4 +307,13 @@ public class PreferencesWrapper {
 
         return -1.0f;
     }
+
+    /**
+     *
+     * @return True if the average speed between the last two GPS points is at least 30 km/h
+     */
+    public static boolean isGPSSpeedExceed30KMH() {
+        final int SPEED_THRESHOLD = 30;
+        return getGPSSpeed() >= SPEED_THRESHOLD;
+    }
 }

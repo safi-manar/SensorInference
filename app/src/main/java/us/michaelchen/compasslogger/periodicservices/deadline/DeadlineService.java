@@ -23,7 +23,7 @@ public class DeadlineService extends IntentService {
 
     /*Checks the current time against the deadline time.*/
     private void checkDeadline() {
-        if (isPassedDeadline()) {
+        if (isPassedDeadline() && !PreferencesWrapper.isGPSSpeedExceed30KMH()) {
             startDeadlineActivity();
         }
     }
