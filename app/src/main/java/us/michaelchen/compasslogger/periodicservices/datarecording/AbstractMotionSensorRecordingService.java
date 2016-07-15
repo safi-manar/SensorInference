@@ -8,6 +8,7 @@ import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Handler;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -30,12 +31,8 @@ public abstract class AbstractMotionSensorRecordingService extends AbstractSenso
     private final SensorEventListener BATCH_SENSOR_LISTENER = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent event) {
-            // Atomically update the batch
             Map<String, Object> data = processSensorData(event);
-            List<Map<String, Object>> batch = getStaticList();
-            synchronized (batch) {
-                batch.add(data);
-            }
+            operateOnBatchBuffer(BatchOps.ADD, data);
         }
 
         @Override
@@ -73,7 +70,7 @@ public abstract class AbstractMotionSensorRecordingService extends AbstractSenso
         if(batchSize > 0 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             // Make a copy of any existing data in the batch and reset it
             Map<String, Object> previousBatch = getDownsampledBatch();
-            getStaticList().clear();
+            operateOnBatchBuffer(BatchOps.CLEAR, null);
 
             // Set up the sensor to use the hardware FIFO batch queue
             int samplingPeriodMs = (int)TimeConstants.SENSOR_DATA_POLL_INTERVAL;
@@ -128,7 +125,42 @@ public abstract class AbstractMotionSensorRecordingService extends AbstractSenso
      *
      * @return A static list of processed batch data that persists between service invocations
      */
-    protected abstract List<Map<String, Object>> getStaticList();
+    protected abstract List<Map<String, Object>> getStaticBatchBuffer();
+
+    private enum BatchOps {
+        ADD,
+        CLEAR,
+        COPY
+    }
+
+    /**
+     * Atomic operations on the static batch buffer
+     * @param op Operation to perform; may be BatchOps.ADD, CLEAR, or COPY
+     * @param data Data to append to the buffer if BatchOps.ADD; may be null
+     * @return If ADD or CLEAR, a reference to the batch buffer. If copy, a reference to a new shallow
+     * copy of the batch buffer.
+     */
+    private synchronized List<Map<String, Object>> operateOnBatchBuffer(BatchOps op, Map<String, Object> data) {
+        List<Map<String, Object>> batchBuffer = getStaticBatchBuffer();
+
+        switch(op) {
+            case ADD:
+                if(data != null) {
+                    batchBuffer.add(data);
+                }
+                break;
+
+            case CLEAR:
+                batchBuffer.clear();
+                break;
+
+            case COPY:
+                return new ArrayList<>(batchBuffer);
+
+        }
+
+        return batchBuffer;
+    }
 
     @Override
     protected final AbstractDataDestination getDataDestination() {
@@ -147,8 +179,8 @@ public abstract class AbstractMotionSensorRecordingService extends AbstractSenso
      * @return An ordered mapping of data points, where consecutive points have at least
      * MIN_INTERVAL_BETWEEN_EVENTS_WITH_TOLERANCE amount of time between them. Null if empty.
      */
-    private synchronized Map<String, Object> getDownsampledBatch() {
-        List<Map<String, Object>> batch = getStaticList();
+    private Map<String, Object> getDownsampledBatch() {
+        List<Map<String, Object>> batch = operateOnBatchBuffer(BatchOps.COPY, null);
 
         if(!batch.isEmpty()) {
             Collections.sort(batch, BATCH_ENTRY_COMPARATOR);

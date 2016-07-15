@@ -28,7 +28,7 @@ public class AccelerometerSensorRecordingService extends AbstractMotionSensorRec
     }
 
     @Override
-    protected List<Map<String, Object>> getStaticList() {
+    protected List<Map<String, Object>> getStaticBatchBuffer() {
         return ACCELEROMETER_BATCH;
     }
 }

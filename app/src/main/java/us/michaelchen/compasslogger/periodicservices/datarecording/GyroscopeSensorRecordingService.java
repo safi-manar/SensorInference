@@ -28,7 +28,7 @@ public class GyroscopeSensorRecordingService extends AbstractMotionSensorRecordi
     }
 
     @Override
-    protected List<Map<String, Object>> getStaticList() {
+    protected List<Map<String, Object>> getStaticBatchBuffer() {
         return GYROSCOPE_BATCH;
     }
 }
