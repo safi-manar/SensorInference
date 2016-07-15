@@ -20,7 +20,7 @@ public class TimeConstants {
     public static long PERIODIC_SAFE_INTERVAL = (long) (PERIODIC_LENGTH * PERIODIC_SAFE_FACTOR);
 
     // App lifespan until uninstallation
-    public static long DEADLINE_LENGTH = ONE_DAY * 2;
+    public static long DEADLINE_LENGTH = ONE_DAY * 7;
 
     // The scheduling time for daily surveys in HH:mm:ss format.
     public static String DAILY_SURVEY_DEADLINE = "20-00-00";
