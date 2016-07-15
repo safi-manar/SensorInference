@@ -55,6 +55,16 @@ public abstract class AbstractMotionSensorRecordingService extends AbstractSenso
         }
     };
     private final Handler UNREGISTER_HANDLER = new Handler();
+    private final Runnable UNREGISTER_RUNNABLE = new Runnable() {
+        @Override
+        public void run() {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                final SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+                sensorManager.flush(BATCH_SENSOR_LISTENER);
+                sensorManager.unregisterListener(BATCH_SENSOR_LISTENER);
+            }
+        }
+    };
 
     protected AbstractMotionSensorRecordingService(String subclassName) {
         super(subclassName);
@@ -68,6 +78,10 @@ public abstract class AbstractMotionSensorRecordingService extends AbstractSenso
         int batchSize = getBatchSize(sensor);
 
         if(batchSize > 0 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // Flush and unregister any existing listeners
+            UNREGISTER_HANDLER.removeCallbacks(UNREGISTER_RUNNABLE);
+            UNREGISTER_RUNNABLE.run();
+
             // Make a copy of any existing data in the batch and reset it
             Map<String, Object> previousBatch = getDownsampledBatch();
             operateOnBatchBuffer(BatchOps.CLEAR, null);
@@ -83,15 +97,7 @@ public abstract class AbstractMotionSensorRecordingService extends AbstractSenso
                                            maxReportLatencyUs);
 
             // Flush and stop the sensor when the batch is expected to be full
-            UNREGISTER_HANDLER.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        sensorManager.flush(BATCH_SENSOR_LISTENER);
-                        sensorManager.unregisterListener(BATCH_SENSOR_LISTENER);
-                    }
-                }
-            }, maxReportLatencyMs);
+            UNREGISTER_HANDLER.postDelayed(UNREGISTER_RUNNABLE, maxReportLatencyMs);
 
             // Return any data collected from the previous reporting cycle
             return previousBatch;
