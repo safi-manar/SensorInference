@@ -79,7 +79,7 @@ public abstract class AbstractMotionSensorRecordingService extends AbstractSenso
 
         if(batchSize > 0 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             // Flush and unregister any existing listeners
-            UNREGISTER_HANDLER.removeCallbacks(UNREGISTER_RUNNABLE);
+            UNREGISTER_HANDLER.removeCallbacksAndMessages(null);
             UNREGISTER_RUNNABLE.run();
 
             // Make a copy of any existing data in the batch and reset it
