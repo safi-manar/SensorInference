@@ -54,6 +54,7 @@ public class DailySurveyActivity extends Activity {
 
         builder.setPositiveButton(R.string.dailysurvey_yes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+                PreferencesWrapper.setOverlayUnFlagged();
                 // Assume the user finishes the survey. Update the schedule.
                 PreferencesWrapper.updateDailyDeadline();
                 // Now show the WebView FormActivity
@@ -64,12 +65,14 @@ public class DailySurveyActivity extends Activity {
 
         builder.setNeutralButton(R.string.dailysurvey_postpone, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+                PreferencesWrapper.setOverlayUnFlagged();
                 postponeDeadline();
             }
         });
 
         builder.setNegativeButton(R.string.dailysurvey_no, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+                PreferencesWrapper.setOverlayUnFlagged();
                 skipTodaySurvey();
             }
         });
@@ -80,11 +83,12 @@ public class DailySurveyActivity extends Activity {
         /*To avoid a bug where the back button on the dialog takes the user to the
         * transparent activity screen where interaction does nothing (and gives the
         * impression that the phone is locked up / crashing), override the back button
-        * to close the activity. */
+        * to close the activity AND make the back button postpone the deadline. */
         builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
                 Log.d("DailySurveyActivity", "Back button pressed inside of dialog.");
+                postponeDeadline();
                 moveTaskToBack(true);
                 finish();
             }

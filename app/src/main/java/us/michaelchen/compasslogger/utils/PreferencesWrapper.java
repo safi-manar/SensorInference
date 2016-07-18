@@ -31,6 +31,7 @@ public class PreferencesWrapper {
     private static final String REAL_DAILY_DEADLINE = "real_daily_deadline";
     // Nominal variable to allow calculation of deadline postponement.
     private static final String NOMINAL_DAILY_DEADLINE = "nominal_daily_deadline";
+    private static final String DAILY_SURVEY_OVERLAY = "daily_survey_overlay";
 
     private static final String LAST_GPS_DISTANCE = "last_gps_distance";
     private static final String LAST_GPS_INTERVAL  = "last_gps_interval";
@@ -261,6 +262,32 @@ public class PreferencesWrapper {
             prefs.edit().putLong(NOMINAL_DAILY_DEADLINE, dailyDeadlineMillis).commit();
         }
     }
+
+
+
+    /**
+     * @return true if there is currently a DailySurveyActivity dialog overlayed;
+     * ie, if the user has yet to interact with the current DailySurvey dialog.
+     */
+    public static boolean isDialogOverlayed() {
+        return prefs.getBoolean(DAILY_SURVEY_OVERLAY, false);
+    }
+
+    /**
+     * Represent the DailySurvey dialog as being currently overlayed on the screen
+     * and that the user has yet to interact with it.
+     */
+    public static void setOverlayFlagged() {
+        prefs.edit().putBoolean(DAILY_SURVEY_OVERLAY, true).commit();
+    }
+
+    /**
+     * Represent the DailySurvey dialog as no longer overlayed on the screen
+     */
+    public static void setOverlayUnFlagged() {
+        prefs.edit().putBoolean(DAILY_SURVEY_OVERLAY, false).commit();
+    }
+
 
     /**
      * Store a distance and time between GPS coordinates
