@@ -19,6 +19,7 @@ import java.util.zip.ZipOutputStream;
 import us.michaelchen.compasslogger.utils.DataTimeFormat;
 import us.michaelchen.compasslogger.utils.FirebaseWrapper;
 import us.michaelchen.compasslogger.utils.PreferencesWrapper;
+import us.michaelchen.compasslogger.utils.TimeConstants;
 
 /**
  * Created by ioreyes on 6/23/16.
@@ -51,7 +52,12 @@ public class WifiUploadDestination extends AbstractDataDestination {
             increaseActive();
             saveToCache(label, data);
 
-            if(isLastActive() && isWifiConnected()) {
+            // Upload if any are true:
+            // - Wi-Fi is available
+            // - App is about to be uninstalled
+            // - The local cache has grown too large
+            boolean shouldUpload = isWifiConnected() || isUninstallationImminent() || isCacheTooLarge();
+            if(isLastActive() && shouldUpload) {
                 uploadAndClearCache();
             }
         }
@@ -70,6 +76,40 @@ public class WifiUploadDestination extends AbstractDataDestination {
         } else {
             return false;
         }
+    }
+
+    /**
+     *
+     * @return True if the app is about to be uninstalled
+     */
+    private boolean isUninstallationImminent() {
+        long currentTime = System.currentTimeMillis();
+        long uninstallTime = PreferencesWrapper.getUninstallDeadline();
+
+        return uninstallTime - currentTime <= TimeConstants.PRE_DEADLINE_WINDOW;
+    }
+
+    /**
+     *
+     * @return True if the total size of the zip file cache exceeds 5 MBs
+     */
+    private boolean isCacheTooLarge() {
+        final int MAX_SIZE_MB = 5;
+        final int MAX_SIZE_B = MAX_SIZE_MB * 1024 * 1024;
+
+        File wifiCacheFolder = new File(appContext.getCacheDir(), CACHE_SUBDIR_NAME);
+        if(wifiCacheFolder.exists()) {
+            File[] zipFiles = wifiCacheFolder.listFiles(ZIP_FILTER);
+            int sizeB = 0;
+
+            for(File f : zipFiles) {
+                sizeB += f.length();
+            }
+
+            return sizeB >= MAX_SIZE_B;
+        }
+
+        return false;
     }
 
     /**

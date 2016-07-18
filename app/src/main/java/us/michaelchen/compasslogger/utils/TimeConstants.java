@@ -22,6 +22,9 @@ public class TimeConstants {
     // App lifespan until uninstallation
     public static long DEADLINE_LENGTH = ONE_DAY * 7;
 
+    // Final moments of app lifespan when policies may change (e.g., wifi upload only -> upload on cell)
+    public static long PRE_DEADLINE_WINDOW = ONE_HOUR;
+
     // The scheduling time for daily surveys in HH:mm:ss format.
     public static String DAILY_SURVEY_DEADLINE = "20-00-00";
     public static long DAILY_SURVEY_WINDOW = ONE_HOUR * 4;
