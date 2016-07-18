@@ -3,7 +3,7 @@ package us.michaelchen.compasslogger.periodicservices.datarecording;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
+import android.hardware.SensorEventListener2;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Handler;
@@ -28,18 +28,6 @@ public abstract class AbstractMotionSensorRecordingService extends AbstractSenso
     private static final long MIN_INTERVAL_BETWEEN_EVENTS_WITH_TOLERANCE = (long) Math.floor(TimeConstants.SENSOR_DATA_POLL_INTERVAL * 0.75);
     private static final String BATCH_KEY = "batch-%05d";
 
-    private final SensorEventListener BATCH_SENSOR_LISTENER = new SensorEventListener() {
-        @Override
-        public void onSensorChanged(SensorEvent event) {
-            Map<String, Object> data = processSensorData(event);
-            operateOnBatchBuffer(BatchOps.ADD, data);
-        }
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-            // Do nothing
-        }
-    };
     private final Comparator<Map<String, Object>> BATCH_ENTRY_COMPARATOR = new Comparator() {
 
         @Override
@@ -50,21 +38,19 @@ public abstract class AbstractMotionSensorRecordingService extends AbstractSenso
             // Compare batch data by timestamp
             long leftTimestamp = (long)left.get(TIMESTAMP_RAW_KEY);
             long rightTimestamp = (long)right.get(TIMESTAMP_RAW_KEY);
+            long difference = leftTimestamp - rightTimestamp;
 
-            return (int)(leftTimestamp - rightTimestamp);
+            if(difference < 0l) {
+                return -1;
+            } else if(difference > 0l) {
+                return 1;
+            }
+
+            return 0;
         }
     };
     private final Handler UNREGISTER_HANDLER = new Handler();
-    private final Runnable UNREGISTER_RUNNABLE = new Runnable() {
-        @Override
-        public void run() {
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                final SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-                sensorManager.flush(BATCH_SENSOR_LISTENER);
-                sensorManager.unregisterListener(BATCH_SENSOR_LISTENER);
-            }
-        }
-    };
+    private boolean isFlushing = false;
 
     protected AbstractMotionSensorRecordingService(String subclassName) {
         super(subclassName);
@@ -73,13 +59,48 @@ public abstract class AbstractMotionSensorRecordingService extends AbstractSenso
     @Override
     protected Map<String, Object> readData(Intent intent) {
         // Determine the FIFO length
-        final SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        Sensor sensor = sensorManager.getDefaultSensor(getSensorType());
+        final SensorManager SENSOR_MANAGER = (SensorManager) getSystemService(SENSOR_SERVICE);
+        Sensor sensor = SENSOR_MANAGER.getDefaultSensor(getSensorType());
         int batchSize = getBatchSize(sensor);
 
         if(batchSize > 0 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            final SensorEventListener2 BATCH_SENSOR_LISTENER = new SensorEventListener2() {
+                @Override
+                public void onFlushCompleted(Sensor sensor) {
+                    isFlushing = false;
+                }
+
+                @Override
+                public void onSensorChanged(SensorEvent sensorEvent) {
+                    Map<String, Object> data = processSensorData(sensorEvent);
+                    operateOnBatchBuffer(BatchOps.ADD, data);
+                }
+
+                @Override
+                public void onAccuracyChanged(Sensor sensor, int i) {
+
+                }
+            };
+            final Runnable UNREGISTER_RUNNABLE = new Runnable() {
+                @Override
+                public void run() {
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        long stopTime = System.currentTimeMillis() + TimeConstants.MAX_SENSOR_TIME;
+                        isFlushing = SENSOR_MANAGER.flush(BATCH_SENSOR_LISTENER);
+                        while(isFlushing && System.currentTimeMillis() < stopTime) {
+                            try {
+                                Thread.sleep(TimeConstants.SENSOR_DATA_POLL_INTERVAL);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        SENSOR_MANAGER.unregisterListener(BATCH_SENSOR_LISTENER);
+                        UNREGISTER_HANDLER.removeCallbacksAndMessages(null);
+                    }
+                }
+            };
+
             // Flush and unregister any existing listeners
-            UNREGISTER_HANDLER.removeCallbacksAndMessages(null);
             UNREGISTER_RUNNABLE.run();
 
             // Make a copy of any existing data in the batch and reset it
@@ -91,12 +112,12 @@ public abstract class AbstractMotionSensorRecordingService extends AbstractSenso
             int samplingPeriodUs = samplingPeriodMs * 1000;  // ms to us
             int maxReportLatencyUs = samplingPeriodUs * batchSize;
             int maxReportLatencyMs = maxReportLatencyUs / 1000; // us to ms
-            sensorManager.registerListener(BATCH_SENSOR_LISTENER,
+            SENSOR_MANAGER.registerListener(BATCH_SENSOR_LISTENER,
                                            sensor,
                                            samplingPeriodUs,
                                            maxReportLatencyUs);
 
-            // Flush and stop the sensor when the batch is expected to be full
+            // Schedule to flush and stop the sensor when it's expected to be full
             UNREGISTER_HANDLER.postDelayed(UNREGISTER_RUNNABLE, maxReportLatencyMs);
 
             // Return any data collected from the previous reporting cycle
