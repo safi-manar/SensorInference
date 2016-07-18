@@ -54,11 +54,11 @@ public class DailySurveyActivity extends Activity {
 
         builder.setPositiveButton(R.string.dailysurvey_yes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+                // Assume the user finishes the survey. Update the schedule.
+                PreferencesWrapper.updateDailyDeadline();
                 // Now show the WebView FormActivity
                 Intent intent = new Intent(context, DailySurveyFormActivity.class);
                 startActivity(intent);
-                // Assume the user finishes the survey. Update the schedule.
-                PreferencesWrapper.updateDailyDeadline();
             }
         });
 
