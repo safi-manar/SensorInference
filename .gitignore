@@ -47,3 +47,4 @@ captures/
 app/app.iml
 /app/google-services.json
 /.swp
+/scripts/firebase-dump/*.json
