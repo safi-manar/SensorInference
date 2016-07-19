@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import edu.berkeley.icsi.R;
+import edu.berkeley.icsi.sensormonitor.R;
 import edu.berkeley.icsi.sensormonitor.utils.PreferencesWrapper;
 
 /**

@@ -22,8 +22,6 @@ import android.view.MenuItem;
 
 import java.util.List;
 
-import edu.berkeley.icsi.R;
-
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
  * handset devices, settings are presented as a single list. On tablets,

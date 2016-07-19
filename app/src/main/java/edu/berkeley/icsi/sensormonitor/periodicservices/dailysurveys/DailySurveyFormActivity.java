@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import edu.berkeley.icsi.R;
+import edu.berkeley.icsi.sensormonitor.R;
 import edu.berkeley.icsi.sensormonitor.utils.PreferencesWrapper;
 
 public class DailySurveyFormActivity extends AppCompatActivity {

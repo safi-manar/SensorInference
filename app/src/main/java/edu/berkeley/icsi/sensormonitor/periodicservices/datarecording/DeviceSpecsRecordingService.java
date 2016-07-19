@@ -9,7 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import edu.berkeley.icsi.R;
+import edu.berkeley.icsi.sensormonitor.R;
 import edu.berkeley.icsi.sensormonitor.utils.PreferencesWrapper;
 
 /**
