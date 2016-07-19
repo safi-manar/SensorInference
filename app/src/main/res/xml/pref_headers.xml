@@ -3,16 +3,16 @@
     <!-- These settings headers are only used on tablets. -->
 
     <header
-        android:fragment="us.michaelchen.compasslogger.SettingsActivity$GeneralPreferenceFragment"
+        android:fragment="edu.berkeley.icsi.sensormonitor.SettingsActivity$GeneralPreferenceFragment"
         android:title="@string/pref_header_general" android:icon="@drawable/ic_info_black_24dp" />
 
     <header
-        android:fragment="us.michaelchen.compasslogger.SettingsActivity$NotificationPreferenceFragment"
+        android:fragment="edu.berkeley.icsi.sensormonitor.SettingsActivity$NotificationPreferenceFragment"
         android:title="@string/pref_header_notifications"
         android:icon="@drawable/ic_notifications_black_24dp" />
 
     <header
-        android:fragment="us.michaelchen.compasslogger.SettingsActivity$DataSyncPreferenceFragment"
+        android:fragment="edu.berkeley.icsi.sensormonitor.SettingsActivity$DataSyncPreferenceFragment"
         android:title="@string/pref_header_data_sync" android:icon="@drawable/ic_sync_black_24dp" />
 
 </preference-headers>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="us.michaelchen.compasslogger"
+    package="edu.berkeley.icsi"
     android:installLocation="internalOnly"
     android:versionName="@string/app_version">
 
@@ -13,11 +13,11 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:name=".LoggerApplication"
+        android:name=".sensormonitor.LoggerApplication"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".sensormonitor.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -28,22 +28,22 @@
         </activity>
 
         <receiver
-            android:name=".receiver.PeriodicReceiver"
+            android:name=".sensormonitor.receiver.PeriodicReceiver"
             android:enabled="true"
             android:exported="true"
             android:process=":remote" />
         <receiver
-            android:name=".receiver.PeriodicGroundTruthReceiver"
+            android:name=".sensormonitor.receiver.PeriodicGroundTruthReceiver"
             android:enabled="true"
             android:exported="true"
             android:process=":remote" />
 
         <activity
-            android:name=".SettingsActivity"
+            android:name=".sensormonitor.SettingsActivity"
             android:label="@string/title_activity_settings" />
 
         <receiver
-            android:name=".receiver.BootReceiver"
+            android:name=".sensormonitor.receiver.BootReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
@@ -52,33 +52,33 @@
         </receiver>
 
         <activity
-            android:name=".FormActivity"
+            android:name=".sensormonitor.FormActivity"
             android:label="@string/title_activity_form"
             android:theme="@style/AppTheme.NoActionBar" />
 
 
         <!-- For the Deadline Notification -->
         <service
-            android:name=".periodicservices.deadline.DeadlineService"
+            android:name=".sensormonitor.periodicservices.deadline.DeadlineService"
             android:enabled="true"
             android:exported="false" />
 
         <activity
-            android:name=".periodicservices.deadline.DeadlineActivity"
+            android:name=".sensormonitor.periodicservices.deadline.DeadlineActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <!-- For the Daily Survey Notification -->
         <service
-            android:name=".periodicservices.dailysurveys.DailySurveyService"
+            android:name=".sensormonitor.periodicservices.dailysurveys.DailySurveyService"
             android:enabled="true"
             android:exported="false" />
 
         <activity
-            android:name=".periodicservices.dailysurveys.DailySurveyActivity"
+            android:name=".sensormonitor.periodicservices.dailysurveys.DailySurveyActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <activity
-            android:name=".periodicservices.dailysurveys.DailySurveyFormActivity"
+            android:name=".sensormonitor.periodicservices.dailysurveys.DailySurveyFormActivity"
             android:label="@string/title_activity_form"
             android:theme="@style/AppTheme.NoActionBar" />
 
@@ -87,94 +87,94 @@
 
         <!-- Refactored services and receivers -->
         <service
-            android:name=".periodicservices.datarecording.DeviceSpecsRecordingService"
+            android:name=".sensormonitor.periodicservices.datarecording.DeviceSpecsRecordingService"
             android:enabled="true"
             android:exported="false" />
 
         <service
-            android:name=".periodicservices.datarecording.ScreenRecordingService"
+            android:name=".sensormonitor.periodicservices.datarecording.ScreenRecordingService"
             android:enabled="true"
             android:exported="false" />
         <service
-            android:name=".periodicservices.datarecording.PowerRecordingService"
+            android:name=".sensormonitor.periodicservices.datarecording.PowerRecordingService"
             android:enabled="true"
             android:exported="false" />
         <service
-            android:name=".periodicservices.datarecording.GenericEventRecordingService"
-            android:enabled="true"
-            android:exported="false" />
-
-
-        <service
-            android:name=".periodicservices.datarecording.AccelerometerSensorRecordingService"
-            android:enabled="true"
-            android:exported="false" />
-        <service
-            android:name=".periodicservices.datarecording.GyroscopeSensorRecordingService"
-            android:enabled="true"
-            android:exported="false" />
-        <service
-            android:name=".periodicservices.datarecording.HumiditySensorRecordingService"
-            android:enabled="true"
-            android:exported="false" />
-        <service
-            android:name=".periodicservices.datarecording.LightSensorRecordingService"
-            android:enabled="true"
-            android:exported="false" />
-        <service
-            android:name=".periodicservices.datarecording.MagneticSensorRecordingService"
-            android:enabled="true"
-            android:exported="false" />
-        <service
-            android:name=".periodicservices.datarecording.PressureSensorRecordingService"
-            android:enabled="true"
-            android:exported="false" />
-        <service
-            android:name=".periodicservices.datarecording.ProximitySensorRecordingService"
-            android:enabled="true"
-            android:exported="false" />
-        <service
-            android:name=".periodicservices.datarecording.RotationVectorSensorRecordingService"
-            android:enabled="true"
-            android:exported="false" />
-        <service
-            android:name=".periodicservices.datarecording.StepSensorRecordingService"
-            android:enabled="true"
-            android:exported="false" />
-        <service
-            android:name=".periodicservices.datarecording.TemperatureSensorRecordingService"
+            android:name=".sensormonitor.periodicservices.datarecording.GenericEventRecordingService"
             android:enabled="true"
             android:exported="false" />
 
 
         <service
-            android:name=".periodicservices.datarecording.LocationRecordingService"
+            android:name=".sensormonitor.periodicservices.datarecording.AccelerometerSensorRecordingService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".sensormonitor.periodicservices.datarecording.GyroscopeSensorRecordingService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".sensormonitor.periodicservices.datarecording.HumiditySensorRecordingService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".sensormonitor.periodicservices.datarecording.LightSensorRecordingService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".sensormonitor.periodicservices.datarecording.MagneticSensorRecordingService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".sensormonitor.periodicservices.datarecording.PressureSensorRecordingService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".sensormonitor.periodicservices.datarecording.ProximitySensorRecordingService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".sensormonitor.periodicservices.datarecording.RotationVectorSensorRecordingService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".sensormonitor.periodicservices.datarecording.StepSensorRecordingService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".sensormonitor.periodicservices.datarecording.TemperatureSensorRecordingService"
+            android:enabled="true"
+            android:exported="false" />
+
+
+        <service
+            android:name=".sensormonitor.periodicservices.datarecording.LocationRecordingService"
             android:exported="false"
             android:enabled="true"
             android:permission="android.p" />
 
         <service
-            android:name=".periodicservices.PeriodicTimeUpdateService"
+            android:name=".sensormonitor.periodicservices.PeriodicTimeUpdateService"
             android:enabled="true"
             android:exported="false" />
 
         <!-- keep-alive services -->
         <service
-            android:name=".periodicservices.keepalive.GenericReceiverKeepAliveService"
+            android:name=".sensormonitor.periodicservices.keepalive.GenericReceiverKeepAliveService"
             android:enabled="true"
             android:exported="false" />
         <service
-            android:name=".periodicservices.keepalive.FirebaseKeepAliveService"
+            android:name=".sensormonitor.periodicservices.keepalive.FirebaseKeepAliveService"
             android:enabled="true"
             android:exported="false" />
         <service
-            android:name=".periodicservices.keepalive.StepSensorKeepAliveService"
+            android:name=".sensormonitor.periodicservices.keepalive.StepSensorKeepAliveService"
             android:enabled="true"
             android:exported="false" />
 
         <!-- Firebase sequential upload service -->
         <service
-            android:name=".utils.FirebaseSequentialUploadService"
+            android:name=".sensormonitor.utils.FirebaseSequentialUploadService"
             android:enabled="true"
             android:exported="false" />
 

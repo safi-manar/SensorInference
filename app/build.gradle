@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        applicationId "us.michaelchen.compasslogger"
+        applicationId "edu.berkeley.icsi.sensormonitor"
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 1
