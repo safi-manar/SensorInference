@@ -59,14 +59,15 @@ for uuid in uuids.each():
 
 # Dump storage
 storage = firebase.storage()
+for file in storage.list_files():
+    filepath = file.name
+    tokens = filepath.split('/')
 
-for uuid in uuids.each():
-    if not os.path.exists(uuid):
-        os.makedirs(uuid)
+    if len(tokens) == 2:
+        uuid = tokens[0]
+        filename = tokens[1]
 
-    zips = storage.child(uuid)
-    for zip in zips.list_files():
-        filepath = zip.name
-        filename = filepath.split('/')[-1]
+        if not os.path.exists(uuid):
+            os.makedirs(uuid)
 
-        zip.download_to_filename(os.path.join(uuid, filename))
+        file.download_to_filename(os.path.join(uuid, filename))
