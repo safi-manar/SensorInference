@@ -38,28 +38,35 @@ config = {
 
 firebase = pyrebase.initialize_app(config)
 
+# TODO: Optional custom output directory. Optional delete remote source flag.
+
 # Dump database
 db = firebase.database()
 
 user_data = 'userData'
 uuids = db.child(user_data).shallow().get()
-# for uuid in uuids.each():
-#     if not os.path.exists(uuid):
-#         os.makedirs(uuid)
-#
-#     file_out = open(os.path.join(uuid, 'database.json'), 'w')
-#
-#     data = db.child(user_data).child(uuid).get()
-#     json_dump = json.dumps(data.val(), sort_keys=True, indent=4, separators=(',', ': '))
-#
-#     file_out.write(json_dump)
-#     file_out.close()
+for uuid in uuids.each():
+    if not os.path.exists(uuid):
+        os.makedirs(uuid)
+
+    file_out = open(os.path.join(uuid, 'database.json'), 'w')
+
+    data = db.child(user_data).child(uuid).get()
+    json_dump = json.dumps(data.val(), sort_keys=True, indent=4, separators=(',', ': '))
+
+    file_out.write(json_dump)
+    file_out.close()
 
 # Dump storage
-# TODO
 storage = firebase.storage()
 
 for uuid in uuids.each():
+    if not os.path.exists(uuid):
+        os.makedirs(uuid)
+
     zips = storage.child(uuid)
     for zip in zips.list_files():
-        print zip
+        filepath = zip.name
+        filename = filepath.split('/')[-1]
+
+        zip.download_to_filename(os.path.join(uuid, filename))
