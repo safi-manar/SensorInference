@@ -251,7 +251,32 @@
 
 
     <!--UIredesign-->
-
     <string name="permissions_continue">CONTINUE</string>
+
+    <string name="permissions_explanation_1">
+        The app will now prompt you for the following two permissions:
+    </string>
+
+    <string name="permissions_explanation_2">
+        - \"Make and manage phone calls\"
+    </string>
+
+    <string name="permissions_explanation_3">
+        This permission is a misnomer. We will not be accessing your phone calls in any way. Rather, this permission
+        lets us determine whether you are on Wifi so that we can conserve your data usage.
+    </string>
+
+
+    <string name="permissions_explanation_4">
+        - \"Access this device's location\"
+    </string>
+
+    <string name="permissions_explanation_5">
+        We need this permission to collect periodic GPS data.
+    </string>
+
+    <string name="permissions_explanation_6">
+        You will need to accept these permissions to complete your participation in this study.
+    </string>
 
 </resources>
