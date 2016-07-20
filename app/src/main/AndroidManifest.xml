@@ -174,8 +174,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PermissionActivity"
+        <activity
+            android:name=".PermissionActivity"
             android:parentActivityName=".ConsentActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.berkeley.icsi.sensormonitor.ConsentActivity" />
+        </activity>
+        <activity android:name=".SurveyRedirectActivity"
+            android:parentActivityName=".PermissionActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.berkeley.icsi.sensormonitor.ConsentActivity" />
