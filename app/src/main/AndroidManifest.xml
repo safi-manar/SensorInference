@@ -181,12 +181,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.berkeley.icsi.sensormonitor.ConsentActivity" />
         </activity>
-        <activity android:name=".SurveyRedirectActivity"
+        <activity
+            android:name=".SurveyRedirectActivity"
             android:parentActivityName=".PermissionActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.berkeley.icsi.sensormonitor.ConsentActivity" />
         </activity>
+        <activity android:name=".SurveyFormActivity" />
+        <activity android:name=".InfoActivity"></activity>
     </application>
 
 </manifest>

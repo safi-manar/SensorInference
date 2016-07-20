@@ -3,12 +3,11 @@ package edu.berkeley.icsi.sensormonitor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class SurveyRedirectActivity extends AppCompatActivity {
+public class InfoActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_survey_redirect);
-
+        setContentView(R.layout.activity_info);
     }
 }

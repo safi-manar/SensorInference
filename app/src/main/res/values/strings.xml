@@ -177,7 +177,7 @@
     <string name="gdocs_url">https://docs.google.com/forms/d/1rvRzCKcWDC-w6WKSMMpU8ZfljdOdOLXArqG1vVhFKeQ/viewform?entry.1826764866=</string>
 
     <!-- Auto-generated Git version DO NOT EDIT -->
-    <string name="app_version">10d35a1</string>
+    <string name="app_version">e40786a</string>
 
 
     <!--                                                     -->
@@ -253,30 +253,55 @@
     <!--UIredesign-->
     <string name="permissions_continue">CONTINUE</string>
 
+    <string name="permissions_explanation_title">Required Permissions</string>
     <string name="permissions_explanation_1">
         The app will now prompt you for the following two permissions:
     </string>
-
     <string name="permissions_explanation_2">
         - \"Make and manage phone calls\"
     </string>
-
     <string name="permissions_explanation_3">
         This permission is a misnomer. We will not be accessing your phone calls in any way. Rather, this permission
         lets us determine whether you are on Wifi so that we can conserve your data usage.
     </string>
-
-
     <string name="permissions_explanation_4">
-        - \"Access this device's location\"
+        - \"Access this device\'s location\"
     </string>
-
     <string name="permissions_explanation_5">
         We need this permission to collect periodic GPS data.
     </string>
-
     <string name="permissions_explanation_6">
         You will need to accept these permissions to complete your participation in this study.
+    </string>
+
+    <string name="survey_redirect_message">
+        You will now be directed to complete a short survey for some demographic information needed for this research.
+        As always, your data will be kept securely and confidentially.
+    </string>
+
+    <string name="survey_redirect_warning">
+        Please note: You will not be paid the $2.00 completion bonus without participating in this portion of the study.
+    </string>
+
+    <string name="survey_redirect_title">Required Survey</string>
+
+    <string name="info_main">This app is for a study at UC Berkeley to better understand smartphone sensors.
+        This app will log various sensor data over the course of one week.
+    </string>
+
+    <string name="info_id">ID: </string>
+    <string name="info_build">Build: </string>
+
+    <string name="info_contact_label">Contact Info: </string>
+    <string name="info_contact_details_1">
+        Sensors Inference Project Team
+    </string>
+    <string name="info_contact_details_2">
+        sensor-inference@icsi.berkeley.edu
+    </string>
+    <string name="info_contact_details_3">
+        Computer Science Department, UC Berkeley
+        International Computer Science Institute
     </string>
 
 </resources>
