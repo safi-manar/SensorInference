@@ -6,7 +6,6 @@
     <string name="title_section3">Feedback</string>
 
 
-
     <!--MTURK: For the token inquiry and confirmation dialogs -->
 
     <string name="MTURK_inquiry_title">MTURK?</string>
@@ -36,8 +35,6 @@
 
     <string name="correct">CORRECT</string>
     <string name="incorrect">INCORRECT</string>
-
-
 
 
     <!--For the Agreement consent dialog-->
@@ -97,7 +94,6 @@
     </string>
 
 
-
     <!-- For the Permission Denied dialog-->
 
     <string name="denied_permission_title">Permissions Denied Warning</string>
@@ -124,8 +120,6 @@
 
         <b>Please note: You will not be paid the $2.00 completion bonus without participating in this portion of the study.</b>\n\n
     </string>
-
-
 
 
     <!--For the MTURK message on the MainActivity screen-->
@@ -163,8 +157,6 @@
     <string name="daily_gdocs_url">https://docs.google.com/forms/d/1dHLJ3T6ljC0-6-ct_dW_PAgYmhaPtcIWeyl_Pq47QEQ/viewform?entry.1826764866=</string>
 
 
-
-
     <!-- For the deadline notification uninstall prompt dialog-->
 
     <string name="uninstall_message_title">UCB Sensor Research Complete!</string>
@@ -181,16 +173,11 @@
     </string>
 
 
-
-
     <!-- Survey settings -->
     <string name="gdocs_url">https://docs.google.com/forms/d/1rvRzCKcWDC-w6WKSMMpU8ZfljdOdOLXArqG1vVhFKeQ/viewform?entry.1826764866=</string>
 
     <!-- Auto-generated Git version DO NOT EDIT -->
-    <string name="app_version">51b58a4</string>
-
-
-
+    <string name="app_version">10d35a1</string>
 
 
     <!--                                                     -->
@@ -263,5 +250,8 @@
     <string name="title_activity_form">FormActivity</string>
 
 
+    <!--UIredesign-->
+
+    <string name="permissions_continue">CONTINUE</string>
 
 </resources>
