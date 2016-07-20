@@ -18,7 +18,7 @@ public class FormActivity extends AppCompatActivity {
         Intent i = getIntent();
 
         String deviceId = PreferencesWrapper.getDeviceID();
-        String formURL = getResources().getString(R.string.gdocs_url);
+        String formURL = getResources().getString(R.string.entry_survey_url);
 
 
         WebViewClient webViewClient = getWebviewClient(this);

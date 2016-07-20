@@ -117,7 +117,7 @@
 
     <string name="survey_form_title">Required Survey Form</string>
 
-    <string name="survey_form_response">formResponse</string>
+    <string name="survey_form_response">berkeley</string>
     <string name="survey_form_message">
         You will now be directed to complete a short survey for some demographic information needed for this research.
         As always, your data will be kept securely and confidentially.\n\n
@@ -160,7 +160,7 @@
     <string name="dailysurvey_yes">Yes!</string>
     <string name="dailysurvey_no">Not today.</string>
     <string name="dailysurvey_postpone">Remind me in an hour.</string>
-    <string name="daily_gdocs_url">https://docs.google.com/forms/d/1dHLJ3T6ljC0-6-ct_dW_PAgYmhaPtcIWeyl_Pq47QEQ/viewform?entry.1826764866=</string>
+    <string name="daily_survey_url">https://www.surveygizmo.com/s3/2934943/Sensors-Inference-Daily-Activity-Survey?uuid=</string>
 
 
 
@@ -184,10 +184,10 @@
 
 
     <!-- Survey settings -->
-    <string name="gdocs_url">https://docs.google.com/forms/d/1rvRzCKcWDC-w6WKSMMpU8ZfljdOdOLXArqG1vVhFKeQ/viewform?entry.1826764866=</string>
+    <string name="entry_survey_url">https://www.surveygizmo.com/s3/2933242/Sensors-Inference-Entry-Survey?uuid=</string>
 
     <!-- Auto-generated Git version DO NOT EDIT -->
-    <string name="app_version">51b58a4</string>
+    <string name="app_version">10d35a1</string>
 
 
 
