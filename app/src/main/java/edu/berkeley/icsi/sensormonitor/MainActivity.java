@@ -405,7 +405,7 @@ public class MainActivity extends AppCompatActivity {
     private void startDeadlineTimer() {
         long currentTime = System.currentTimeMillis();
         long deadline = currentTime + TimeConstants.DEADLINE_LENGTH;
-        PreferencesWrapper.setUninstallDeadline(deadline);
+        PreferencesWrapper.setUninstallDeadline();
     }
 
 

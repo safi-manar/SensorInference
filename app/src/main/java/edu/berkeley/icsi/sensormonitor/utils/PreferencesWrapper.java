@@ -90,9 +90,12 @@ public class PreferencesWrapper {
 
     /**
      * Set when the app should prompt to uninstall itself
-     * @param deadlineMillis Uninstallation timestamp in milliseconds
+     *
      */
-    public static void setUninstallDeadline(long deadlineMillis) {
+    public static void setUninstallDeadline() {
+        long currentTime = System.currentTimeMillis();
+        // Uninstallation timestamp in milliseconds
+        long deadlineMillis = currentTime + TimeConstants.DEADLINE_LENGTH;
         prefs.edit().putLong(UNINSTALL_DEADLINE, deadlineMillis).commit();
     }
 

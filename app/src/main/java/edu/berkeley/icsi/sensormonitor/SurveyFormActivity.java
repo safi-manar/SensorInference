@@ -1,14 +1,18 @@
 package edu.berkeley.icsi.sensormonitor;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import edu.berkeley.icsi.sensormonitor.utils.MasterSwitch;
 import edu.berkeley.icsi.sensormonitor.utils.PreferencesWrapper;
+import edu.berkeley.icsi.sensormonitor.utils.TimeConstants;
 
 public class SurveyFormActivity extends AppCompatActivity {
 
@@ -24,6 +28,9 @@ public class SurveyFormActivity extends AppCompatActivity {
     private void setWebView(Context context) {
         String deviceId = PreferencesWrapper.getDeviceID();
         String formURL = getResources().getString(R.string.gdocs_url);
+
+        // Register the survey-complete receiver.
+        registerSurveyReceiver();
 
         WebViewClient webViewClient = getWebviewClient(context);
         WebView webView = (WebView) findViewById(R.id.survey_form_view);
@@ -55,5 +62,44 @@ public class SurveyFormActivity extends AppCompatActivity {
 
         };
     }
+
+    /**
+     * Register to receive survey completion intent.
+     * We are registering an observer (surveyReceiver) to receive Intents
+     * with actions named "survey-complete".
+     */
+    private void registerSurveyReceiver() {
+        LocalBroadcastManager.getInstance(this).registerReceiver(surveyReceiver,
+                new IntentFilter("survey-complete"));
+    }
+
+    /**
+    * The handler for received Intents. This will be called whenever an Intent
+    * with an action named "survey-complete" is broadcasted.
+    * */
+    private BroadcastReceiver surveyReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Now that the survey has been completed, tag the user as having completed it.
+            PreferencesWrapper.setSurveyCompleted();
+
+            // Sensor data collection has begun. Now begin a one-week countdown.
+            PreferencesWrapper.setUninstallDeadline();
+            // Also, set today's daily survey deadline
+            PreferencesWrapper.setInitialDailyDeadline();
+            //Now that the user has completed the form, sensor data collection can begin.
+            MasterSwitch.on(context);
+
+            // Now, show the user the Verification Activity.
+            Intent verificationIntent = new Intent(context, VerificationActivity.class);
+            startActivity(verificationIntent);
+        }
+    };
+
+
+
+
+
+
 
 }
