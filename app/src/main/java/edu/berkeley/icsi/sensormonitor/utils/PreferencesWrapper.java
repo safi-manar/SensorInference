@@ -320,13 +320,13 @@ public class PreferencesWrapper {
      * @return The speed taken between along the last stored distance between GPS coordinates in
      * km/h. -1.0 if unavailable.
      */
-    public static float getGPSSpeed() {
+    public static double getGPSSpeed() {
         float distanceM = getGPSDistance();
         long timeMS = getGPSTime();
 
         if(distanceM > 0.0f && timeMS > 1l) {
-            float distanceKM = distanceM / 1000.0f;
-            int timeHR = (int) (timeMS / 1000 / 60 / 60);
+            double distanceKM = distanceM / 1000.0;
+            double timeHR = timeMS / (1000.0 * 60.0 * 60.0);    // (ms -> sec -> min -> hr)
 
             return distanceKM / timeHR;
         }
@@ -336,10 +336,10 @@ public class PreferencesWrapper {
 
     /**
      *
-     * @return True if the average speed between the last two GPS points is at least 30 km/h
+     * @return True if the average speed between the last two GPS points is at least 20 km/h
      */
-    public static boolean isGPSSpeedExceed30KMH() {
-        final int SPEED_THRESHOLD = 30;
+    public static boolean isGPSSpeedExceed20KPH() {
+        final double SPEED_THRESHOLD = 20.0;
         return getGPSSpeed() >= SPEED_THRESHOLD;
     }
 }
