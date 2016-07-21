@@ -289,6 +289,7 @@
         This app will log various sensor data over the course of one week.
     </string>
 
+    <string name="info_verif_code">Verification Code: </string>
     <string name="info_id">ID: </string>
     <string name="info_build">Build: </string>
 
@@ -303,5 +304,18 @@
         Computer Science Department, UC Berkeley
         International Computer Science Institute
     </string>
+
+    <string name="verif_title">Your Verification Code</string>
+
+    <string name="verif_message_1">
+        Thank you for your participation. Your verification code is printed below.
+    </string>
+
+    <string name="verif_message_2">
+        Please keep this code for your own reference.
+    </string>
+
+    <string name="verif_code">12345678</string>
+
 
 </resources>

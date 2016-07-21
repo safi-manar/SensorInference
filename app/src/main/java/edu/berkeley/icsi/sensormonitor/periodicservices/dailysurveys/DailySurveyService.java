@@ -25,10 +25,10 @@ public class DailySurveyService extends IntentService {
      * Check the current time against the daily survey deadline times.
      */
     private void checkDeadline() {
-        if (isPassedWindow() && PreferencesWrapper.isDialogOverlayed()) {
+        if (isPassedWindow()) {
             PreferencesWrapper.updateDailyDeadline();
         } else if (isPassedDeadline() && !PreferencesWrapper.isGPSSpeedExceed30KMH()
-                                    && PreferencesWrapper.isDialogOverlayed()) {
+                                    && !PreferencesWrapper.isDialogOverlayed()) {
             startDailySurveyActivity();
         }
     }
