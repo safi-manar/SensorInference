@@ -167,13 +167,7 @@
             android:enabled="true"
             android:exported="false" />
 
-        <activity android:name=".ConsentActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".ConsentActivity"></activity>
         <activity
             android:name=".PermissionActivity"
             android:parentActivityName=".ConsentActivity">

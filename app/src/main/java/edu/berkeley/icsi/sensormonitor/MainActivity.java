@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseWrapper.init();
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_info);
 
         /*Because alarms are reset upon a device restart,
          * we'll reset the alarm timestamp so that MasterSwitch
@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         PreferencesWrapper.resetLastAlarmTimestamp();
 
 
+/*
         if (PreferencesWrapper.getMTURKCheckpoint() && PreferencesWrapper.isUserConsented()) {
             checkPermissions();
         } else if (PreferencesWrapper.getMTURKCheckpoint()) {
@@ -50,8 +51,47 @@ public class MainActivity extends AppCompatActivity {
 
         displayUUIDandBuild();
         displayMTURKStatus();
+*/
+
+
+        launchCorrectActivity(this);
 
     }
+
+
+    /**
+     * Launches the correct activity based on the state of the user's progress.
+     * If the survey has been submitted, the user is taken to the Info activity.
+     * Otherwise, the user is taken back to the agreement consent activity.
+     */
+    private void launchCorrectActivity(Context context) {
+        if (PreferencesWrapper.isSurveyCompleted()) {
+            // Show the Info Activity
+            Intent intent = new Intent(context, InfoActivity.class);
+            startActivity(intent);
+        } else {
+            // Show the Consent
+            Intent intent = new Intent(context, ConsentActivity.class);
+            startActivity(intent);
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Put the UUID and build on the main screen

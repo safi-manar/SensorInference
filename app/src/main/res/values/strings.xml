@@ -177,7 +177,7 @@
     <string name="gdocs_url">https://docs.google.com/forms/d/1rvRzCKcWDC-w6WKSMMpU8ZfljdOdOLXArqG1vVhFKeQ/viewform?entry.1826764866=</string>
 
     <!-- Auto-generated Git version DO NOT EDIT -->
-    <string name="app_version">e40786a</string>
+    <string name="app_version">9b2f8f6</string>
 
 
     <!--                                                     -->
@@ -280,7 +280,8 @@
     </string>
 
     <string name="survey_redirect_warning">
-        Please note: You will not be paid the $2.00 completion bonus without participating in this portion of the study.
+        Please note: You will need to answer EVERY question in the survey in order to be considered for particpation
+        in this study. If you want to abstain from answering a question, choose the \"I prefer not to answer\" option.
     </string>
 
     <string name="survey_redirect_title">Required Survey</string>
