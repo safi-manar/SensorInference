@@ -177,7 +177,7 @@
     <string name="gdocs_url">https://docs.google.com/forms/d/1rvRzCKcWDC-w6WKSMMpU8ZfljdOdOLXArqG1vVhFKeQ/viewform?entry.1826764866=</string>
 
     <!-- Auto-generated Git version DO NOT EDIT -->
-    <string name="app_version">9b2f8f6</string>
+    <string name="app_version">b102112</string>
 
 
     <!--                                                     -->
@@ -251,6 +251,9 @@
 
 
     <!--UIredesign-->
+    <string name="consent_agree">AGREE</string>
+    <string name="consent_cancel">CANCEL</string>
+
     <string name="permissions_continue">CONTINUE</string>
 
     <string name="permissions_explanation_title">Required Permissions</string>

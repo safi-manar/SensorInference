@@ -67,12 +67,15 @@ public class MainActivity extends AppCompatActivity {
     private void launchCorrectActivity(Context context) {
         if (PreferencesWrapper.isSurveyCompleted()) {
             // Show the Info Activity
+
             Intent intent = new Intent(context, InfoActivity.class);
             startActivity(intent);
+            MainActivity.this.finish();
         } else {
             // Show the Consent
             Intent intent = new Intent(context, ConsentActivity.class);
             startActivity(intent);
+            MainActivity.this.finish();
         }
 
     }
@@ -251,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
     * method runs on an asychronous thread-- that is, the system does not wait on the user to respond to
     * the permissions dialog before continuing the flow of the for loop. As a result, we must
     * explicitly break the flow of this method on every requestPermissions call, and then restart checkPermissions().
-    * Thus, we run an independent checkPermissions() call for each invidual permission.
+    * Thus, we run an independent checkPermissions() call for each individual permission.
     * */
     private void checkPermissions() {
         for (int i = 0; i < permissions.length; i++) {

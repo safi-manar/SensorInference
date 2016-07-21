@@ -12,7 +12,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Agree"
+        android:text="@string/consent_agree"
         android:id="@+id/consent_agree_button"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
@@ -38,7 +38,8 @@
         android:layout_alignParentStart="true"
         android:layout_above="@+id/consent_agree_button"
         android:layout_alignRight="@+id/consent_agree_button"
-        android:layout_alignEnd="@+id/consent_agree_button" >
+        android:layout_alignEnd="@+id/consent_agree_button"
+        android:paddingTop="10dp">
 
         <LinearLayout
             android:orientation="vertical"
@@ -54,8 +55,8 @@
                 android:layout_height="53dp"
                 android:id="@+id/imageView"
                 android:layout_below="@+id/consent_title"
-                android:layout_toRightOf="@+id/cancel_button"
-                android:layout_toEndOf="@+id/cancel_button"
+                android:layout_toRightOf="@+id/consent_cancel_button"
+                android:layout_toEndOf="@+id/consent_cancel_button"
                 android:layout_marginLeft="0dp"
                 android:layout_marginStart="0dp"
                 android:src="@drawable/sponsor_logos"
@@ -78,8 +79,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/cancel"
-        android:id="@+id/cancel_button"
+        android:text="@string/consent_cancel"
+        android:id="@+id/consent_cancel_button"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
