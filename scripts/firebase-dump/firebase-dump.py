@@ -1,4 +1,3 @@
-#import pyrebase
 import argparse
 import json
 import os
