@@ -16,16 +16,12 @@ public class PreferencesWrapper {
     private static final String PREFS_NAME = "CompassLoggerPrefs";
 
     // Field names
-    private static final String USER_CONSENTED = "user_consented";
     private static final String SURVEY_COMPLETED = "survey_completed";
     private static final String UNINSTALL_DEADLINE = "uninstall_deadline";
     private static final String ALARM_TIMESTAMP = "alarm_timestamp";
     private static final String FIRST_RUN = "first_run";
     private static final String DEVICE_ID = "device_id";
-    private static final String MTURK_ID = "mturk_id";
-    private static final String MTURK_STATUS_VERIFIED = "mturk_status_verified";
-    private static final String MTURK_STATUS = "mturk_status";
-    private static final String MTURK_TOKEN = "mturk_token";
+    private static final String VERIF_CODE = "verif_code";
 
     private static final String REAL_DAILY_DEADLINE = "real_daily_deadline";
     // Nominal variable to allow calculation of deadline postponement.
@@ -45,25 +41,6 @@ public class PreferencesWrapper {
         prefs = c.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
     }
 
-    /**
-     *
-     * @return True if the user has agreed to the consent disclosure
-     */
-    /*Determines whether the user has given consent to the experiment by checking
-    * the value of PREFS_AGREED.
-    * PREFS_AGREED = true : The user has previously launched the app and accepted the consent agreement dialog.
-    * PREFS_AGREED = false: The user may or may not have launched the app; but permissions have not
-    *                       been accepted. */
-    public static boolean isUserConsented() {
-        return prefs.getBoolean(USER_CONSENTED, false);
-    }
-
-    /**
-     * Set that the user has agreed to the consent disclosure
-     */
-    public static void setUserConsented() {
-        prefs.edit().putBoolean(USER_CONSENTED, true).commit();
-    }
 
     /**
      *
@@ -90,9 +67,12 @@ public class PreferencesWrapper {
 
     /**
      * Set when the app should prompt to uninstall itself
-     * @param deadlineMillis Uninstallation timestamp in milliseconds
+     *
      */
-    public static void setUninstallDeadline(long deadlineMillis) {
+    public static void setUninstallDeadline() {
+        long currentTime = System.currentTimeMillis();
+        // Uninstallation timestamp in milliseconds
+        long deadlineMillis = currentTime + TimeConstants.DEADLINE_LENGTH;
         prefs.edit().putLong(UNINSTALL_DEADLINE, deadlineMillis).commit();
     }
 
@@ -162,50 +142,17 @@ public class PreferencesWrapper {
     }
 
     /**
-     * Sets a checkpoint for verification of the MTURK status of the user
-     * (ie, that the app has already asked if the subject is an MTURK user). */
-    public static void setMTURKCheckpoint(boolean status) {
-        prefs.edit().putBoolean(MTURK_STATUS_VERIFIED, true).commit();
-
-        prefs.edit().putBoolean(MTURK_STATUS, status).commit();
-    }
-
-    /**
-     *
-     * @return true if the the user has passed the askMTURKStatus() dialog.
+     * Creates the verification code as the first block
+     * in the UUID.
      */
-    public static Boolean getMTURKCheckpoint() {
-        return prefs.getBoolean(MTURK_STATUS_VERIFIED, false);
-    }
-
-
-    private static String generateMTURKToken() {
-        return "[ TOKEN PLACEHOLDER ]";
-    }
-
-    /**
-     *
-     * @return The user's MTURK token to be used as a verification code on MTURK.
-     */
-    public static String getMTURKToken() {
-
-        String token = prefs.getString(MTURK_TOKEN, null);
-        if (token == null) {
-            token = generateMTURKToken();
-            prefs.edit().putString(MTURK_TOKEN, token).commit();
+    public static String getVerifCode() {
+        String vCode = prefs.getString(VERIF_CODE, null);
+        if (vCode == null) {
+            vCode = getShortDeviceID();
+            prefs.edit().putString(VERIF_CODE, vCode).commit();
         }
-        return token;
+        return vCode;
     }
-
-
-    /**
-     *
-     * @return true if the user marked "Yes" to the askMTURKStatus() dialog question.
-     */
-    public static boolean isMTURKUser() {
-        return prefs.getBoolean(MTURK_STATUS, false);
-    }
-
 
 
     /**

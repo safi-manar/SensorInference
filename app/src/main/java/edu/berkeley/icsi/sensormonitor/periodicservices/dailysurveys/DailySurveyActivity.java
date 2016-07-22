@@ -35,6 +35,7 @@ public class DailySurveyActivity extends Activity {
         Log.d("DailySurveyActivity: ", "Entered deadline activity. Prompting dialog.");
         AlertDialog dailySurveyDialog = createDailySurveyDialog();
         dailySurveyDialog.show();
+        PreferencesWrapper.setOverlayFlagged();
     }
 
 
