@@ -1,49 +1,36 @@
 <resources>
     <string name="app_name">Sensor Monitor</string>
 
-    <string name="title_section1">Info</string>
-    <string name="title_section2">Settings</string>
-    <string name="title_section3">Feedback</string>
 
+    <!--For DailySurveyService and DailySurveyActivity-->
+    <string name="dailysurvey_message_title">Daily Survey</string>
+    <string name="dailysurvey_message">
+        As part of your participation in the UCB Sensor Inference Study, we would like to give you a short survey
+        that will take 1-2 minutes of your time. \n\n
 
-    <!--MTURK: For the token inquiry and confirmation dialogs -->
-
-    <string name="MTURK_inquiry_title">MTURK?</string>
-    <string name="MTURK_inquiry">Were you prompted to install this app from Amazon MTURK?
-
-        \n\n<b>Please note: We will not be able to pay you for your participation without properly answering this question.</b>
-
+        Though every daily survey is optional, you will be given a <b>$1 bonus</b> for each daily survey you complete. \n
+        Would you like to complete today\'s survey?
     </string>
-    <!--MTURK: For choosing Yes -->
-    <string name="yes">Yes</string>
-    <string name="MTURK_verification_title">Your MTURK Token</string>
-    <string name="MTURK_verification_confirm">I have entered my MTURK token!</string>
-    <string name="MTURK_verification_message">Your MTURK token is printed below.
-        \nYou will need to enter
-        this token on the Amazon MTURK page to get your payment!
-        \n\n\t
+    <string name="dailysurvey_yes">Yes!</string>
+    <string name="dailysurvey_no">Not today.</string>
+    <string name="dailysurvey_postpone">Remind me in an hour.</string>
+    <string name="daily_gdocs_url">https://docs.google.com/forms/d/1dHLJ3T6ljC0-6-ct_dW_PAgYmhaPtcIWeyl_Pq47QEQ/viewform?entry.1826764866=</string>
+
+
+    <!-- For DeadlineService and DeadlineActivity-->
+    <string name="uninstall_message_title">UCB Sensor Research Complete!</string>
+    <string name="uninstall_message">
+        Thank you for participating in our research project! \n\n
+        One week has passed since you installed our app, so you are officially done with your participation.
+        You can now proceed to uninstall the app.
     </string>
-    <!--MTURK: For choosing No -->
-    <string name="no">No</string>
-    <string name="MTURK_confirm_title">Confirm MTURK Status</string>
-
-    <string name="MTURK_confirm_message">
-        \nYou marked that you were <b>not</b> redirected to this app from MTURK.
-
-        \n\nPlease confirm that this is correct.
-    </string>
-
-    <string name="correct">CORRECT</string>
-    <string name="incorrect">INCORRECT</string>
+    <string name="uninstall_proceed_button">Proceed to Uninstall</string>
 
 
-    <!--For the Agreement consent dialog-->
 
-    <string name="agree">Agree</string>
-    <string name="cancel">Cancel</string>
-
-    <string name="agreement_title">Consent to Participate in Research\n Understanding Smartphone Sensors</string>
-    <string name="agreement_message">
+    <!--ConsentActivity-->
+    <string name="consent_title">Consent to Participate in Research\n Understanding Smartphone Sensors</string>
+    <string name="consent_message">
         \n<b>In order for you to understand your participation in this study, please read this
         entire disclosure.</b>
 
@@ -89,15 +76,39 @@
         \nsensor-inference@icsi.berkeley.edu
         \nComputer Science Department, UC Berkeley
         \nInternational Computer Science Institute
-
-
     </string>
+    <string name="consent_agree">AGREE</string>
+    <string name="consent_cancel">CANCEL</string>
 
+    <!--For PermissionsActivity-->
+
+    <string name="permissions_continue">CONTINUE</string>
+
+    <string name="permissions_explanation_title">Required Permissions</string>
+    <string name="permissions_explanation_1">
+        The app will now prompt you for the following two permissions:
+    </string>
+    <string name="permissions_explanation_2">
+        - \"Make and manage phone calls\"
+    </string>
+    <string name="permissions_explanation_3">
+        This permission is a misnomer. We will not be accessing your phone calls in any way. Rather, this permission
+        lets us determine whether you are on Wifi so that we can conserve your data usage.
+    </string>
+    <string name="permissions_explanation_4">
+        - \"Access this device\'s location\"
+    </string>
+    <string name="permissions_explanation_5">
+        We need this permission to collect periodic GPS data.
+    </string>
+    <string name="permissions_explanation_6">
+        You will need to accept these permissions to complete your participation in this study.
+    </string>
 
     <!-- For the Permission Denied dialog-->
 
-    <string name="denied_permission_title">Permissions Denied Warning</string>
-    <string name="denied_permission_response">
+    <string name="permission_denied_title">Permissions Denied Warning</string>
+    <string name="permission_denied_response">
         You chose to deny permissions that this app needs to collect data.\n
         Please recall that the app will not collect any personally identifiable information besides GPS. All data
         that is collected will be stored securely.\n\n
@@ -106,78 +117,66 @@
 
         The app will now close. If this is a mistake, you may restart the app and accept the permissions.
     </string>
-    <string name="ok">Ok</string>
+    <string name="permission_denied_ok">Ok</string>
 
 
-    <!-- For the survey form prompt dialog-->
 
-    <string name="survey_form_title">Required Survey Form</string>
+    <!--For SurveyRedirectActivity-->
 
-    <string name="survey_form_response">formResponse</string>
-    <string name="survey_form_message">
+    <string name="survey_redirect_message">
         You will now be directed to complete a short survey for some demographic information needed for this research.
-        As always, your data will be kept securely and confidentially.\n\n
+        As always, your data will be kept securely and confidentially.
+    </string>
+    <string name="survey_redirect_warning">
+        Please note: You will need to answer EVERY question in the survey in order to be considered for particpation
+        in this study. If you want to abstain from answering a question, choose the \"I prefer not to answer\" option.
+    </string>
+    <string name="survey_redirect_title">Required Survey</string>
 
-        <b>Please note: You will not be paid the $2.00 completion bonus without participating in this portion of the study.</b>\n\n
+    <!--For SurveyFormActivity-->
+    <string name="survey_form_response">formResponse</string>
+
+    <!--For VerificationActivity-->
+    <string name="verif_title">Your Verification Code</string>
+    <string name="verif_message_1">
+        Thank you for your participation. Your verification code is printed below.
+    </string>
+    <string name="verif_message_2">
+        Please keep this code for your own reference.
+    </string>
+    <string name="verif_code">ToBeReplacedDynamically</string> <!--Replaced dynamically-->
+
+
+    <!--For InfoActivity-->
+    <string name="info_main">This app is for a study at UC Berkeley to better understand smartphone sensors.
+        This app will log various sensor data over the course of one week.
+    </string>
+
+    <string name="info_verif_code">Verification Code: </string>
+    <string name="info_id">ID: </string>
+    <string name="info_build">Build: </string>
+
+    <string name="info_contact_label">Contact Info: </string>
+    <string name="info_contact_details_1">
+        Sensors Inference Project Team
+    </string>
+    <string name="info_contact_details_2">
+        sensor-inference@icsi.berkeley.edu
+    </string>
+    <string name="info_contact_details_3">
+        Computer Science Department, UC Berkeley
+        International Computer Science Institute
     </string>
 
 
-    <!--For the MTURK message on the MainActivity screen-->
 
-    <string name="MTURK_user_yes">
-        MTURK Status: <b>[ VERIFIED ]</b>
-        \n\nYou marked that you <b>are</b> an MTURK user and that you submitted your verification code on the MTURK HIT page.
-        \n<b><i>This information must be correct in order for you to receive your payment in the study.</i></b>
-        \nIf there is a mistake, please email <b>sensor-inference@icsi.berkeley.edu</b> and explain the case. Include your UUID
-        (printed above) in the email.
-    </string>
-
-    <string name="MTURK_user_no">
-        MTURK Status: <b>[ NOT VERIFIED ]</b>
-        \n\nYou marked that you <b>are not</b> an MTURK user and we have <b>not</b> collected a verification code on our MTURK HIT page.
-        \n<b><i>However, if you are indeed an MTURK user, we will need to correct this mistake ASAP for you to receive your payment
-            in the study.</i></b>
-        \nIf there is a mistake, please email <b>sensor-inference@icsi.berkeley.edu</b> and explain the case. Include your UUID
-        (printed above) in the email.
-    </string>
-
-
-    <!--For the daily survey dialog-->
-    <string name="dailysurvey_message_title">Daily Survey</string>
-    <string name="dailysurvey_message">
-        As part of your participation in the UCB Sensor Inference Study, we would like to give you a short survey
-        that will take 1-2 minutes of your time. \n\n
-
-        Though every daily survey is optional, you will be given a <b>$1 bonus</b> for each daily survey you complete. \n
-        Would you like to complete today\'s survey?
-    </string>
-    <string name="dailysurvey_yes">Yes!</string>
-    <string name="dailysurvey_no">Not today.</string>
-    <string name="dailysurvey_postpone">Remind me in an hour.</string>
-    <string name="daily_gdocs_url">https://docs.google.com/forms/d/1dHLJ3T6ljC0-6-ct_dW_PAgYmhaPtcIWeyl_Pq47QEQ/viewform?entry.1826764866=</string>
-
-
-    <!-- For the deadline notification uninstall prompt dialog-->
-
-    <string name="uninstall_message_title">UCB Sensor Research Complete!</string>
-    <string name="uninstall_message">
-        Thank you for participating in our research project! \n\n
-        One week has passed since you installed our app, so you are officially done with your participation.
-        You can now proceed to uninstall the app.
-    </string>
-    <string name="uninstall_proceed_button">Proceed to Uninstall</string>
-
-    <!-- For the MainActivity layout-->
-    <string name="info">This app is for a study at UC Berkeley to better understand smartphone sensors.
-        This application will log various sensor data over the course of one week.
-    </string>
 
 
     <!-- Survey settings -->
     <string name="gdocs_url">https://docs.google.com/forms/d/1rvRzCKcWDC-w6WKSMMpU8ZfljdOdOLXArqG1vVhFKeQ/viewform?entry.1826764866=</string>
 
     <!-- Auto-generated Git version DO NOT EDIT -->
-    <string name="app_version">561fd52</string>
+    <string name="app_version">b97d4e0</string>
 
 
     <!--                                                     -->
@@ -250,76 +249,8 @@
     <string name="title_activity_form">FormActivity</string>
 
 
-    <!--UIredesign-->
-    <string name="consent_agree">AGREE</string>
-    <string name="consent_cancel">CANCEL</string>
 
-    <string name="permissions_continue">CONTINUE</string>
 
-    <string name="permissions_explanation_title">Required Permissions</string>
-    <string name="permissions_explanation_1">
-        The app will now prompt you for the following two permissions:
-    </string>
-    <string name="permissions_explanation_2">
-        - \"Make and manage phone calls\"
-    </string>
-    <string name="permissions_explanation_3">
-        This permission is a misnomer. We will not be accessing your phone calls in any way. Rather, this permission
-        lets us determine whether you are on Wifi so that we can conserve your data usage.
-    </string>
-    <string name="permissions_explanation_4">
-        - \"Access this device\'s location\"
-    </string>
-    <string name="permissions_explanation_5">
-        We need this permission to collect periodic GPS data.
-    </string>
-    <string name="permissions_explanation_6">
-        You will need to accept these permissions to complete your participation in this study.
-    </string>
-
-    <string name="survey_redirect_message">
-        You will now be directed to complete a short survey for some demographic information needed for this research.
-        As always, your data will be kept securely and confidentially.
-    </string>
-
-    <string name="survey_redirect_warning">
-        Please note: You will need to answer EVERY question in the survey in order to be considered for particpation
-        in this study. If you want to abstain from answering a question, choose the \"I prefer not to answer\" option.
-    </string>
-
-    <string name="survey_redirect_title">Required Survey</string>
-
-    <string name="info_main">This app is for a study at UC Berkeley to better understand smartphone sensors.
-        This app will log various sensor data over the course of one week.
-    </string>
-
-    <string name="info_verif_code">Verification Code: </string>
-    <string name="info_id">ID: </string>
-    <string name="info_build">Build: </string>
-
-    <string name="info_contact_label">Contact Info: </string>
-    <string name="info_contact_details_1">
-        Sensors Inference Project Team
-    </string>
-    <string name="info_contact_details_2">
-        sensor-inference@icsi.berkeley.edu
-    </string>
-    <string name="info_contact_details_3">
-        Computer Science Department, UC Berkeley
-        International Computer Science Institute
-    </string>
-
-    <string name="verif_title">Your Verification Code</string>
-
-    <string name="verif_message_1">
-        Thank you for your participation. Your verification code is printed below.
-    </string>
-
-    <string name="verif_message_2">
-        Please keep this code for your own reference.
-    </string>
-
-    <string name="verif_code">ToBeReplacedDynamically</string> <!--Replaced dynamically-->
 
 
 </resources>

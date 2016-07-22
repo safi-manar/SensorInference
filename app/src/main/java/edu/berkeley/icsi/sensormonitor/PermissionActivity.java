@@ -94,15 +94,15 @@ public class PermissionActivity extends AppCompatActivity {
     private AlertDialog permissionDeniedDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
+        builder.setNeutralButton(R.string.permission_denied_ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 finishAffinity();
 
             }
         });
 
-        builder.setMessage(R.string.denied_permission_response)
-                .setTitle(R.string.denied_permission_title);
+        builder.setMessage(R.string.permission_denied_response)
+                .setTitle(R.string.permission_denied_title);
 
         // Prevent users from dismissing the dialog by tapping outside it
         builder.setCancelable(false);

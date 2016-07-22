@@ -107,7 +107,7 @@ public class MasterSwitch {
                 TimeConstants.LOCATION_PERIODIC_LENGTH,
                 locationPeriodicIntent);
 
-        Toast.makeText(app, "Alarms Set", Toast.LENGTH_SHORT).show();
+        Toast.makeText(app, "Survey submitted!", Toast.LENGTH_SHORT).show();
 
         // Note that the periodic started at this time
         PreferencesWrapper.updateLastAlarmTimestamp();
