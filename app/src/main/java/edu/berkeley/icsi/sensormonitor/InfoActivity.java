@@ -31,11 +31,11 @@ public class InfoActivity extends AppCompatActivity {
     private void updateVerification() {
         TextView verifView= (TextView) findViewById(R.id.info_verif_code);
 
-        String verif = "12345678";
+        String vCode = PreferencesWrapper.getVerifCode();
 
         String text = getString(R.string.info_verif_code);
         // Concat the verification code
-        text = text + " " + verif;
+        text = text + " " + vCode;
         verifView.setText(text);
     }
 

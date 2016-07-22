@@ -177,7 +177,7 @@
     <string name="gdocs_url">https://docs.google.com/forms/d/1rvRzCKcWDC-w6WKSMMpU8ZfljdOdOLXArqG1vVhFKeQ/viewform?entry.1826764866=</string>
 
     <!-- Auto-generated Git version DO NOT EDIT -->
-    <string name="app_version">cb61da4</string>
+    <string name="app_version">561fd52</string>
 
 
     <!--                                                     -->
@@ -319,7 +319,7 @@
         Please keep this code for your own reference.
     </string>
 
-    <string name="verif_code">12345678</string>
+    <string name="verif_code">ToBeReplacedDynamically</string> <!--Replaced dynamically-->
 
 
 </resources>

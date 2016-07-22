@@ -6,6 +6,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+
+import java.util.prefs.Preferences;
+
+import edu.berkeley.icsi.sensormonitor.utils.PreferencesWrapper;
 
 public class VerificationActivity extends AppCompatActivity {
 
@@ -14,6 +19,7 @@ public class VerificationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verification);
         programButtons(this);
+        updateVerification(PreferencesWrapper.getVerifCode());
     }
 
     private void programButtons(final Context context) {
@@ -29,6 +35,15 @@ public class VerificationActivity extends AppCompatActivity {
 
     }
 
+
+    /**
+     * Updates the Verification code textView object to display vCode
+     */
+    private void updateVerification(String vCode) {
+        TextView verifView= (TextView) findViewById(R.id.verif_code);
+        verifView.setText(vCode);
+
+    }
 
     /**
      * Override the back button so that the user cannot go back to the survey.

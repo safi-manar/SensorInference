@@ -22,7 +22,7 @@ public class PreferencesWrapper {
     private static final String ALARM_TIMESTAMP = "alarm_timestamp";
     private static final String FIRST_RUN = "first_run";
     private static final String DEVICE_ID = "device_id";
-    private static final String MTURK_ID = "mturk_id";
+    private static final String VERIF_CODE = "verif_code";
     private static final String MTURK_STATUS_VERIFIED = "mturk_status_verified";
     private static final String MTURK_STATUS = "mturk_status";
     private static final String MTURK_TOKEN = "mturk_token";
@@ -162,6 +162,19 @@ public class PreferencesWrapper {
         String[] blocks = id.split("-");  // The "-" symbol delimits the different UUID blocks
 
         return blocks[0];
+    }
+
+    /**
+     * Creates the verification code as the first block
+     * in the UUID.
+     */
+    public static String getVerifCode() {
+        String vCode = prefs.getString(VERIF_CODE, null);
+        if (vCode == null) {
+            vCode = getShortDeviceID();
+            prefs.edit().putString(VERIF_CODE, vCode).commit();
+        }
+        return vCode;
     }
 
     /**
