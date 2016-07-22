@@ -51,11 +51,6 @@
             </intent-filter>
         </receiver>
 
-        <activity
-            android:name=".FormActivity"
-            android:label="@string/title_activity_form"
-            android:theme="@style/AppTheme.NoActionBar" />
-
         <!-- For the Deadline Notification -->
         <service
             android:name=".periodicservices.deadline.DeadlineService"
