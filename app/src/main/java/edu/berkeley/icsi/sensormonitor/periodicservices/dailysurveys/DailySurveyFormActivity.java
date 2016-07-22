@@ -19,7 +19,7 @@ public class DailySurveyFormActivity extends AppCompatActivity {
         Intent i = getIntent();
 
         String deviceId = PreferencesWrapper.getDeviceID();
-        String formURL = getResources().getString(R.string.daily_survey_url);
+        String formURL = getResources().getString(R.string.daily_gdocs_url);
 
 
         WebViewClient webViewClient = getWebviewClient(this);

@@ -27,7 +27,7 @@ public class DailySurveyService extends IntentService {
     private void checkDeadline() {
         if (isPassedWindow()) {
             PreferencesWrapper.updateDailyDeadline();
-        } else if (isPassedDeadline() && !PreferencesWrapper.isGPSSpeedExceed30KMH()
+        } else if (isPassedDeadline() && !PreferencesWrapper.isGPSSpeedExceed20KPH()
                                     && !PreferencesWrapper.isDialogOverlayed()) {
             startDailySurveyActivity();
         }
