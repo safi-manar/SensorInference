@@ -27,7 +27,7 @@ public class SurveyFormActivity extends AppCompatActivity {
     /*Sets up the WebView in the layout to show the online survey page. */
     private void setWebView(Context context) {
         String deviceId = PreferencesWrapper.getDeviceID();
-        String formURL = getResources().getString(R.string.gdocs_url);
+        String formURL = getResources().getString(R.string.entry_survey_url);
 
         // Register the survey-complete receiver.
         registerSurveyReceiver();
