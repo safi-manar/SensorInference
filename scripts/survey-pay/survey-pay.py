@@ -16,16 +16,27 @@ def read_json(path):
     json_data = open(path).read()
     return json.loads(json_data)
 
-def get_valid_uuids(api_secrets):
+def get_uuid_mturkid_mapping(api_secrets):
     mtc = MTurkConnection(
         aws_access_key_id = api_secrets['mt_aws_key'],
         aws_secret_access_key = api_secrets['mt_aws_secret_key'],
         host = api_secrets['mt_host']
     )
 
-    print mtc.get_account_balance()
+    my_hit = None
+    for hit in mtc.get_all_hits():
+        if hit.Title == api_secrets['mt_hit_title']:
+            my_hit = hit
 
-    return
+    mapping = {}
+    if my_hit is not None:
+        id = my_hit.HITId
+        for assignment in mtc.get_assignments(id):
+            turk_id = assignment.WorkerId
+            uuid = assignment.answers[0][0].fields[0]
+            mapping[uuid] = turk_id
+
+    return mapping
 
 def process_survey_gizmo(api_secrets):
     client = SurveyGizmo(
@@ -81,5 +92,6 @@ def identify_uuid_and_processed(survey_id, client):
 args = parse_args()
 api_secrets = read_json(args.api_path)
 
-get_valid_uuids(api_secrets)
+uuids_mturkids = get_uuid_mturkid_mapping(api_secrets)
+print uuids_mturkids
 #process_survey_gizmo(api_secrets)
