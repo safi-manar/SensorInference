@@ -23,7 +23,7 @@ public class SurveyRedirectActivity extends AppCompatActivity {
         agreeButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Show the Survey Redirect Activity
-                Intent intent = new Intent(context, SurveyFormActivity.class);
+                Intent intent = new Intent(context, EntrySurveyFormActivity.class);
                 startActivity(intent);
             }
         });
