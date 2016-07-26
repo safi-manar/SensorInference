@@ -2,6 +2,7 @@ import argparse
 import json
 
 from surveygizmo import SurveyGizmo
+from boto.mturk.connection import MTurkConnection
 
 def parse_args():
     """Specify a parser for a single mandatory command-line argument"""
@@ -16,6 +17,14 @@ def read_json(path):
     return json.loads(json_data)
 
 def get_valid_uuids(api_secrets):
+    mtc = MTurkConnection(
+        aws_access_key_id = api_secrets['mt_aws_key'],
+        aws_secret_access_key = api_secrets['mt_aws_secret_key'],
+        host = api_secrets['mt_host']
+    )
+
+    print mtc.get_account_balance()
+
     return
 
 def process_survey_gizmo(api_secrets):
@@ -72,4 +81,5 @@ def identify_uuid_and_processed(survey_id, client):
 args = parse_args()
 api_secrets = read_json(args.api_path)
 
-process_survey_gizmo(api_secrets)
+get_valid_uuids(api_secrets)
+#process_survey_gizmo(api_secrets)
