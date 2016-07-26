@@ -15,19 +15,23 @@ public class DailySurveyFormActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_form);
+        setContentView(R.layout.activity_daily_survey_form);
         Intent i = getIntent();
 
+        setWebView(this);
+    }
+
+
+    /*Sets up the WebView in the layout to show the online survey page. */
+    private void setWebView(Context context) {
         String deviceId = PreferencesWrapper.getDeviceID();
         String formURL = getResources().getString(R.string.daily_survey_url);
 
-
-        WebViewClient webViewClient = getWebviewClient(this);
-        WebView webView = (WebView) findViewById(R.id.webView);
+        WebViewClient webViewClient = getWebviewClient(context);
+        WebView webView = (WebView) findViewById(R.id.daily_survey_view);
         webView.setWebViewClient(webViewClient);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl(formURL + deviceId);
-
     }
 
 

@@ -7,12 +7,12 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="edu.berkeley.icsi.sensormonitor.EntrySurveyFormActivity">
+    tools:context="edu.berkeley.icsi.sensormonitor.periodicservices.dailysurveys.DailySurveyFormActivity">
 
     <WebView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/survey_form_view"
+        android:id="@+id/daily_survey_view"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />

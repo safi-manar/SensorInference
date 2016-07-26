@@ -71,9 +71,7 @@
             android:name=".periodicservices.dailysurveys.DailySurveyActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-            android:name=".periodicservices.dailysurveys.DailySurveyFormActivity"
-            android:label="@string/title_activity_form"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".periodicservices.dailysurveys.DailySurveyFormActivity" />
 
         <!-- Refactored services and receivers -->
         <service
@@ -177,11 +175,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.berkeley.icsi.sensormonitor.ConsentActivity" />
         </activity>
-        <activity android:name=".SurveyFormActivity">
+        <activity android:name=".EntrySurveyFormActivity">
             android:parentActivityName=".SurveyRedirectActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="edu.berkeley.icsi.sensormonitor.SurveyFormActivity" />
+                android:value="edu.berkeley.icsi.sensormonitor.EntrySurveyFormActivity" />
         </activity>
         <activity android:name=".InfoActivity" />
         <activity android:name=".VerificationActivity"></activity>
