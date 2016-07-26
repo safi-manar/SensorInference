@@ -12,14 +12,13 @@ import android.webkit.WebViewClient;
 
 import edu.berkeley.icsi.sensormonitor.utils.MasterSwitch;
 import edu.berkeley.icsi.sensormonitor.utils.PreferencesWrapper;
-import edu.berkeley.icsi.sensormonitor.utils.TimeConstants;
 
-public class SurveyFormActivity extends AppCompatActivity {
+public class EntrySurveyFormActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_survey_form);
+        setContentView(R.layout.activity_entry_survey_form);
 
         setWebView(this);
     }
