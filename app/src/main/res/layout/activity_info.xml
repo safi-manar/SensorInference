@@ -96,4 +96,13 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/info_done_button"
+        android:id="@+id/info_done_button"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/info_details3"
+        android:layout_alignEnd="@+id/info_details3" />
+
 </RelativeLayout>

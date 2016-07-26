@@ -167,6 +167,8 @@
         International Computer Science Institute
     </string>
 
+    <string name="info_done_button">Done!</string>
+
 
 
 
@@ -178,7 +180,7 @@
 
 
     <!-- Auto-generated Git version DO NOT EDIT -->
-    <string name="app_version">6873e42</string>
+    <string name="app_version">9c82642</string>
 
 
     <!--                                                     -->
