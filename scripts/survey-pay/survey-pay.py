@@ -38,7 +38,7 @@ def get_uuid_mturkid_mapping(api_secrets):
 
     return mapping
 
-def process_survey_gizmo(api_secrets):
+def process_survey_gizmo(api_secrets, id_mapping):
     client = SurveyGizmo(
         api_version = api_secrets['sm_api_version'],
         api_token = api_secrets['sm_api_key'],
@@ -51,11 +51,16 @@ def process_survey_gizmo(api_secrets):
     entry_survey_id = [survey['id'] for survey in survey_data if survey['title'] == api_secrets['sm_entry_survey_title']][0]
     daily_survey_id = [survey['id'] for survey in survey_data if survey['title'] == api_secrets['sm_daily_survey_title']][0]
 
-    process_entry_survey(entry_survey_id, client)
+    valid_uuids = frozenset(id_mapping.keys())
+    entry_payments = process_survey(entry_survey_id, valid_uuids, client)
+    daily_payments = process_survey(daily_survey_id, valid_uuids, client)
 
-def process_entry_survey(entry_id, client):
-    """Return UUIDs that should be paid for submitting the entry survey. Mark those as processed."""
-    (uuid_id, processed_id) = identify_uuid_and_processed(entry_id, client)
+    print entry_payments
+    print daily_payments
+
+def process_survey(survey_id, valid_uuids, client):
+    """Return UUIDs that should be paid for submitting entry survey. Mark those as processed."""
+    (uuid_id, processed_id) = identify_uuid_and_processed(survey_id, client)
     uuid_field = '[question(%d), option(0)]' % uuid_id
     processed_field = '[question(%d), option(0)]' % processed_id
 
@@ -63,15 +68,21 @@ def process_entry_survey(entry_id, client):
                 .filter('status', '!=', 'Deleted') \
                 .filter(processed_field, '=', 'false') \
                 .filter(uuid_field, 'IS NOT NULL', '') \
-                .list(entry_id)
-    uuids = [response[uuid_field] for response in responses['data']]
+                .list(survey_id)
+    response_data = responses['data']
 
-    response_ids = [response['id'] for response in responses['data']]
-    for response_id in response_ids:
-        kwargs = {'data[%d][0]' % processed_id: 'true'}     # change the "processed" field from false to true
-        client.api.surveyresponse.update(entry_id, response_id, **kwargs)
+    processed = []
+    for response in response_data:
+        response_id = response['id']
+        uuid = response[uuid_field]
+        short_uuid = uuid.split('-')[0]
 
-    print uuids
+        if short_uuid in valid_uuids:
+            # kwargs = {'data[%d][0]' % processed_id: 'true'}     # change the "processed" field from false to true
+            # client.api.surveyresponse.update(survey_id, response_id, **kwargs)
+            processed.append(short_uuid)
+
+    return processed
 
 def identify_uuid_and_processed(survey_id, client):
     """Return the IDs for the hidden actions containing the "processed" flag and UUID """
@@ -93,5 +104,4 @@ args = parse_args()
 api_secrets = read_json(args.api_path)
 
 uuids_mturkids = get_uuid_mturkid_mapping(api_secrets)
-print uuids_mturkids
-#process_survey_gizmo(api_secrets)
+process_survey_gizmo(api_secrets, uuids_mturkids)
