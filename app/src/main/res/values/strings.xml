@@ -176,8 +176,7 @@
     <!-- Survey settings -->
     <string name="entry_survey_url">https://www.surveygizmo.com/s3/2933242/Sensors-Inference-Entry-Survey?uuid=</string>
     <string name="daily_survey_url">https://www.surveygizmo.com/s3/2934943/Sensors-Inference-Daily-Activity-Survey?uuid=</string>
-
-
+    <string name="exit_survey_url">https://www.surveygizmo.com/s3/2950911/Sensors-Inference-Exit-Survey?uuid=</string>
 
     <!-- Auto-generated Git version DO NOT EDIT -->
     <string name="app_version">8ee72ba</string>

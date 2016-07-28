@@ -7,3 +7,4 @@ REQUIRES
 
 SURVEY ASSUMPTIONS
 - Surveys contain "uuid" and "processed" hidden actions
+- Amazon MTURK HIT page contains a single FreeText input for the app code (as configured by scripts/survey-setup/)
