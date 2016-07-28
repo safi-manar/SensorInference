@@ -82,8 +82,8 @@ def process_survey(survey_id, id_mapping):
         short_uuid = uuid.split('-')[0]
 
         if short_uuid in id_mapping.keys():
-            # kwargs = {'data[%d][0]' % processed_id: 'true'}     # change the "processed" field from false to true
-            # sg.api.surveyresponse.update(survey_id, response_id, **kwargs)
+            kwargs = {'data[%d][0]' % processed_id: 'true'}     # change the "processed" field from false to true
+            sg.api.surveyresponse.update(survey_id, response_id, **kwargs)
             processed.append(short_uuid)
 
     return processed
@@ -107,20 +107,21 @@ def pay_worker(worker_ids, assignment_mapping, is_bonus=False, amount_usd=0.0, s
     for worker_id in worker_ids:
         assignment_id = assignment_mapping[worker_id]
         if is_bonus:
-            # Send bonuses for daily and exit surveys
-            try:
-                mtk.grant_bonus(worker_id, assignment_id, Price(amount_usd), 'Thank you for completing the %s survey!' % survey_type)
-                log_message('Issued $%f bonus to worker %s for %s survey' % (amount_usd, worker_id, survey_type))
-            except MTurkRequestError as e:
-                log_message('Failed to send $%f bonus to worker %s for %s survey' % (amount_usd, worker_id, survey_type), level='ERROR')
+            # Log bonuses for daily and exit surveys
+            log_message('Issued $%f bonus to worker %s for %s survey' % (amount_usd, worker_id, survey_type))
+            log_message('assignment_id=%s,worker_id=%s,amount_usd=%f,survey_type=%s' % (assignment_id, worker_id, amount_usd, survey_type), level='BONUS')
+
         else:
-            # Approve assignment upon submission of the entry survey and app code
+            # Log assignment approval upon submission of the entry survey and app code
             try:
                 mtk.approve_assignment(assignment_id, \
                                        feedback='Thank you for completing the %s survey! Please participate in the daily and exit surveys to receive bonuses.' % survey_type)
+
                 log_message('Approved assignment %s given to worker %s for %s survey' % (assignment_id, worker_id, survey_type))
+                log_message('assignment_id=%s,worker_id=%s,survey_type=%s' % (assignment_id, worker_id, amount_usd, survey_type), level='APPROVE')
             except MTurkRequestError as e:
                 log_message('Failed to approve assignment %s to worker %s for %s survey' % (assignment_id, worker_id, survey_type), level='ERROR')
+                log_message('Exception "%s"' % str(e).replace('\r','').replace('\n',''), level='ERROR')
 
 def log_message(message, level='INFO'):
     """Print a message to the console with the timestamp"""
