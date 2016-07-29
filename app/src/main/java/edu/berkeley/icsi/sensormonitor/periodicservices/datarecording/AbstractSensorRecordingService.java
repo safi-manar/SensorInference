@@ -25,7 +25,7 @@ public abstract class AbstractSensorRecordingService extends AbstractRecordingSe
         EPOCH_NS,
         BOOT_MS,
         BOOT_NS,
-        ARBITRARY,
+        EPOCH_MS_AT_REPORTING,
     };
 
     private static final String VALUES_KEY = "values-%02d";
@@ -146,30 +146,25 @@ public abstract class AbstractSensorRecordingService extends AbstractRecordingSe
 
         Map<String, Object> timestampMap = new HashMap<>();
         long timestampMS = -1;
-        String timestampReadable = "";
         String timestampType = "";
 
         if(isBootMS) {
             timestampMS = epochMS - bootMS + eventTimestamp;
-            timestampReadable = DataTimeFormat.format(timestampMS);
             timestampType = TimestampType.BOOT_MS.name();
         } else if(isBootNS) {
             timestampMS = epochMS - bootMS + (eventTimestamp / (long) 1e6);  // ns to ms
-            timestampReadable = DataTimeFormat.format(timestampMS);
             timestampType = TimestampType.BOOT_NS.name();
         } else if(isEpochMS) {
             timestampMS = eventTimestamp;
-            timestampReadable = DataTimeFormat.format(timestampMS);
             timestampType = TimestampType.EPOCH_MS.name();
         } else if(isEpochNS) {
             timestampMS = eventTimestamp / (long)1e6; // ns to ms
-            timestampReadable = DataTimeFormat.format(timestampMS);
             timestampType = TimestampType.EPOCH_NS.name();
         } else if(isArbitrary) {
-            timestampMS = -1;   // Con't convert to epoch time
-            timestampReadable = ""; // Nothing to convert
-            timestampType = TimestampType.ARBITRARY.name();
+            timestampMS = epochMS;   // Just use the current time
+            timestampType = TimestampType.EPOCH_MS_AT_REPORTING.name();
         }
+        String timestampReadable = DataTimeFormat.format(timestampMS);
         timestampMap.put(super.TIMESTAMP_KEY, timestampMS);
         timestampMap.put(super.READABLE_TIME_KEY, timestampReadable);
         timestampMap.put(TIMESTAMP_RAW_KEY, eventTimestamp);
