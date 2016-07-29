@@ -70,8 +70,7 @@
         <activity
             android:name=".periodicservices.dailysurveys.DailySurveyActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity
-            android:name=".periodicservices.dailysurveys.DailySurveyFormActivity" />
+        <activity android:name=".periodicservices.dailysurveys.DailySurveyFormActivity" />
 
         <!-- Refactored services and receivers -->
         <service
@@ -160,7 +159,7 @@
             android:enabled="true"
             android:exported="false" />
 
-        <activity android:name=".ConsentActivity"></activity>
+        <activity android:name=".ConsentActivity" />
         <activity
             android:name=".PermissionActivity"
             android:parentActivityName=".ConsentActivity">
@@ -182,7 +181,9 @@
                 android:value="edu.berkeley.icsi.sensormonitor.EntrySurveyFormActivity" />
         </activity>
         <activity android:name=".InfoActivity" />
-        <activity android:name=".VerificationActivity"></activity>
+        <activity android:name=".VerificationActivity" />
+        <activity android:name=".periodicservices.deadline.ExitSurveyFormActivity" />
+        <activity android:name=".periodicservices.deadline.UninstallPromptActivity"></activity>
     </application>
 
 </manifest>

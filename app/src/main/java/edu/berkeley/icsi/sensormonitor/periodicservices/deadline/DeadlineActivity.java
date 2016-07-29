@@ -18,7 +18,7 @@ import edu.berkeley.icsi.sensormonitor.utils.MasterSwitch;
 
 
 /* DeadlineActivity is called when the timer has reached the deadline. It prompts the
-* user with a dialog that takes the user to uninstall the app.*/
+* user with a dialog to complete the exit survey, which will be followed by an uninstall prompt.*/
 public class DeadlineActivity extends Activity {
 
     @Override

@@ -16,7 +16,32 @@
     <string name="dailysurvey_postpone">Remind me in an hour.</string>
 
 
-    <!-- For DeadlineService and DeadlineActivity-->
+    <!-- For Deadline Package (DeadlineService/Activity, ExitSurveyForm, and UninstallPrompt)-->
+    <string name="deadline_message_title">UCB Sensor Research Almost Complete!</string>
+    <string name="deadline_message">
+        To complete your participation in our research study, please complete this brief,
+        mandatory exit survey.
+        \nAfter taking the survey, you will be directed to uninstall the app.
+
+        \n\n<b>Please note: You will not qualify for full, complete participation in this study
+        without completion of this exit survey!</b>
+    </string>
+    <string name="deadline_proceed_button">Proceed!</string>
+    <string name="deadline_postpone_button">Remind me in an hour.</string>
+    <string name="deadline_uninstall_button">Uninstall now.</string>
+
+    <string name="deadline_confirm_title">Are you sure?</string>
+    <string name="deadline_confirm_message">
+        If you do not complete the very brief exit survey, you will not be considered for
+        complete participation in the study.
+
+        \n\nAre you sure you want to skip the exit survey?
+
+    </string>
+    <string name="deadline_confirm_yes">Yes</string>
+    <string name="deadline_confirm_no">No</string>
+
+
     <string name="uninstall_message_title">UCB Sensor Research Complete!</string>
     <string name="uninstall_message">
         Thank you for participating in our research project! \n\n
@@ -24,7 +49,6 @@
         You can now proceed to uninstall the app.
     </string>
     <string name="uninstall_proceed_button">Proceed to Uninstall</string>
-
 
 
     <!--ConsentActivity-->
@@ -119,7 +143,6 @@
     <string name="permission_denied_ok">Ok</string>
 
 
-
     <!--For SurveyRedirectActivity-->
 
     <string name="survey_redirect_message">
@@ -168,9 +191,6 @@
     </string>
 
     <string name="info_done_button">Done!</string>
-
-
-
 
 
     <!-- Survey settings -->
@@ -250,10 +270,6 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="title_activity_form">FormActivity</string>
-
-
-
-
 
 
 </resources>

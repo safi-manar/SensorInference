@@ -36,7 +36,7 @@ public class DailySurveyFormActivity extends AppCompatActivity {
 
 
     /**
-     * Custom web client to let us override behaviour when the Google form has been submitted
+     * Custom web client to let us override behaviour when the survey form has been submitted
      */
     private WebViewClient getWebviewClient(final Context context) {
         return new WebViewClient() {
