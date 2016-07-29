@@ -1,5 +1,6 @@
 import argparse
 import os
+import shutil
 import json
 import csv
 
@@ -17,16 +18,39 @@ def sensor_headers():
     """Return a list of valid expected sensor headers in a database.json file"""
     return ['light', 'location', 'magmetic', 'power', 'pressure', 'proximity', 'rotation', 'screen', 'steps']
 
-def extract_to_temp(dump_path, batch_list):
-    """Extract compressed batched files to dump_path/temp"""
+def process_batch(dump_path, out_path, batch_list):
+    """Extract compressed batched files to dump_path/temp and generate CSVs for them"""
     temp_path = os.path.join(dump_path, 'temp')
     if not os.path.exists(temp_path):
         os.makedirs(temp_path)
 
+    # Extract
+    sensor = None
     for filename in batch_list:
+        if sensor is None:
+            sensor = filename.split('--')[0]
+
         zip = ZipFile(os.path.join(dump_path, filename), 'r')
         zip.extractall(temp_path)
         zip.close()
+
+    # Generate CSV
+    csv_file = open(os.path.join(out_path, '%s.csv' % sensor), 'wb')
+    csv_writer = csv.writer(csv_file)
+    extracted = [filename for filename in os.listdir(temp_path) if filename.startswith(sensor) and filename.endswith('json')]
+    batch_headers = None
+    for filename in extracted:
+        batch = read_json(os.path.join(temp_path, filename))
+        for batch_num in batch.keys():
+            batch_data = batch[batch_num]
+            if batch_headers is None:
+                batch_headers = list(batch_data.keys())
+                csv_writer.writerow(batch_headers)
+            data_row = [batch_data[header] for header in batch_headers]
+            csv_writer.writerow(data_row)
+
+    # Clean up
+    shutil.rmtree(temp_path)
 
 def read_json(path):
     """Return a dict representation of a JSON file"""
@@ -44,29 +68,28 @@ is_folder = os.path.isdir(dump_path)
 has_database = is_folder and os.path.exists(db_path) and os.path.isfile(db_path)
 is_valid = is_folder and has_database
 
+if not os.path.exists(out_path):
+    os.makedirs(out_path)
+
 # Process valid folders
 if is_valid:
-    # Check for and extract any batched data
+    # Check for any batched data
     sensor_headers = sensor_headers()
     file_list = os.listdir(dump_path)
     batched_accel = [filename for filename in file_list if filename.startswith('accelerometer') and filename.endswith('zip')]
     batched_gyro = [filename for filename in file_list if filename.startswith('gyroscope') and filename.endswith('zip')]
 
-#   if len(batched_accel) == 0:
-#       sensor_headers.append('accelerometer')
-#   else:
-#       extract_to_temp(dump_path, batched_accel)
-#   if len(batched_gyro) == 0:
-#       sensor.headers.append('gyroscope')
-#   else:
-#       extract_to_temp(dump_path, batched_gyro)
+    if len(batched_accel) == 0:
+        sensor_headers.append('accelerometer')
+    else:
+        process_batch(dump_path, out_path, batched_accel)
+    if len(batched_gyro) == 0:
+        sensor.headers.append('gyroscope')
+    else:
+        process_batch(dump_path, out_path, batched_gyro)
 
     # Read in the database and generate CSVs for the sensors
     db = read_json(db_path)
-
-    if not os.path.exists(out_path):
-        os.makedirs(out_path)
-
     present_sensors = [sensor for sensor in sensor_headers if sensor in db.keys()]
     for sensor in present_sensors:
         sensor_data = db[sensor]
