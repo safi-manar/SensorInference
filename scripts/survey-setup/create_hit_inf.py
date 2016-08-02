@@ -19,7 +19,7 @@ question = '''<?xml version="1.0"?>
 
             <p>&#160;</p>
 
-            <p>Participants will need to enter the app-generated code upon completion of the entry survey. <em><strong>This is necessary to ensure payment.</strong></em></p>
+            <p>Participants need to enter the app-generated code upon completion of the entry survey. <em><strong>This is necessary to ensure payment. Bonus payments depend on this, so please do not generate a new one by reinstalling the app.</strong></em></p>
 
             <p align="center"><img src="http://i.imgur.com/zSs896i.png" alt="App code example"/></p>
 
