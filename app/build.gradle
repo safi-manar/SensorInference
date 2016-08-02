@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "edu.berkeley.icsi.sensormonitor"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 23
         versionCode 1
     }
