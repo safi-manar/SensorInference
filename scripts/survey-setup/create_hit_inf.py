@@ -40,7 +40,7 @@ question = '''<?xml version="1.0"?>
                 <tbody>
                     <tr>
                         <td><strong>Google Play Store link (requires Android 5.0 or higher):</strong></td>
-                        <td><a href="https://github.com/safi-manar/SensorInference" target="_blank">https://github.com/safi-manar/SensorInference</a></td>
+                        <td><a href="https://play.google.com/apps/testing/edu.berkeley.icsi.sensormonitor" target="_blank">https://play.google.com/apps/testing/edu.berkeley.icsi.sensormonitor</a></td>
                     </tr>
                 </tbody>
             </table>
