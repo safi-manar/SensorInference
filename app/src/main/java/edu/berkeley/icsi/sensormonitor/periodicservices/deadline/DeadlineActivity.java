@@ -46,6 +46,8 @@ public class DeadlineActivity extends Activity {
         builder.setNeutralButton(R.string.deadline_postpone_button, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 PreferencesWrapper.postponeUninstallDeadline();
+                moveTaskToBack(true);
+                finish();
             }
         });
         builder.setNegativeButton(R.string.deadline_uninstall_button, new DialogInterface.OnClickListener() {
