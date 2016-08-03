@@ -21,6 +21,7 @@ public class TimeConstants {
 
     // App lifespan until uninstallation
     public static long DEADLINE_LENGTH = ONE_DAY * 7;
+    public static long UNINSTALL_POSTPONEMENT = ONE_HOUR;
 
     // Final moments of app lifespan when policies may change (e.g., wifi upload only -> upload on cell)
     public static long PRE_DEADLINE_WINDOW = ONE_HOUR;

@@ -59,7 +59,7 @@
 
         <activity
             android:name=".periodicservices.deadline.DeadlineActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
 
         <!-- For the Daily Survey Notification -->
         <service
@@ -183,7 +183,9 @@
         <activity android:name=".InfoActivity" />
         <activity android:name=".VerificationActivity" />
         <activity android:name=".periodicservices.deadline.ExitSurveyFormActivity" />
-        <activity android:name=".periodicservices.deadline.UninstallPromptActivity"></activity>
+        <activity android:name=".periodicservices.deadline.UninstallPromptActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+        </activity>
     </application>
 
 </manifest>

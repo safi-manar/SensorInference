@@ -77,6 +77,13 @@ public class PreferencesWrapper {
     }
 
     /**
+     * Adds UNINSTALL_POSTPONEMENT to the uninstall deadline.
+     */
+    public static void postponeUninstallDeadline() {
+        prefs.edit().putLong(UNINSTALL_DEADLINE, getUninstallDeadline() + TimeConstants.UNINSTALL_POSTPONEMENT).commit();
+    }
+
+    /**
      *
      * @return The timestamp in milliseconds when the last alarm occurred. 0 if unset.
      */

@@ -34,7 +34,7 @@ public class ExitSurveyFormActivity extends AppCompatActivity {
         registerSurveyReceiver();
 
         WebViewClient webViewClient = getWebviewClient(context);
-        WebView webView = (WebView) findViewById(R.id.daily_survey_view);
+        WebView webView = (WebView) findViewById(R.id.exit_survey_view);
         webView.setWebViewClient(webViewClient);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl(formURL + deviceId);
@@ -83,16 +83,13 @@ public class ExitSurveyFormActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
 
 
-            // Sensor data collection has begun. Now begin a one-week countdown.
-            PreferencesWrapper.setUninstallDeadline();
-            // Also, set today's daily survey deadline
-            PreferencesWrapper.setInitialDailyDeadline();
-            //Now that the user has completed the form, sensor data collection can begin.
-            MasterSwitch.on(context);
+            // Clear out timers, active sensors, and receivers
+            MasterSwitch.off(context);
 
-            // Now, show the user the Verification Activity.
-            Intent verificationIntent = new Intent(context, VerificationActivity.class);
-            startActivity(verificationIntent);
+
+            // Now, show the user the Uninstall Prompt Activity.
+            Intent uninstallIntent = new Intent(context, UninstallPromptActivity.class);
+            startActivity(uninstallIntent);
         }
     };
 
