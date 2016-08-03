@@ -68,13 +68,6 @@
         \n\nYour participation in this study will involve <b>1 required survey</b> in addition to
         brief daily optional surveys.
 
-        \n\nFor Amazon MTURK participants:
-
-        \n\n- $0.25 for downloading and installing the app
-        \n- $1 for each daily survey you submit
-        \n- $2 for 1 week complete participation in the study
-
-
         \n\nThis research will not benefit you directly. However, it will indirectly benefit you and other
         smartphone users by informing system designers of the data implications from benign sensors.
 
@@ -97,6 +90,7 @@
 
         \n\n<b>Sensors Inference Project Team</b>
         \nsensor-inference@icsi.berkeley.edu
+        \n<a href="https://blues.cs.berkeley.edu/sensor-inference">https://blues.cs.berkeley.edu/sensor-inference</a>
         \nComputer Science Department, UC Berkeley
         \nInternational Computer Science Institute
     </string>
