@@ -35,7 +35,7 @@ public class DailySurveyActivity extends Activity {
         Log.d("DailySurveyActivity: ", "Entered deadline activity. Prompting dialog.");
         AlertDialog dailySurveyDialog = createDailySurveyDialog();
         dailySurveyDialog.show();
-        PreferencesWrapper.setOverlayFlagged();
+        PreferencesWrapper.setDailyOverlayFlagged();
     }
 
 
@@ -51,7 +51,7 @@ public class DailySurveyActivity extends Activity {
 
         builder.setPositiveButton(R.string.dailysurvey_yes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                PreferencesWrapper.setOverlayUnFlagged();
+                PreferencesWrapper.setDailyOverlayUnFlagged();
                 // Assume the user finishes the survey. Update the schedule.
                 PreferencesWrapper.updateDailyDeadline();
                 // Now show the WebView FormActivity
@@ -62,14 +62,16 @@ public class DailySurveyActivity extends Activity {
 
         builder.setNeutralButton(R.string.dailysurvey_postpone, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                PreferencesWrapper.setOverlayUnFlagged();
+                PreferencesWrapper.setDailyOverlayUnFlagged();
                 postponeDeadline();
+                //moveTaskToBack(true);
+                //finish();
             }
         });
 
         builder.setNegativeButton(R.string.dailysurvey_no, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                PreferencesWrapper.setOverlayUnFlagged();
+                PreferencesWrapper.setDailyOverlayUnFlagged();
                 skipTodaySurvey();
             }
         });

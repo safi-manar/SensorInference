@@ -222,7 +222,7 @@ public class PreferencesWrapper {
      * @return true if there is currently a DailySurveyActivity dialog overlayed;
      * ie, if the user has yet to interact with the current DailySurvey dialog.
      */
-    public static boolean isDialogOverlayed() {
+    public static boolean isDailyDialogOverlayed() {
         return prefs.getBoolean(DAILY_SURVEY_OVERLAY, false);
     }
 
@@ -230,17 +230,40 @@ public class PreferencesWrapper {
      * Represent the DailySurvey dialog as being currently overlayed on the screen
      * and that the user has yet to interact with it.
      */
-    public static void setOverlayFlagged() {
+    public static void setDailyOverlayFlagged() {
         prefs.edit().putBoolean(DAILY_SURVEY_OVERLAY, true).commit();
     }
 
     /**
      * Represent the DailySurvey dialog as no longer overlayed on the screen
      */
-    public static void setOverlayUnFlagged() {
+    public static void setDailyOverlayUnFlagged() {
         prefs.edit().putBoolean(DAILY_SURVEY_OVERLAY, false).commit();
     }
 
+
+    /**
+     * @return true if there is currently a Deadline dialog overlayed;
+     * ie, if the user has yet to interact with the current Deadline dialog.
+     */
+    public static boolean isDeadlineDialogOverlayed() {
+        return prefs.getBoolean(DAILY_SURVEY_OVERLAY, false);
+    }
+
+    /**
+     * Represent the Deadline dialog as being currently overlayed on the screen
+     * and that the user has yet to interact with it.
+     */
+    public static void setDeadlineOverlayFlagged() {
+        prefs.edit().putBoolean(DAILY_SURVEY_OVERLAY, true).commit();
+    }
+
+    /**
+     * Represent the Deadline dialog as no longer overlayed on the screen
+     */
+    public static void setDeadlineOverlayUnFlagged() {
+        prefs.edit().putBoolean(DAILY_SURVEY_OVERLAY, false).commit();
+    }
 
     /**
      * Store a distance and time between GPS coordinates

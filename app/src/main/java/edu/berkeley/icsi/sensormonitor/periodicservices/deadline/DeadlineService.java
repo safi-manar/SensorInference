@@ -34,7 +34,8 @@ public class DeadlineService extends IntentService {
 
     /*Checks the current time against the deadline time.*/
     private void checkDeadline() {
-        if (isPassedDeadline() && !PreferencesWrapper.isGPSSpeedExceed20KPH()) {
+        if (isPassedDeadline() && !PreferencesWrapper.isGPSSpeedExceed20KPH()
+                && !PreferencesWrapper.isDeadlineDialogOverlayed()) {
             startDeadlineActivity();
         }
     }

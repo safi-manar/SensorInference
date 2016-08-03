@@ -35,6 +35,7 @@ public class DeadlineActivity extends Activity {
     private void promptExitSurveyDialog() {
         AlertDialog exitSurveyDialog = createExitSurveyDialog();
         //exitSurveyDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        PreferencesWrapper.setDeadlineOverlayFlagged();
         exitSurveyDialog.show();
 
     }
@@ -45,6 +46,7 @@ public class DeadlineActivity extends Activity {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setNeutralButton(R.string.deadline_postpone_button, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+                PreferencesWrapper.setDeadlineOverlayUnFlagged();
                 PreferencesWrapper.postponeUninstallDeadline();
                 moveTaskToBack(true);
                 finish();
@@ -52,12 +54,14 @@ public class DeadlineActivity extends Activity {
         });
         builder.setNegativeButton(R.string.deadline_uninstall_button, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+                PreferencesWrapper.setDeadlineOverlayUnFlagged();
                 Intent intent = new Intent(context, UninstallPromptActivity.class);
                 startActivity(intent);
             }
         });
         builder.setPositiveButton(R.string.deadline_proceed_button, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+                PreferencesWrapper.setDeadlineOverlayUnFlagged();
                 Intent intent = new Intent(context, ExitSurveyFormActivity.class);
                 startActivity(intent);
             }
