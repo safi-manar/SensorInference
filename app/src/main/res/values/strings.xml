@@ -157,7 +157,7 @@
     </string>
     <string name="survey_redirect_warning">
         Please note: You will need to answer EVERY question in the survey in order to be considered for particpation
-        in this study. If you want to abstain from answering a question, choose the \"I prefer not to answer\" option.
+        in this study.
     </string>
     <string name="survey_redirect_title">Required Survey</string>
 
@@ -205,7 +205,7 @@
     <string name="exit_survey_url">https://www.surveygizmo.com/s3/2950911/Sensors-Inference-Exit-Survey?uuid=</string>
 
     <!-- Auto-generated Git version DO NOT EDIT -->
-    <string name="app_version">ba310c1</string>
+    <string name="app_version">78635a4</string>
 
 
     <!--                                                     -->
