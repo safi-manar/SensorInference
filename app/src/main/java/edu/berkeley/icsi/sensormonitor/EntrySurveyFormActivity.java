@@ -52,7 +52,7 @@ public class EntrySurveyFormActivity extends AppCompatActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                if (url.contains(getString(R.string.survey_form_response))) {
+                if (url.contains(getString(R.string.survey_completion_keyword))) {
                     Intent intent = new Intent("survey-complete");
                     LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                 }

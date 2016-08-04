@@ -11,7 +11,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import edu.berkeley.icsi.sensormonitor.R;
-import edu.berkeley.icsi.sensormonitor.VerificationActivity;
 import edu.berkeley.icsi.sensormonitor.utils.MasterSwitch;
 import edu.berkeley.icsi.sensormonitor.utils.PreferencesWrapper;
 
@@ -63,7 +62,7 @@ public class ExitSurveyFormActivity extends AppCompatActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                if (url.contains(getString(R.string.survey_form_response))) {
+                if (url.contains(getString(R.string.survey_completion_keyword))) {
                     Intent intent = new Intent("exit-survey-complete");
                     LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                 }

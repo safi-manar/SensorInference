@@ -11,8 +11,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import edu.berkeley.icsi.sensormonitor.R;
-import edu.berkeley.icsi.sensormonitor.periodicservices.deadline.UninstallPromptActivity;
-import edu.berkeley.icsi.sensormonitor.utils.MasterSwitch;
 import edu.berkeley.icsi.sensormonitor.utils.PreferencesWrapper;
 
 public class DailySurveyFormActivity extends AppCompatActivity {
@@ -55,7 +53,7 @@ public class DailySurveyFormActivity extends AppCompatActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                if (url.contains(getString(R.string.survey_form_response))) {
+                if (url.contains(getString(R.string.survey_completion_keyword))) {
                     Intent intent = new Intent("daily-survey-complete");
                     LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                 }
@@ -85,7 +83,7 @@ public class DailySurveyFormActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
 
             // Now, show the user the Daily PostPage Activity.
-            Intent dailyPostIntent = new Intent(context, UninstallPromptActivity.class);
+            Intent dailyPostIntent = new Intent(context, DailyPostPageActivity.class);
             startActivity(dailyPostIntent);
         }
     };

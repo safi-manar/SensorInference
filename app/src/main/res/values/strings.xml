@@ -162,7 +162,7 @@
     <string name="survey_redirect_title">Required Survey</string>
 
     <!--For SurveyFormActivity-->
-    <string name="survey_form_response">processing</string>
+    <string name="survey_completion_keyword">processing</string>
 
     <!--For VerificationActivity-->
     <string name="verif_title">Your Verification Code</string>
