@@ -15,6 +15,18 @@
     <string name="dailysurvey_no">Not today.</string>
     <string name="dailysurvey_postpone">Remind me in an hour.</string>
 
+    <string name="dailypost_done">Done</string>
+    <string name="dailypost_info">Info Page</string>
+    <string name="dailypost_title">Today's Survey Complete!</string>
+    <string name="dailypost_messsage">
+        You have submitted today's survey!
+        \nYou will be prompted for a survey on each day for the remainder of the study.
+        \nThese surveys <b>greatly</b> benefit our research, so you are highly encouraged to participate in
+        each survey!
+        \n\nThank you, again, for your participation in the UC Berkeley Sensor Inference study.
+
+    </string>
+
 
     <!-- For Deadline Package (DeadlineService/Activity, ExitSurveyForm, and UninstallPrompt)-->
     <string name="deadline_message_title">UCB Sensor Research Almost Complete!</string>

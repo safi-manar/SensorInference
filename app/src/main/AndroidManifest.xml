@@ -11,22 +11,54 @@
 
     <!-- Limit to phones only -->
     <compatible-screens>
-        <screen android:screenSize="small" android:screenDensity="ldpi" />
-        <screen android:screenSize="small" android:screenDensity="mdpi" />
-        <screen android:screenSize="small" android:screenDensity="hdpi" />
-        <screen android:screenSize="small" android:screenDensity="xhdpi" />
-        <screen android:screenSize="small" android:screenDensity="420" />
-        <screen android:screenSize="small" android:screenDensity="480" />
-        <screen android:screenSize="small" android:screenDensity="560" />
-        <screen android:screenSize="small" android:screenDensity="640" />
-        <screen android:screenSize="normal" android:screenDensity="ldpi" />
-        <screen android:screenSize="normal" android:screenDensity="mdpi" />
-        <screen android:screenSize="normal" android:screenDensity="hdpi" />
-        <screen android:screenSize="normal" android:screenDensity="xhdpi" />
-        <screen android:screenSize="normal" android:screenDensity="420" />
-        <screen android:screenSize="normal" android:screenDensity="480" />
-        <screen android:screenSize="normal" android:screenDensity="560" />
-        <screen android:screenSize="normal" android:screenDensity="640" />
+        <screen
+            android:screenDensity="ldpi"
+            android:screenSize="small" />
+        <screen
+            android:screenDensity="mdpi"
+            android:screenSize="small" />
+        <screen
+            android:screenDensity="hdpi"
+            android:screenSize="small" />
+        <screen
+            android:screenDensity="xhdpi"
+            android:screenSize="small" />
+        <screen
+            android:screenDensity="420"
+            android:screenSize="small" />
+        <screen
+            android:screenDensity="480"
+            android:screenSize="small" />
+        <screen
+            android:screenDensity="560"
+            android:screenSize="small" />
+        <screen
+            android:screenDensity="640"
+            android:screenSize="small" />
+        <screen
+            android:screenDensity="ldpi"
+            android:screenSize="normal" />
+        <screen
+            android:screenDensity="mdpi"
+            android:screenSize="normal" />
+        <screen
+            android:screenDensity="hdpi"
+            android:screenSize="normal" />
+        <screen
+            android:screenDensity="xhdpi"
+            android:screenSize="normal" />
+        <screen
+            android:screenDensity="420"
+            android:screenSize="normal" />
+        <screen
+            android:screenDensity="480"
+            android:screenSize="normal" />
+        <screen
+            android:screenDensity="560"
+            android:screenSize="normal" />
+        <screen
+            android:screenDensity="640"
+            android:screenSize="normal" />
     </compatible-screens>
 
     <application
@@ -79,7 +111,7 @@
 
         <activity
             android:name=".periodicservices.deadline.DeadlineActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <!-- For the Daily Survey Notification -->
         <service
@@ -203,9 +235,10 @@
         <activity android:name=".InfoActivity" />
         <activity android:name=".VerificationActivity" />
         <activity android:name=".periodicservices.deadline.ExitSurveyFormActivity" />
-        <activity android:name=".periodicservices.deadline.UninstallPromptActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar">
-        </activity>
+        <activity
+            android:name=".periodicservices.deadline.UninstallPromptActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
+        <activity android:name=".periodicservices.dailysurveys.DailyPostPageActivity"></activity>
     </application>
 
 </manifest>
