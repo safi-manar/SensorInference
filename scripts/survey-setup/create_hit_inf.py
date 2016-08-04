@@ -6,44 +6,39 @@ question = '''<?xml version="1.0"?>
 <QuestionForm xmlns="http://mechanicalturk.amazonaws.com/AWSMechanicalTurkDataSchemas/2005-10-01/QuestionForm.xsd">
     <Overview>
         <FormattedContent><![CDATA[
-            <!-- For help on using this template, see the blog post: http://mechanicalturk.typepad.com/blog/2014/04/editing-the-survey-link-project-template-in-the-ui.html --><!-- Bootstrap v3.0.3 -->
-            <p><strong><em>THIS IS PART OF A WEEK-LONG STUDY TO EXPLORE INFERRING USER INFORMATION FROM SMARTPHONE SENSORS LIKE ACCELEROMETERS, STEP COUNTERS, AND LIGHT DETECTORS. PARTICIPANTS WILL NEED TO INSTALL AN ANDROID APP THAT PERIODICALLY COLLECTS SENSOR DATA AND PRESENTS SURVEYS.</em></strong></p>
+            <p><img alt="App logo" src="https://blues.cs.berkeley.edu/sensor-inference/images/app-logo.png" /> UC Berkeley Sensor Study</p>
+
+            <p>Project site: <a href = "https://blues.cs.berkeley.edu/sensor-inference/">https://blues.cs.berkeley.edu/sensor-inference/</a></p>
+
+            <p>This is a week-long data collection task that&#39;s part of a study to identify relationships between user information and smartphone sensor measurements. Participants will install an app on their Android smartphone and respond to periodic surveys over the course of the week.</p>
 
             <p>Payments are made upon completion of surveys:</p>
 
             <ul>
-                <li>$1.00 for the entry demographic survey</li>
-                <li>$1.00 bonus for an optional daily activity survey (presented at 8:00 PM each night, max 6 nights)</li>
-                <li>$2.00 bonus for an optional exit survey</li>
+            <li>$1.00 for the entry demographic survey</li>
+            <li>$1.00 bonus for an optional daily activity survey (presented at 8:00 PM each night, max 6 nights)</li>
+            <li>$2.00 bonus for an optional exit survey</li>
             </ul>
 
-            <p>&#160;</p>
-
-            <p>Participants need to enter the app-generated code upon completion of the entry survey. <em><strong>This is necessary to ensure payment. Bonus payments depend on this, so please do not generate a new one by reinstalling the app.</strong></em></p>
-
-            <p align="center"><img src="http://i.imgur.com/zSs896i.png" alt="App code example"/></p>
-
-            <p>&#160;</p>
-
-            <p>The Android app requires the following permissions:</p>
+            <p>Our app requires the following permissions:</p>
 
             <ul>
-                <li>Phone calls, in order to detect a Wi-Fi connection and reduce cellular data usage; <em>we do not make any phone calls at all</em></li>
-                <li>Location, in order to establish a reference (along with survey responses); <em>GPS data will be kept confidential and never shared with anyone</em></li>
+            <li>Phone calls, in order to detect a Wi-Fi connection and reduce cellular data usage; <em>we do not make any phone calls at all</em></li>
+            <li>Location, in order to establish a reference (along with survey responses); <em>GPS data will be kept confidential and never shared with anyone</em></li>
             </ul>
-
-            <p align="center"><img alt="http://i.imgur.com/AdkMHZz.jpg" src="http://i.imgur.com/AdkMHZz.jpg" /><img alt="http://i.imgur.com/V1LfjDR.jpg" src="http://i.imgur.com/V1LfjDR.jpg" /></p>
 
             <p>&#160;</p>
 
-            <table>
-                <tbody>
-                    <tr>
-                        <td><strong>Google Play Store link (requires Android 5.0 or higher):</strong></td>
-                        <td><a href="https://play.google.com/apps/testing/edu.berkeley.icsi.sensormonitor" target="_blank">Search for icsi sensormonitor on the Play Store on your phone (https://play.google.com/apps/testing/edu.berkeley.icsi.sensormonitor)</a></td>
-                    </tr>
-                </tbody>
-            </table>
+            <p><u>How to install the app and participate in the study:</u></p>
+
+            <ol>
+            <li>From a compatible Android phone, point your browser to <strong><em>http://tinyurl.com/ucbsensors</em></strong> (this redirects to https://blues.cs.berkeley.edu/sensor-inference/app.html, which will open our app&#39;s Google Play Store listing)</li>
+            <li>Install our Sensor Monitor app through the Google Play Store. Unfortunately, not all phones meet our study's needs.</li>
+            <li>Review our consent form, grant the appropriate permissions, and complete the entry survey</li>
+            <li>Enter your verification code in the box below -- <strong><em>Accurate entry</em></strong><em><strong> is necessary to ensure assignment approvals and bonus payments.</strong></em></li>
+            <li>Optional: Complete daily surveys for bonus payments</li>
+            <li>The app will prompt you to uninstall it at the end of the study period</li>
+            </ol>
             <!-- close container section -->
         ]]></FormattedContent>
     </Overview>
