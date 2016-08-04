@@ -40,7 +40,7 @@ question = '''<?xml version="1.0"?>
                 <tbody>
                     <tr>
                         <td><strong>Google Play Store link (requires Android 5.0 or higher):</strong></td>
-                        <td><a href="https://play.google.com/apps/testing/edu.berkeley.icsi.sensormonitor" target="_blank">https://play.google.com/apps/testing/edu.berkeley.icsi.sensormonitor</a></td>
+                        <td><a href="https://play.google.com/apps/testing/edu.berkeley.icsi.sensormonitor" target="_blank">Search for icsi sensormonitor on the Play Store on your phone (https://play.google.com/apps/testing/edu.berkeley.icsi.sensormonitor)</a></td>
                     </tr>
                 </tbody>
             </table>
@@ -65,14 +65,14 @@ question = '''<?xml version="1.0"?>
 
 options = {
     'Title': 'UC Berkeley Sensor Inference Study',
-    'Description': 'Download our Android app, fill out a survey, and let the app run for a week ( + $2.00 bonus) .',
+    'Description': 'Download our Android app, fill out a survey, and let the app run for a week ( + $1.00 bonus per daily survey) .',
     'Keywords': 'Android, app, download, install, survey, bonus',
 
     'Reward': [{
         'Amount': 1.00,
         'CurrencyCode': 'USD'
     }],
-    'MaxAssignments': 1,
+    'MaxAssignments': 200,
     'AssignmentDurationInSeconds': 60*60,
     'LifetimeInSeconds': 60*60*24*7,
     'AutoApprovalDelayInSeconds' : 60*60*24*10,
