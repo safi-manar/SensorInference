@@ -39,7 +39,9 @@
         android:layout_above="@+id/consent_agree_button"
         android:layout_alignRight="@+id/consent_agree_button"
         android:layout_alignEnd="@+id/consent_agree_button"
-        android:paddingTop="10dp">
+        android:paddingTop="10dp"
+        android:paddingLeft="1dp"
+        android:paddingRight="0dp">
 
         <LinearLayout
             android:orientation="vertical"
@@ -51,7 +53,7 @@
             android:layout_above="@+id/consent_agree_button">
 
             <ImageView
-                android:layout_width="373dp"
+                android:layout_width="match_parent"
                 android:layout_height="53dp"
                 android:id="@+id/imageView"
                 android:layout_below="@+id/consent_title"
@@ -63,7 +65,7 @@
                 android:layout_marginTop="20dp" />
 
             <TextView
-                android:layout_width="373dp"
+                android:layout_width="match_parent"
                 android:layout_height="1003dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="@string/consent_message"

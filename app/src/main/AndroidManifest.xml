@@ -111,7 +111,8 @@
 
         <activity
             android:name=".periodicservices.deadline.DeadlineActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:screenOrientation="portrait"/>
 
         <!-- For the Daily Survey Notification -->
         <service
@@ -121,8 +122,10 @@
 
         <activity
             android:name=".periodicservices.dailysurveys.DailySurveyActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name=".periodicservices.dailysurveys.DailySurveyFormActivity" />
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".periodicservices.dailysurveys.DailySurveyFormActivity"
+            android:screenOrientation="portrait"/>
 
         <!-- Refactored services and receivers -->
         <service
@@ -211,34 +214,43 @@
             android:enabled="true"
             android:exported="false" />
 
-        <activity android:name=".ConsentActivity" />
+        <activity android:name=".ConsentActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".PermissionActivity"
-            android:parentActivityName=".ConsentActivity">
+            android:parentActivityName=".ConsentActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.berkeley.icsi.sensormonitor.ConsentActivity" />
         </activity>
         <activity
             android:name=".SurveyRedirectActivity"
-            android:parentActivityName=".PermissionActivity">
+            android:parentActivityName=".PermissionActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.berkeley.icsi.sensormonitor.ConsentActivity" />
         </activity>
-        <activity android:name=".EntrySurveyFormActivity">
-            android:parentActivityName=".SurveyRedirectActivity">
+        <activity android:name=".EntrySurveyFormActivity"
+            android:parentActivityName=".SurveyRedirectActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.berkeley.icsi.sensormonitor.EntrySurveyFormActivity" />
         </activity>
-        <activity android:name=".InfoActivity" />
-        <activity android:name=".VerificationActivity" />
-        <activity android:name=".periodicservices.deadline.ExitSurveyFormActivity" />
+        <activity android:name=".InfoActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".VerificationActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".periodicservices.deadline.ExitSurveyFormActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".periodicservices.deadline.UninstallPromptActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
-        <activity android:name=".periodicservices.dailysurveys.DailyPostPageActivity"></activity>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".periodicservices.dailysurveys.DailyPostPageActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
