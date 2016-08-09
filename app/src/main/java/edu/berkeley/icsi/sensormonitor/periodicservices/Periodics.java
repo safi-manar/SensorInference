@@ -15,6 +15,7 @@ import edu.berkeley.icsi.sensormonitor.periodicservices.datarecording.ScreenReco
 import edu.berkeley.icsi.sensormonitor.periodicservices.datarecording.StepSensorRecordingService;
 import edu.berkeley.icsi.sensormonitor.periodicservices.datarecording.TemperatureSensorRecordingService;
 import edu.berkeley.icsi.sensormonitor.periodicservices.deadline.DeadlineService;
+import edu.berkeley.icsi.sensormonitor.periodicservices.keepalive.BootReceiverKeepAliveService;
 import edu.berkeley.icsi.sensormonitor.periodicservices.keepalive.FirebaseKeepAliveService;
 import edu.berkeley.icsi.sensormonitor.periodicservices.keepalive.GenericReceiverKeepAliveService;
 import edu.berkeley.icsi.sensormonitor.periodicservices.keepalive.StepSensorKeepAliveService;
@@ -28,6 +29,7 @@ public class Periodics {
             PeriodicTimeUpdateService.class,
 
             // To keep receivers and low-power sensors alive
+            BootReceiverKeepAliveService.class,
             GenericReceiverKeepAliveService.class,
             FirebaseKeepAliveService.class,
             StepSensorKeepAliveService.class,
@@ -58,6 +60,7 @@ public class Periodics {
     };
 
     public static final Class[] KEEP_ALIVE = new Class[] {
+            BootReceiverKeepAliveService.class,
             GenericReceiverKeepAliveService.class,
             FirebaseKeepAliveService.class,
             StepSensorKeepAliveService.class,

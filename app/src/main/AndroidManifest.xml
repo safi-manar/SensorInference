@@ -196,6 +196,10 @@
 
         <!-- keep-alive services -->
         <service
+            android:name=".periodicservices.keepalive.BootReceiverKeepAliveService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
             android:name=".periodicservices.keepalive.GenericReceiverKeepAliveService"
             android:enabled="true"
             android:exported="false" />
