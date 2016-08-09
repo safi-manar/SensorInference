@@ -8,7 +8,7 @@ android {
         applicationId "edu.berkeley.icsi.sensormonitor"
         minSdkVersion 21
         targetSdkVersion 23
-        versionCode 3
+        versionCode 4
     }
 
     buildTypes {
