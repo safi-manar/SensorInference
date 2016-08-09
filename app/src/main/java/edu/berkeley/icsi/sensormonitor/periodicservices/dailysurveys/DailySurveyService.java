@@ -39,7 +39,7 @@ public class DailySurveyService extends IntentService {
      * @return true if the current time is more than DAILY_SURVEY_WINDOW
      *          passed the DAILY_SURVEY_DEADLINE.
      */
-    private boolean isPassedWindow() {
+    public static boolean isPassedWindow() {
         long CurrentTime = System.currentTimeMillis();
         long threshold = PreferencesWrapper.getDailyDeadlineThreshold();
         return (System.currentTimeMillis() > (PreferencesWrapper.getDailyDeadlineThreshold()));
@@ -51,7 +51,7 @@ public class DailySurveyService extends IntentService {
      * @return true if the current time is passed the nominal (possibly postponed)
      *          daily deadline.
      */
-    private boolean isPassedDeadline() {
+    protected boolean isPassedDeadline() {
         long currentTime = System.currentTimeMillis();
         long deadlineTime = PreferencesWrapper.getDailyDeadline();
         return (currentTime > deadlineTime);

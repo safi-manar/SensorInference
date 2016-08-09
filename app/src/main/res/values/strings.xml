@@ -198,6 +198,21 @@
 
     <string name="info_done_button">Done!</string>
 
+    <string name="info_dailystatus_button">Check Today\'s Survey Status</string>
+
+    <string name="info_ok">Ok</string>
+    <string name="info_unavailable_title">Survey Currently Unavailable</string>
+    <string name="info_unavailable_message">
+        You are not eligible to take today\'s survey at the moment. This may be because:
+
+        \n\n1. You have already submitted today\'s survey. You must wait until 8PM tomorrow to submit another survey.
+        \n2. You have postponed the survey. Wait an hour before trying again.
+        \n3. It is not yet 8PM today.
+
+        \n\nDaily surveys become available for four hours starting at 8PM every day, and can only be submitted once a day.
+
+    </string>
+
 
     <!-- Survey settings -->
     <string name="entry_survey_url">https://www.surveygizmo.com/s3/2933242/Sensors-Inference-Entry-Survey?uuid=</string>
