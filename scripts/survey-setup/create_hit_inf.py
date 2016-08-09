@@ -10,21 +10,21 @@ question = '''<?xml version="1.0"?>
 
             <p>Project site: <a href = "https://blues.cs.berkeley.edu/sensor-inference/">https://blues.cs.berkeley.edu/sensor-inference/</a></p>
 
-            <p>This is a week-long data collection task that&#39;s part of a study to identify relationships between user information and smartphone sensor measurements. Participants will install an app on their Android smartphone and respond to periodic surveys over the course of the week.</p>
+            <p>This is a week-long data collection task that&#39;s part of a study to identify relationships between user information and smartphone sensor measurements. Participants will install an app on their Android smartphone for this HIT, and can respond to optional periodic surveys over the course of the week for bonuses.</p>
 
             <p>Payments are made upon completion of surveys:</p>
 
             <ul>
             <li>$1.00 for the entry demographic survey</li>
-            <li>$1.00 bonus for an optional daily activity survey (presented at 8:00 PM each night, max 6 nights)</li>
+            <li>$1.00 bonus for an optional daily activity survey (presented at around 8:00 PM each night, max 6 nights)</li>
             <li>$2.00 bonus for an optional exit survey</li>
             </ul>
 
             <p>Our app requires the following permissions:</p>
 
             <ul>
-            <li>Phone calls, in order to detect a Wi-Fi connection and reduce cellular data usage; <em>we do not make any phone calls at all</em></li>
-            <li>Location, in order to establish a reference (along with survey responses); <em>GPS data will be kept confidential and never shared with anyone</em></li>
+            <li>Phone calls, in order to detect a Wi-Fi connection and reduce cellular data usage; <strong><em>we do not make any phone calls</em></strong></li>
+            <li>Location, used with survey responses to test our models and predictions; <strong><em>GPS data will be kept confidential and never shared outside our research group</em></strong></li>
             </ul>
 
             <p>&#160;</p>
@@ -32,12 +32,12 @@ question = '''<?xml version="1.0"?>
             <p><u>How to install the app and participate in the study:</u></p>
 
             <ol>
-            <li>From a compatible Android phone, point your browser to <strong><em>http://tinyurl.com/ucbsensors</em></strong> (this redirects to https://blues.cs.berkeley.edu/sensor-inference/app.html, which will open our app&#39;s Google Play Store listing)</li>
-            <li>Install our Sensor Monitor app through the Google Play Store. Unfortunately, not all phones meet our study's needs.</li>
-            <li>Review our consent form, grant the appropriate permissions, and complete the entry survey</li>
-            <li>Enter your verification code in the box below -- <strong><em>Accurate entry</em></strong><em><strong> is necessary to ensure assignment approvals and bonus payments.</strong></em></li>
-            <li>Optional: Complete daily surveys for bonus payments</li>
-            <li>The app will prompt you to uninstall it at the end of the study period</li>
+            <li>From a compatible Android phone, point your browser to <strong><em>http://tinyurl.com/ucbsensors</em></strong>. This redirects to https://blues.cs.berkeley.edu/sensor-inference/app.html, which will open our app&#39;s Google Play Store listing.</li>
+            <li>Install our Sensor Monitor app through the Google Play Store. Unfortunately, we're unable to support all phone models, so you may not be able to participate if our software is unavailable for your device.</li>
+            <li>Review our consent form, grant the appropriate permissions, and complete the entry survey.</li>
+            <li>Enter your verification code in the box below. <strong><em>Accurate entry</em></strong><em><strong> is necessary to ensure assignment approvals and payments.</strong></em></li>
+            <li>Optional: complete daily surveys for bonus payments.</li>
+            <li>The app will present an exit survey and prompt you to uninstall it at the end of the study period.</li>
             </ol>
             <!-- close container section -->
         ]]></FormattedContent>
@@ -47,7 +47,7 @@ question = '''<?xml version="1.0"?>
         <DisplayName>App Code</DisplayName>
         <IsRequired>true</IsRequired>
 
-        <QuestionContent><Text>Enter your MTURK verification code here:</Text></QuestionContent>
+        <QuestionContent><Text>Enter the app-generated verification code here (shown after completing the in-app survey):</Text></QuestionContent>
         <AnswerSpecification>
             <FreeTextAnswer>
                 <Constraints><Length minLength="8" maxLength="8" /></Constraints>
