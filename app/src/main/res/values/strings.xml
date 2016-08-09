@@ -8,8 +8,10 @@
         As part of your participation in the UCB Sensor Inference Study, we would like to give you a short survey
         that will take 1-2 minutes of your time. \n\n
 
-        Though every daily survey is optional, you will be given a <b>$1 bonus</b> for each daily survey you complete. \n
-        Would you like to complete today\'s survey?
+        Though every daily survey is optional, these surveys greatly benefit our research and maximize your participation
+        in our study. You can manually check for daily survey eligibility by opening our app anytime and pressing the
+        status button. \n
+        Would you like to complete today\'s survey now?
     </string>
     <string name="dailysurvey_yes">Yes!</string>
     <string name="dailysurvey_no">Not today.</string>
@@ -142,7 +144,8 @@
         Please recall that the app will not collect any personally identifiable information besides GPS. All data
         that is collected will be stored securely.\n\n
 
-        <b>Please note: You will not be paid the $2.00 completion bonus without participating in this portion of the study.</b>\n\n
+        <b>Please note: You will not be considered for participation in this study with completion of this portion
+            of the study.</b>\n\n
 
         The app will now close. If this is a mistake, you may restart the app and accept the permissions.
     </string>
@@ -220,7 +223,7 @@
     <string name="exit_survey_url">https://www.surveygizmo.com/s3/2950911/Sensors-Inference-Exit-Survey?uuid=</string>
 
     <!-- Auto-generated Git version DO NOT EDIT -->
-    <string name="app_version">b755658</string>
+    <string name="app_version">4c5a243</string>
 
 
     <!--                                                     -->
