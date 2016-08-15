@@ -32,14 +32,13 @@ question = '''<?xml version="1.0"?>
             <p><u>How to install the app and participate in the study:</u></p>
 
             <ol>
-            <li>From a compatible Android phone, point your browser to <strong><em>http://tinyurl.com/ucbsensors</em></strong>. This redirects to https://blues.cs.berkeley.edu/sensor-inference/app.html, which will open our app&#39;s Google Play Store listing.</li>
+            <li>From a compatible Android phone, point your browser to <strong><em><a href = "http://tinyurl.com/ucbsensormon">http://tinyurl.com/ucbsensormon</a></em></strong>. This is a short link to our Google Play Store listing at <a href = "https://play.google.com/store/apps/details?id=edu.berkeley.icsi.sensormonitor">https://play.google.com/store/apps/details?id=edu.berkeley.icsi.sensormonitor</a> </li>
             <li>Install our Sensor Monitor app through the Google Play Store. Unfortunately, we're unable to support all phone models, so you may not be able to participate if our software is unavailable for your device.</li>
-            <li>Review our consent form, grant the appropriate permissions, and complete the entry survey.</li>
-            <li>Enter your verification code in the box below. <strong><em>Accurate entry</em></strong><em><strong> is necessary to ensure assignment approvals and payments.</strong></em></li>
+            <li>In the app, review our consent form, grant the appropriate permissions, and complete the entry survey.</li>
+            <li>Enter your verification code in the box below. <strong><em>Accurate entry is necessary to ensure assignment approvals and payments.</strong></em></li>
             <li>Optional: complete daily surveys for bonus payments.</li>
             <li>The app will present an exit survey and prompt you to uninstall it at the end of the study period.</li>
             </ol>
-            <!-- close container section -->
         ]]></FormattedContent>
     </Overview>
     <Question>
@@ -60,7 +59,7 @@ question = '''<?xml version="1.0"?>
 
 options = {
     'Title': 'UC Berkeley Sensor Inference Study',
-    'Description': 'Download our Android app, fill out a survey, and let the app run for a week ( + $1.00 bonus per daily survey) .',
+    'Description': 'Download our Android app, fill out a survey, and let the app run for a week (+ up to $8.00 in bonuses).',
     'Keywords': 'Android, app, download, install, survey, bonus',
 
     'Reward': [{
@@ -72,24 +71,22 @@ options = {
     'LifetimeInSeconds': 60*60*24*7,
     'AutoApprovalDelayInSeconds' : 60*60*24*10,
 
-    'QualificationRequirement': [{
+    'QualificationRequirement': [
+    {
         'QualificationTypeId': mturk.LOCALE,
         'Comparator': 'EqualTo',
         'LocaleValue': {
             'Country': 'US'
         },
         'RequiredToPreview': 'true'
-    }, {
+    }
+#    ,{
 #       'QualificationTypeId': mturk.P_APPROVED,
 #       'Comparator': 'GreaterThan',
 #       'IntegerValue': 95,
 #       'RequiredToPreview': 'true'
-#   }, {
-        'QualificationTypeId': mturk.ADULT,
-        'Comparator': 'EqualTo',
-        'IntegerValue': 1,
-        'RequiredToPreview': 'true'
-    }],
+#    }
+    ],
 
     'Question': question
 }

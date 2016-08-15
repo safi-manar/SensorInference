@@ -74,10 +74,10 @@
         \n\nThis app is part of a study to explore the possibility of inferring user information from
         benign smartphone sensors, like the step counter or compass.
 
-        \n\nThis app will silently collect periodic sensor measurements.It will also collect GPS data.
+        \n\nThis app will silently collect periodic sensor measurements. It will also collect GPS data.
         All collected data will be kept on our
         secure servers. The data will be maintained for possible future research. Only anonymous,
-        non-identifiable data (ie, not GPS) would be shared with other researchers. Data collection
+        non-identifiable data (i.e., not GPS) will be potentially shared with other researchers. Data collection
         will have minimal impact on your phone performance and battery life.
         \n\nYour participation in this study will involve <b>1 required survey</b> in addition to
         brief daily optional surveys.
@@ -89,8 +89,8 @@
         to answer and stop the study at any time. You may also uninstall the app at any time to stop
         the study.
 
-        \n\nIf you any survey content objectionable, you are free to abstain from answering or entirely
-        ending your participation in the study.
+        \n\nIf you find any survey content objectionable, you may choose to abstain from answering,
+        or even end your participation in the study entirely.
 
         \n\nThe risks for this study are minimal: these involve a potential breach of confidentiality for
         GPS data and other location data. We will encrypt data to decrease the probability of such a
@@ -170,7 +170,7 @@
     <!--For VerificationActivity-->
     <string name="verif_title">Your Verification Code</string>
     <string name="verif_message_1">
-        Thank you for your participation. Your verification code is printed below.
+        Thank you for your participation. Your verification code is displayed below.
     </string>
     <string name="verif_message_2">
         Please keep this code for your own reference.
