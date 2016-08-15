@@ -28,7 +28,8 @@ public class DailySurveyService extends IntentService {
         if (isPassedWindow()) {
             PreferencesWrapper.updateDailyDeadline();
         } else if (isPassedDeadline() && !PreferencesWrapper.isGPSSpeedExceed20KPH()
-                                    && !PreferencesWrapper.isDailyDialogOverlayed()) {
+                                    && !PreferencesWrapper.isDailyDialogOverlayed()
+                                    && PreferencesWrapper.isPastSixHoursSinceInstall()) {
             startDailySurveyActivity();
         }
     }
@@ -40,8 +41,6 @@ public class DailySurveyService extends IntentService {
      *          passed the DAILY_SURVEY_DEADLINE.
      */
     public static boolean isPassedWindow() {
-        long CurrentTime = System.currentTimeMillis();
-        long threshold = PreferencesWrapper.getDailyDeadlineThreshold();
         return (System.currentTimeMillis() > (PreferencesWrapper.getDailyDeadlineThreshold()));
     }
 

@@ -20,6 +20,7 @@ public class PreferencesWrapper {
     private static final String UNINSTALL_DEADLINE = "uninstall_deadline";
     private static final String ALARM_TIMESTAMP = "alarm_timestamp";
     private static final String FIRST_RUN = "first_run";
+    private static final String FIRST_RUN_TIME = "first_run_time";
     private static final String DEVICE_ID = "device_id";
     private static final String VERIF_CODE = "verif_code";
 
@@ -114,10 +115,22 @@ public class PreferencesWrapper {
     }
 
     /**
-     * Updates the "first run" preference to false
+     * Updates the "first run" preference to false and stores the current time
      */
     public static void setFirstRun() {
         prefs.edit().putBoolean(FIRST_RUN, false).commit();
+        prefs.edit().putLong(FIRST_RUN_TIME, System.currentTimeMillis());
+    }
+
+    /**
+     *
+     * @return True if it's been more than six hours since install
+     */
+    public static boolean isPastSixHoursSinceInstall() {
+        final long SIX_HOURS_IN_MILLIS = 1000 * 60 * 60 * 6;
+        long currentTime = System.currentTimeMillis();
+
+        return !isFirstRun() && currentTime - prefs.getLong(FIRST_RUN_TIME, 0l) >= SIX_HOURS_IN_MILLIS;
     }
 
     /**
