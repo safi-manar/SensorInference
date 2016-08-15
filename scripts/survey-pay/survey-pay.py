@@ -125,7 +125,7 @@ def pay_worker(worker_ids, assignment_mapping, is_bonus=False, amount_usd=0.0, s
 
 def log_message(message, level='INFO'):
     """Print a message to the console with the timestamp"""
-    current_time = datetime.datetime.now().time()
+    current_time = datetime.datetime.now()
     formatted_time = current_time.isoformat()
 
     print '(%s) %s -- %s' % (level, formatted_time, message)
