@@ -84,7 +84,7 @@ if is_valid:
     else:
         process_batch(dump_path, out_path, batched_accel)
     if len(batched_gyro) == 0:
-        sensor.headers.append('gyroscope')
+        sensor_headers.append('gyroscope')
     else:
         process_batch(dump_path, out_path, batched_gyro)
 
