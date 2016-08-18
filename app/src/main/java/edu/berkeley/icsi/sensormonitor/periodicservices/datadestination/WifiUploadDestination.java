@@ -91,10 +91,10 @@ public class WifiUploadDestination extends AbstractDataDestination {
 
     /**
      *
-     * @return True if the total size of the zip file cache exceeds 5 MBs
+     * @return True if the total size of the zip file cache exceeds 25 MBs
      */
     private boolean isCacheTooLarge() {
-        final int MAX_SIZE_MB = 5;
+        final int MAX_SIZE_MB = 25;
         final int MAX_SIZE_B = MAX_SIZE_MB * 1024 * 1024;
 
         File wifiCacheFolder = new File(appContext.getCacheDir(), CACHE_SUBDIR_NAME);

@@ -1,6 +1,7 @@
 package edu.berkeley.icsi.sensormonitor.periodicservices.datarecording;
 
 import android.hardware.Sensor;
+import android.os.Handler;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -12,6 +13,7 @@ import java.util.Map;
  */
 public class AccelerometerSensorRecordingService extends AbstractMotionSensorRecordingService {
     private static final List<Map<String, Object>> ACCELEROMETER_BATCH = Collections.synchronizedList(new LinkedList<Map<String, Object>>());
+    private static final Handler ACCELEROMETER_HANDLER = new Handler();
 
     public AccelerometerSensorRecordingService() {
         super("AccelerometerSensorRecordingService");
@@ -30,5 +32,10 @@ public class AccelerometerSensorRecordingService extends AbstractMotionSensorRec
     @Override
     protected List<Map<String, Object>> getStaticBatchBuffer() {
         return ACCELEROMETER_BATCH;
+    }
+
+    @Override
+    protected Handler getStaticHandler() {
+        return ACCELEROMETER_HANDLER;
     }
 }

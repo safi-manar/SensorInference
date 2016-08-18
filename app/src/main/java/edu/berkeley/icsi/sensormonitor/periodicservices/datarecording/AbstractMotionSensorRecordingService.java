@@ -1,5 +1,6 @@
 package edu.berkeley.icsi.sensormonitor.periodicservices.datarecording;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -7,10 +8,12 @@ import android.hardware.SensorEventListener2;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Handler;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,11 +26,10 @@ import edu.berkeley.icsi.sensormonitor.utils.TimeConstants;
  * Created by ioreyes on 6/22/16.
  */
 public abstract class AbstractMotionSensorRecordingService extends AbstractSensorRecordingService {
-    private static final int MAX_EVENTS_PER_PERIOD = (int) (TimeConstants.PERIODIC_LENGTH / TimeConstants.SENSOR_DATA_POLL_INTERVAL);
-    private static final int MAX_EVENTS_PER_PERIOD_WITH_TOLERANCE = (int) Math.floor(MAX_EVENTS_PER_PERIOD * 0.95);
-    private static final long MIN_INTERVAL_BETWEEN_EVENTS_WITH_TOLERANCE = (long) Math.floor(TimeConstants.SENSOR_DATA_POLL_INTERVAL * 0.75);
+    // Label for batch entries
     private static final String BATCH_KEY = "batch-%05d";
 
+    // Comparator used to sort events by their time
     private final Comparator<Map<String, Object>> BATCH_ENTRY_COMPARATOR = new Comparator() {
 
         @Override
@@ -49,7 +51,8 @@ public abstract class AbstractMotionSensorRecordingService extends AbstractSenso
             return 0;
         }
     };
-    private final Handler UNREGISTER_HANDLER = new Handler();
+
+    // Synchronization variables
     private boolean isFlushing = false;
 
     protected AbstractMotionSensorRecordingService(String subclassName) {
@@ -57,71 +60,15 @@ public abstract class AbstractMotionSensorRecordingService extends AbstractSenso
     }
 
     @Override
-    protected Map<String, Object> readData(Intent intent) {
+    protected final Map<String, Object> readData(Intent intent) {
         // Determine the FIFO length
         final SensorManager SENSOR_MANAGER = (SensorManager) getSystemService(SENSOR_SERVICE);
         Sensor sensor = SENSOR_MANAGER.getDefaultSensor(getSensorType());
-        int batchSize = getBatchSize(sensor);
+        int samplingPeriodMs = getSamplingPeriodMs();
+        int batchReportSize = getBatchReportSize(sensor, samplingPeriodMs);
 
-        if(batchSize > 0 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            final SensorEventListener2 BATCH_SENSOR_LISTENER = new SensorEventListener2() {
-                @Override
-                public void onFlushCompleted(Sensor sensor) {
-                    isFlushing = false;
-                }
-
-                @Override
-                public void onSensorChanged(SensorEvent sensorEvent) {
-                    Map<String, Object> data = processSensorData(sensorEvent);
-                    operateOnBatchBuffer(BatchOps.ADD, data);
-                }
-
-                @Override
-                public void onAccuracyChanged(Sensor sensor, int i) {
-
-                }
-            };
-            final Runnable UNREGISTER_RUNNABLE = new Runnable() {
-                @Override
-                public void run() {
-                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        long stopTime = System.currentTimeMillis() + TimeConstants.MAX_SENSOR_TIME;
-                        isFlushing = SENSOR_MANAGER.flush(BATCH_SENSOR_LISTENER);
-                        while(isFlushing && System.currentTimeMillis() < stopTime) {
-                            try {
-                                Thread.sleep(TimeConstants.SENSOR_DATA_POLL_INTERVAL);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        SENSOR_MANAGER.unregisterListener(BATCH_SENSOR_LISTENER);
-                        UNREGISTER_HANDLER.removeCallbacksAndMessages(null);
-                    }
-                }
-            };
-
-            // Flush and unregister any existing listeners
-            UNREGISTER_RUNNABLE.run();
-
-            // Make a copy of any existing data in the batch and reset it
-            Map<String, Object> previousBatch = getDownsampledBatch();
-            operateOnBatchBuffer(BatchOps.CLEAR, null);
-
-            // Set up the sensor to use the hardware FIFO batch queue
-            int samplingPeriodMs = (int)TimeConstants.SENSOR_DATA_POLL_INTERVAL;
-            int samplingPeriodUs = samplingPeriodMs * 1000;  // ms to us
-            int maxReportLatencyUs = samplingPeriodUs * batchSize;
-            int maxReportLatencyMs = maxReportLatencyUs / 1000; // us to ms
-            SENSOR_MANAGER.registerListener(BATCH_SENSOR_LISTENER,
-                                           sensor,
-                                           samplingPeriodUs,
-                                           maxReportLatencyUs);
-
-            // Schedule to flush and stop the sensor when it's expected to be full
-            UNREGISTER_HANDLER.postDelayed(UNREGISTER_RUNNABLE, maxReportLatencyMs);
-
-            // Return any data collected from the previous reporting cycle
-            return previousBatch;
+        if(batchReportSize > 0 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            return batch(sensor, batchReportSize, samplingPeriodMs);
         } else {
             // Do the default "snapshot" single data point collection if batching is unavailable
             return super.readData(intent);
@@ -129,21 +76,112 @@ public abstract class AbstractMotionSensorRecordingService extends AbstractSenso
     }
 
     /**
-     * Calculate the expected size of a batch, defined as either the reserved FIFO size for the
-     * sensor or the number of FIFO events that can occur within a periodic interval (with a small
-     * tolerance), whichever is less
-     * @param sensor
-     * @return Positive value to indicate the expected batch size, 0 if FIFO is unavailable or unsupported
+     *
+     * @return The time between consecutive sensor events, in milliseconds
      */
-    private int getBatchSize(Sensor sensor) {
-        // FIFO capability is only available for SDK level 19 and up
-        if(sensor != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+    protected int getSamplingPeriodMs() {
+        return (int) TimeConstants.SENSOR_DATA_POLL_INTERVAL;
+    }
+
+    /**
+     * Set up batch collection, and retrieve the results of the previous batch, if available
+     * @param sensor Sensor to collect data from
+     * @param batchReportSize The number of measurements in a batch
+     * @param samplingPeriodMs The minimum time between consecutive batch measurements
+     * @return The events from the previous batch, null if not available
+     */
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private Map<String, Object> batch(Sensor sensor, int batchReportSize, int samplingPeriodMs) {
+        // Compute batch sampling and reporting intervals
+        int samplingPeriodUs = samplingPeriodMs * 1000; // ms to us
+        int maxReportLatencyUs = samplingPeriodUs * batchReportSize;
+        final int maxReportLatencyMs = maxReportLatencyUs / 1000; // us to ms
+
+        // Set up a listener for sensor data and flush events
+        final SensorEventListener2 BATCH_SENSOR_LISTENER = new SensorEventListener2() {
+            @Override
+            public void onFlushCompleted(Sensor sensor) {
+                isFlushing = false;
+            }
+
+            @Override
+            public void onSensorChanged(SensorEvent sensorEvent) {
+                Map<String, Object> data = processSensorData(sensorEvent);
+                operateOnBatchBuffer(BatchOps.ADD, data);
+            }
+
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int i) {
+
+            }
+        };
+
+        // Implement explicit flushing of FIFO data and unregistering of listeners
+        final SensorManager SENSOR_MANAGER = (SensorManager) getSystemService(SENSOR_SERVICE);
+        final Runnable FLUSH_RUNNABLE = new Runnable() {
+            private Date creation = new Date();
+            private int delay = maxReportLatencyMs;
+
+            @Override
+            public void run() {
+                Log.d("FLUSH_RUNNABLE", String.format("Created %s | Ran %s", creation.toString(), new Date().toString()));
+                long stopTime = System.currentTimeMillis() + TimeConstants.MAX_SENSOR_TIME;
+                isFlushing = SENSOR_MANAGER.flush(BATCH_SENSOR_LISTENER);
+                while(isFlushing && System.currentTimeMillis() < stopTime) {
+                    try {
+                        Thread.sleep(getSamplingPeriodMs());
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                // Schedule to flush the sensor when it's (mostly) expected to be full
+                getStaticHandler().postDelayed(this, delay);
+            }
+        };
+
+        Log.d("BATCH", new Date().toString());
+
+        // Stop and flush any existing listeners
+        FLUSH_RUNNABLE.run();
+        getStaticHandler().removeCallbacksAndMessages(null);
+        SENSOR_MANAGER.unregisterListener(BATCH_SENSOR_LISTENER);
+
+        // Make a copy of any existing data in the batch and reset it
+        int minimumInterval = (int) Math.floor(0.75 * samplingPeriodMs);
+        Map<String, Object> previousBatch = getDownsampledBatch(minimumInterval);
+        operateOnBatchBuffer(BatchOps.CLEAR, null);
+
+        // Set up the sensor to use the hardware FIFO batch queue
+        SENSOR_MANAGER.registerListener(BATCH_SENSOR_LISTENER,
+                                        sensor,
+                                        samplingPeriodUs,
+                                        maxReportLatencyUs);
+
+        // Schedule to flush (mostly) expected to be full
+        getStaticHandler().postDelayed(FLUSH_RUNNABLE, maxReportLatencyMs);
+
+        // Return any data collected from the previous reporting cycle
+        return previousBatch;
+    }
+
+    /**
+     *
+     * @param sensor
+     * @param samplingPeriodMs Time interval between batched sensor events, in milliseconds.
+     * @return The number of events in a reported batch. Either the number of events in a reporting period,
+     * or the size of the FIFO, whichever is less.
+     */
+    private int getBatchReportSize(Sensor sensor, int samplingPeriodMs) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            int samplesInPeriodWithTolerance = (int) Math.floor(0.95 * (TimeConstants.PERIODIC_LENGTH / samplingPeriodMs));
             int guaranteedFIFO = sensor.getFifoReservedEventCount();
 
-            // The sensor will either fill up the FIFO, or collect as much as it can within a
-            // reporting period, whichever is less
-            return Math.min(guaranteedFIFO, MAX_EVENTS_PER_PERIOD_WITH_TOLERANCE);
+            // The sensor will collect as many measurements as can fit in a reporting period, or
+            // fill up the FIFO queue, whichever is less
+            return Math.min(guaranteedFIFO, samplesInPeriodWithTolerance);
         } else {
+            // 0 if batching is unsupported by the Android version
             return 0;
         }
     }
@@ -153,6 +191,12 @@ public abstract class AbstractMotionSensorRecordingService extends AbstractSenso
      * @return A static list of processed batch data that persists between service invocations
      */
     protected abstract List<Map<String, Object>> getStaticBatchBuffer();
+
+    /**
+     *
+     * @return A static handler to queue runnables for this particular sensor
+     */
+    protected abstract Handler getStaticHandler();
 
     private enum BatchOps {
         ADD,
@@ -194,7 +238,7 @@ public abstract class AbstractMotionSensorRecordingService extends AbstractSenso
         // Use disk-and-wifi-upload destination if batching is available, the default if not
         final SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         Sensor sensor = sensorManager.getDefaultSensor(getSensorType());
-        if(getBatchSize(sensor) > 0) {
+        if(getBatchReportSize(sensor, getSamplingPeriodMs()) > 0) {
             return new WifiUploadDestination(this);
         }
 
@@ -203,10 +247,12 @@ public abstract class AbstractMotionSensorRecordingService extends AbstractSenso
 
     /**
      *
-     * @return An ordered mapping of data points, where consecutive points have at least
-     * MIN_INTERVAL_BETWEEN_EVENTS_WITH_TOLERANCE amount of time between them. Null if empty.
+     * @param minimumIntervalMs The desired minimum amount of time between consecutive measurements,
+     *                          in milliseconds
+     * @return An ordered mapping of data points, where consecutive points have a minimum amount
+     * of time between them
      */
-    private Map<String, Object> getDownsampledBatch() {
+    private Map<String, Object> getDownsampledBatch(long minimumIntervalMs) {
         List<Map<String, Object>> batch = operateOnBatchBuffer(BatchOps.COPY, null);
 
         if(!batch.isEmpty()) {
@@ -219,7 +265,7 @@ public abstract class AbstractMotionSensorRecordingService extends AbstractSenso
                 long currentTimestamp = (long)data.get(TIMESTAMP_KEY);
                 long interval = currentTimestamp - lastTimestamp;
 
-                if(lastTimestamp < 0l || interval >= MIN_INTERVAL_BETWEEN_EVENTS_WITH_TOLERANCE) {
+                if(lastTimestamp < 0l || interval >= minimumIntervalMs) {
                     String batchLabel = String.format(BATCH_KEY, downsampled.size());
                     downsampled.put(batchLabel, data);
 
