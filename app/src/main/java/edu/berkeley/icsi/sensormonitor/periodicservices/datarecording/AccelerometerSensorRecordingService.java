@@ -38,4 +38,10 @@ public class AccelerometerSensorRecordingService extends AbstractMotionSensorRec
     protected Handler getStaticHandler() {
         return ACCELEROMETER_HANDLER;
     }
+
+    @Override
+    protected int getSamplingPeriodMs() {
+        final int FREQUENCY_HZ = 50;
+        return 1000 / FREQUENCY_HZ;
+    }
 }

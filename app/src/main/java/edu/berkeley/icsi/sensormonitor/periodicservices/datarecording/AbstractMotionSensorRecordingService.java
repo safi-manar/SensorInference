@@ -174,12 +174,13 @@ public abstract class AbstractMotionSensorRecordingService extends AbstractSenso
      */
     private int getBatchReportSize(Sensor sensor, int samplingPeriodMs) {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            int samplesInPeriodWithTolerance = (int) Math.floor(0.95 * (TimeConstants.PERIODIC_LENGTH / samplingPeriodMs));
-            int guaranteedFIFO = sensor.getFifoReservedEventCount();
+            int samplesInPeriod = (int) (TimeConstants.PERIODIC_LENGTH / samplingPeriodMs);
+            int guaranteedFifo = sensor.getFifoReservedEventCount();
 
             // The sensor will collect as many measurements as can fit in a reporting period, or
             // fill up the FIFO queue, whichever is less
-            return Math.min(guaranteedFIFO, samplesInPeriodWithTolerance);
+            int reportSizeWithTolerance = (int) Math.floor(0.95 * Math.min(samplesInPeriod, guaranteedFifo));
+            return reportSizeWithTolerance;
         } else {
             // 0 if batching is unsupported by the Android version
             return 0;
