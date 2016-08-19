@@ -39,30 +39,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/permissions_explanation_2"
-                android:id="@+id/permissions_explanation_2"
-                android:layout_below="@+id/permissions_explanation"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:textStyle="bold"
-                android:layout_marginTop="10dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/permissions_explanation_3"
-                android:id="@+id/permissions_explanation_3"
-                android:layout_below="@+id/permissions_explanation_2"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="20dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="@string/permissions_explanation_4"
                 android:id="@+id/permissions_explanation_4"
                 android:layout_below="@+id/permissions_explanation_3"

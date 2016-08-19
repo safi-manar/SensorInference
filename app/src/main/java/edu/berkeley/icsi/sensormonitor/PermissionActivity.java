@@ -14,7 +14,7 @@ import android.widget.Button;
 
 public class PermissionActivity extends AppCompatActivity {
 
-    protected static String[] permissions = {android.Manifest.permission.READ_PHONE_STATE, android.Manifest.permission.ACCESS_FINE_LOCATION};
+    protected static final String[] PERMISSIONS = {android.Manifest.permission.ACCESS_FINE_LOCATION};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,7 @@ public class PermissionActivity extends AppCompatActivity {
 
 
 
-    /* This method explicitly requests the permissions in the permissions[] String array.
+    /* This method explicitly requests the permissions in the PERMISSIONS[] String array.
     * Android allows only one permission to be requested at a time. Additionally, the requestPermissions
     * method runs on an asychronous thread-- that is, the system does not wait on the user to respond to
     * the permissions dialog before continuing the flow of the for loop. As a result, we must
@@ -45,9 +45,9 @@ public class PermissionActivity extends AppCompatActivity {
     * Thus, we run an independent checkPermissions() call for each individual permission.
     * */
     private void checkPermissions(Context context) {
-        for (int i = 0; i < permissions.length; i++) {
-            if (ContextCompat.checkSelfPermission(this, permissions[i]) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{permissions[i]}, i);
+        for (int i = 0; i < PERMISSIONS.length; i++) {
+            if (ContextCompat.checkSelfPermission(this, PERMISSIONS[i]) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{PERMISSIONS[i]}, i);
                 // break the flow of the for loop to bypass asynchronous threading and subsequent permission requests.
                 return;
             }

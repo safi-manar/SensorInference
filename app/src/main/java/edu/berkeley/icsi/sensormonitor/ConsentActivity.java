@@ -67,8 +67,8 @@ public class ConsentActivity extends AppCompatActivity {
      * @return true if and only if full permissions have already been granted.
      */
     private boolean isPermissionGranted() {
-        for (int i = 0; i < PermissionActivity.permissions.length; i++) {
-            if (ContextCompat.checkSelfPermission(this, PermissionActivity.permissions[i]) != PackageManager.PERMISSION_GRANTED) {
+        for (int i = 0; i < PermissionActivity.PERMISSIONS.length; i++) {
+            if (ContextCompat.checkSelfPermission(this, PermissionActivity.PERMISSIONS[i]) != PackageManager.PERMISSION_GRANTED) {
                 return false;
             }
         }

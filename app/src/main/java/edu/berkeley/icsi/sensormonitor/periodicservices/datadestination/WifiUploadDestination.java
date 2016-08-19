@@ -95,11 +95,7 @@ public class WifiUploadDestination extends AbstractDataDestination {
         ConnectivityManager connectivityManager = (ConnectivityManager) appContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo active = connectivityManager.getActiveNetworkInfo();
 
-        if(active != null) {
-            return active.getType() == ConnectivityManager.TYPE_WIFI;
-        } else {
-            return false;
-        }
+        return active != null && active.getType() == ConnectivityManager.TYPE_WIFI && active.isConnected();
     }
 
     /**

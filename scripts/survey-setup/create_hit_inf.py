@@ -23,7 +23,6 @@ question = '''<?xml version="1.0"?>
             <p>Our app requires the following permissions:</p>
 
             <ul>
-            <li>Phone calls, in order to detect a Wi-Fi connection and reduce cellular data usage; <strong><em>we do not make any phone calls</em></strong></li>
             <li>Location, used with survey responses to test our models and predictions; <strong><em>GPS data will be kept confidential and never shared outside our research group</em></strong></li>
             </ul>
 

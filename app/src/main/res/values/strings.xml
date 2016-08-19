@@ -117,14 +117,7 @@
 
     <string name="permissions_explanation_title">Required Permissions</string>
     <string name="permissions_explanation_1">
-        The app will now prompt you for the following two permissions:
-    </string>
-    <string name="permissions_explanation_2">
-        - \"Make and manage phone calls\"
-    </string>
-    <string name="permissions_explanation_3">
-        This permission is a misnomer. We will not be accessing your phone calls in any way. Rather, this permission
-        lets us determine whether you are on Wifi so that we can conserve your data usage.
+        The app will now prompt you for the following permissions:
     </string>
     <string name="permissions_explanation_4">
         - \"Access this device\'s location\"
@@ -223,7 +216,7 @@
     <string name="exit_survey_url">https://www.surveygizmo.com/s3/2950911/Sensors-Inference-Exit-Survey?uuid=</string>
 
     <!-- Auto-generated Git version DO NOT EDIT -->
-    <string name="app_version">2ac3eb8</string>
+    <string name="app_version">6093c24</string>
 
 
     <!--                                                     -->
