@@ -32,6 +32,8 @@ public class PreferencesWrapper {
     private static final String LAST_GPS_DISTANCE = "last_gps_distance";
     private static final String LAST_GPS_INTERVAL  = "last_gps_interval";
 
+    private static final String BYTES_UPLOADED_OVER_CELL = "bytes_uploaded_over_cell";
+
     private static SharedPreferences prefs = null;
 
     /**
@@ -331,5 +333,22 @@ public class PreferencesWrapper {
     public static boolean isGPSSpeedExceed20KPH() {
         final double SPEED_THRESHOLD = 20.0;
         return getGPSSpeed() >= SPEED_THRESHOLD;
+    }
+
+    /**
+     * Increase the cumulative amount of data uploaded over a cellular connection
+     * @param bytes Amount of data, in bytes
+     */
+    public static void incrementCellUploadBytes(int bytes) {
+        int currentBytes = getCellUploadBytes();
+        prefs.edit().putInt(BYTES_UPLOADED_OVER_CELL, currentBytes + bytes).commit();
+    }
+
+    /**
+     *
+     * @return The cumulative amount of data uploaded over a cellular connection, in bytes
+     */
+    public static int getCellUploadBytes() {
+        return prefs.getInt(BYTES_UPLOADED_OVER_CELL, 0);
     }
 }

@@ -38,6 +38,14 @@ public class WifiUploadDestination extends AbstractDataDestination {
     private static Context appContext = null;
     private static int activeCount = 0;
 
+    // Cap the total amount uploaded over a cell network; exceeding this will limit all future uploads to wi-fi only
+    private static final int CELL_CAP_MB = 300;
+    private static final int CELL_CAP_B = 1024 * 1024 * CELL_CAP_MB;    // b to kb to mb
+
+    // (Soft) Cap the total amount of data that can be kept in the cache; exceeding this may trigger a cell network upload
+    private static final int CACHE_CAP_MB = 25;
+    private static final int CACHE_CAP_B = 1024 * 1024 * CACHE_CAP_MB;   // b to kb to mb
+
     /**
      *
      * @param context Calling Android context, necessary to access disk resources
@@ -49,16 +57,32 @@ public class WifiUploadDestination extends AbstractDataDestination {
     @Override
     public void submit(String label, Map<String, Object> data) {
         if(appContext != null && data != null) {
-            increaseActive();
+            increaseActive();   // Only allow the last active thread to upload
             saveToCache(label, data);
 
-            // Upload if any are true:
+            // Upload under the following conditions:
             // - Wi-Fi is available
-            // - App is about to be uninstalled
-            // - The local cache has grown too large
-            boolean shouldUpload = isWifiConnected() || isUninstallationImminent() || isCacheTooLarge();
+            // ---OR---
+            // - Will stay under the cell upload cap
+            //      ---AND---
+            //      - App is about to be uninstalled
+            //      ---OR---
+            //      - The local cache has grown too large
+            int cacheSizeBytes = getCacheSize();
+
+            boolean isWifiConnected = isWifiConnected();
+            boolean isBelowCellCap = PreferencesWrapper.getCellUploadBytes() + cacheSizeBytes <= CELL_CAP_B;
+            boolean isCacheTooLarge = getCacheSize() >= CACHE_CAP_B;
+            boolean isCellUploadAllowed = isBelowCellCap && (isUninstallationImminent() || isCacheTooLarge);
+            boolean shouldUpload = isWifiConnected || isCellUploadAllowed;
+
             if(isLastActive() && shouldUpload) {
                 uploadAndClearCache();
+
+                // Keep track of cell network uploads
+                if(!isWifiConnected) {
+                    PreferencesWrapper.incrementCellUploadBytes(cacheSizeBytes);
+                }
             }
         }
     }
@@ -91,25 +115,21 @@ public class WifiUploadDestination extends AbstractDataDestination {
 
     /**
      *
-     * @return True if the total size of the zip file cache exceeds 25 MBs
+     * @return The size of the cache, in bytes
      */
-    private boolean isCacheTooLarge() {
-        final int MAX_SIZE_MB = 25;
-        final int MAX_SIZE_B = MAX_SIZE_MB * 1024 * 1024;
-
+    private int getCacheSize() {
         File wifiCacheFolder = new File(appContext.getCacheDir(), CACHE_SUBDIR_NAME);
+        int sizeB = 0;
+
         if(wifiCacheFolder.exists()) {
             File[] zipFiles = wifiCacheFolder.listFiles(ZIP_FILTER);
-            int sizeB = 0;
 
             for(File f : zipFiles) {
                 sizeB += f.length();
             }
-
-            return sizeB >= MAX_SIZE_B;
         }
 
-        return false;
+        return sizeB;
     }
 
     /**
