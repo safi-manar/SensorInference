@@ -1,0 +1,4 @@
+aws-mturk-clt-*/
+*.swp
+mturk.properties
+*.input.success

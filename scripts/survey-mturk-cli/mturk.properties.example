@@ -1,0 +1,17 @@
+access_key=[insert your access key here]
+secret_key=[insert your secret key here]
+
+# Uncomment below to use MTURK SANDBOX
+service_url=https://mechanicalturk.sandbox.amazonaws.com/?Service=AWSMechanicalTurkRequester
+
+# Uncomment below to use MTURK REAL
+#service_url=https://mechanicalturk.amazonaws.com/?Service=AWSMechanicalTurkRequester
+
+
+
+
+# The settings below should only be modified under special circumstances.
+# You should not need to adjust these values.
+retriable_errors=Server.ServiceUnavailable,503
+retry_attempts=6
+retry_delay_millis=500
