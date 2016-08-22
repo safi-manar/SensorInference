@@ -50,7 +50,8 @@
             android:layout_alignTop="@+id/scrollView"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_above="@+id/consent_agree_button">
+            android:layout_above="@+id/consent_agree_button"
+            android:weightSum="1">
 
             <ImageView
                 android:layout_width="match_parent"
@@ -66,14 +67,15 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="1003dp"
+                android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="@string/consent_message"
                 android:id="@+id/consent_agreement_message"
                 android:layout_alignTop="@+id/scrollView"
                 android:layout_alignRight="@+id/consent_title"
                 android:layout_alignEnd="@+id/consent_title"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="10dp"
+                android:layout_weight="14.18" />
 
         </LinearLayout>
     </ScrollView>

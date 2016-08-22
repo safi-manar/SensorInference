@@ -69,41 +69,53 @@
     <string name="consent_title">Consent to Participate in Research\n Understanding Smartphone Sensors</string>
     <string name="consent_message">
         \n<b>In order for you to understand your participation in this study, please read this
-        entire disclosure.</b>
+        entire disclosure:</b>
 
-        \n\nThis app is part of a study to explore the possibility of inferring user information from
+        \n\n<u>Introduction</u>
+        \nThis app is part of a study to explore the possibility of inferring user information from
         benign smartphone sensors, like the step counter or compass.
 
-        \n\nThis app will silently collect periodic sensor measurements. It will also collect GPS data.
+        \n\n<u>Procedures</u>
+        \nThis app will silently collect periodic sensor measurements. It will also collect GPS data.
         All collected data will be kept on our
         secure servers. The data will be maintained for possible future research. Only anonymous,
         non-identifiable data (i.e., not GPS) will be potentially shared with other researchers. Data collection
         will have minimal impact on your phone performance and battery life.
-        \n\nYour participation in this study will involve <b>1 required survey</b> in addition to
-        brief daily optional surveys.
 
-        \n\nThis research will not benefit you directly. However, it will indirectly benefit you and other
+        \n\nYour participation in this study will involve one required introductory survey, in
+        addition to brief daily optional surveys. These surveys will ask you about your demographics
+        and daily activities, so that we can see if they could have been predicted based on the captured
+        sensor data. The first survey will appear after you agree to participate in this study. Additional
+        daily surveys will appear as notifications from this application.
+
+        \n\n<u>Total Time Commitment</u>
+        \nTotal active time commitment will be under 15 minutes: approximately 5 minutes to complete
+        the initial survey, 1 minute for each daily survey, 1 minute for the exit survey, and then a week
+        of passively keeping our app running. We will ask you to complete 6 daily surveys, at most.
+
+        \n\n<u>Benefits/Risks</u>
+        \nThis research will not benefit you directly. However, it will indirectly benefit you and other
         smartphone users by informing system designers of the data implications from benign sensors.
 
         \n\nSome of the research questions may make you uncomfortable or upset. You are free to decline
         to answer and stop the study at any time. You may also uninstall the app at any time to stop
         the study.
 
-        \n\nIf you find any survey content objectionable, you may choose to abstain from answering,
-        or even end your participation in the study entirely.
+        \n\nIf you find any survey content objectionable, you may choose to abstain from answering, or
+        even end your participation in the study entirely.
 
-        \n\nThe risks for this study are minimal: these involve a potential breach of confidentiality for
-        GPS data and other location data. We will encrypt data to decrease the probability of such a
-        breach.
+        \n\nThe risks for this study are minimal: these involve a potential breach of confidentiality for GPS
+        data and other location data. We will encrypt data to decrease the probability of such a breach.
 
-        \n\nIf you have any questions or concerns about your rights and treatment as a research subject,
-        you may contact the office of UC Berkeley\'s Committee for the Protection of Human
-        Subjects, at 510-642-7461 or subjects@berkeley.edu. Reference: CPHS# 2015-11-8097
+        \n\n<u>Contact Information</u>
+        \nIf you have any questions or concerns about your rights and treatment as a research subject,
+        you may contact the office of UC Berkeley\'s Committee for the Protection of Human Subjects,
+        at 510-642-7461 or subjects@berkeley.edu. Reference: CPHS# 2015-11-8097
 
         \n\nIf you have any questions or concerns about this study, you may contact our team at:
 
         \n\n<b>Sensors Inference Project Team</b>
-        \nsensor-inference@icsi.berkeley.edu
+        \n<a href="mailto:sensor-inference@icsi.berkeley.edu">sensor-inference@icsi.berkeley.edu</a>
         \n<a href="https://blues.cs.berkeley.edu/sensor-inference">https://blues.cs.berkeley.edu/sensor-inference</a>
         \nComputer Science Department, UC Berkeley
         \nInternational Computer Science Institute
@@ -216,7 +228,7 @@
     <string name="exit_survey_url">https://www.surveygizmo.com/s3/2950911/Sensors-Inference-Exit-Survey?uuid=</string>
 
     <!-- Auto-generated Git version DO NOT EDIT -->
-    <string name="app_version">6093c24</string>
+    <string name="app_version">03d7a0c</string>
 
 
     <!--                                                     -->
