@@ -1,0 +1,116 @@
+\documentclass{sig-alternate-10pt}
+
+% Instance space-saver: --cpk
+%\usepackage{times}
+
+\usepackage{url}
+\usepackage{color}
+\usepackage{xspace}
+
+\usepackage{booktabs} % To thicken table lines
+
+\usepackage{multirow}
+\usepackage{epsfig,endnotes}
+\usepackage{cite}
+\usepackage{pbox}
+
+\usepackage[hidelinks]{hyperref}
+\def\UrlBreaks{\do\/\do-}
+
+\newcommand\nv[1]{\textcolor{red}{[#1 --NV]}}
+\newcommand\ir[1]{\textcolor{red}{[#1 --IR]}}
+\newcommand\pw[1]{\textcolor{red}{[#1 --PW]}}
+\newcommand\se[1]{\textcolor{blue}{[#1 --SE]}}
+\newcommand\ck[1]{\textcolor{red}{[#1 --CK]}}
+
+\newcommand\hs[1]{ICSI Haystack}
+
+
+\linepenalty=200
+\newenvironment{packed_enum}{
+\begin{enumerate}
+  \setlength{\itemsep}{1pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}
+}{\end{enumerate}}
+
+\newenvironment{packed_item}{
+\begin{itemize}
+  \setlength{\itemsep}{1pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}
+}{\end{itemize}}
+
+\providecommand{\etal}{\emph{et al.}\xspace}
+
+\begin{document}
+
+
+\title{TBD}
+
+
+\numberofauthors{1}
+\author{
+%\small
+\alignauthor
+    Manar Safi$^1$, Irwin Reyes$^2$, Serge Egelman$^{1,2}$ \\ \vspace{2mm}
+    \affaddr{{$^1$}UC Berkeley, {$^2$}ICSI} \\
+}
+
+\maketitle
+\begin{abstract}
+
+Modern smartphones come equipped with a suite of high-fidelity motion and environmental
+sensors: accelerometers, gyroscopes, and light sensors, among many others. In order to
+preserve user privacy, the dominant mobile platforms, Android and iOS, place restrictions
+on certain device resources. Apps are required to ask the user for permission before accessing
+geolocation or phone calling capabilities, for instance. However, these access controls
+don't extend to environmental and motion sensors, as these sensors are considered "benign,"
+so apps are able to collect measurements from these data sources without informing
+the user of this usage.
+
+In this work, we consider that smartphones are highly personal devices, typically used
+by just one person, and remains in very close proximity to -- if not on the person of -- that sole user for much of
+the phone's operational life. We explore the feasibility of using this unrestricted 
+"benign" sensor data to infer sensitive or otherwise surprising details about the user,
+such as their daily schedules, income levels, and relationship status. We discuss our
+method of sensor data collection, analysis, and validation with user-reported ground
+truth to build a model to infer user information.
+
+\end{abstract}
+
+\section{Introduction}
+
+Foo bar~\cite{sensor-types}
+
+\section{Related Work}
+
+Foo bar
+
+\section{Methodology}
+
+\subsection{Data collection}
+
+Foo bar
+
+\subsection{Survey}
+
+Foo bar
+
+\section{Preliminary Results}
+
+Foo bar
+
+\section{Conclusions}
+
+Foo bar
+
+%\newpage
+\footnotesize
+\bibliographystyle{abbrv}
+\bibliography{paper}  
+
+\end{document}
+
+
+
