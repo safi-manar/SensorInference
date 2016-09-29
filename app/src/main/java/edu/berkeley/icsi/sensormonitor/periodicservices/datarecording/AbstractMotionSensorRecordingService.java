@@ -173,7 +173,7 @@ public abstract class AbstractMotionSensorRecordingService extends AbstractSenso
      * or the size of the FIFO, whichever is less.
      */
     private int getBatchReportSize(Sensor sensor, int samplingPeriodMs) {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if(sensor!= null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             int samplesInPeriod = (int) (TimeConstants.PERIODIC_LENGTH / samplingPeriodMs);
             int guaranteedFifo = sensor.getFifoReservedEventCount();
 
