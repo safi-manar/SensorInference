@@ -124,7 +124,7 @@ public class PreferencesWrapper {
      */
     public static void setFirstRun() {
         prefs.edit().putBoolean(FIRST_RUN, false).commit();
-        prefs.edit().putLong(FIRST_RUN_TIME, System.currentTimeMillis());
+        prefs.edit().putLong(FIRST_RUN_TIME, System.currentTimeMillis()).commit();
     }
 
     /**
