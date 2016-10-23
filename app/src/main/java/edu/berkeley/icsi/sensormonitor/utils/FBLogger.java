@@ -7,6 +7,14 @@ import java.util.Map;
 /**
  * Created by Manar on 10/22/2016.
  * A supplementary FirebaseWrapper to log activity on user devices.
+ *
+ * Currently Logs:
+ *      - Consent display activity
+ *      - UUID generation activity
+ *      - Device Restart activity
+ *      - Daily survey activity
+ *      - Deadline survey activity
+
  */
 public class FBLogger {
 
