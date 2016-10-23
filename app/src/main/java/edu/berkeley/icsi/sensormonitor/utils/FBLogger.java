@@ -56,6 +56,19 @@ public class FBLogger {
         FirebaseWrapper.push(LOGS, data);
     }
 
+    // Log the user's entire SharedPreferences getting the Prefs map from PreferencesWrapper
+    public static void sharedprefs() {
+        Map<String, Object> data = new HashMap<>();
+
+        Map<String, ?> prefsMap = PreferencesWrapper.getSharedPrefs();
+
+        for (Map.Entry<String, ?> entry : prefsMap.entrySet()) {
+            data.put(entry.getKey(), entry.getValue().toString());
+        }
+
+        FirebaseWrapper.push(LOGS, data);
+    }
+
     // Log when the user has restarted the device
     public static void deviceRestarted() {
         Map<String, Object> data = new HashMap<>();

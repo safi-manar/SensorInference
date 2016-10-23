@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
 
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -45,6 +46,11 @@ public class PreferencesWrapper {
             prefs = c.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         }
 
+    }
+
+    // Return all values from the SharedPreferences
+    public static Map<String, ?> getSharedPrefs() {
+        return prefs.getAll();
     }
 
 
