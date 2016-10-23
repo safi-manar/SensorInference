@@ -15,6 +15,7 @@ public class FBLogger {
 
     // String labels.
     private static final String CONSENT = "consent";
+    private static final String GENERAL = "general";
     private static final String DAILYSURVEY = "dailysurvey";
     private static final String DEADLINESURVEY = "deadlinesurvey";
 
@@ -22,14 +23,55 @@ public class FBLogger {
     /****************************************************************************
      *                                                                          *
      * All log methods automatically log timestamp via FirebaseWrapper.push()   *
+     *
+     * Logging Format:
+     *
+     *   UUID
+     *       deviceSpecs
+     *       generic
+     *       ...
+     *       steps
+     *       logs
+     *           TimeStamp
+     *               consent : "Displayed consent activity"
+     *           TimeStamp
+     *               general : "UUID has been generated"
+     *               general : "UUID = ..."
+     *           Timestamp
+     *               dailysurvey : "Displayed dailysurvey activity"
+     *           Timestamp
+     *               dailysurvey : "Accepted daily survey"
      *                                                                          *
      ****************************************************************************/
 
+
+    /****************************************************************************
+     * Logging for generic user activity                                        *
+     ****************************************************************************/
+
+    // Log when the user is shown the consent activity
     public static void consentActivity() {
         Map<String, Object> data = new HashMap<>();
         data.put(CONSENT, "Displayed consent activity");
         FirebaseWrapper.push(LOGS, data);
     }
+
+    // Log when the user has restarted the device
+    public static void deviceRestarted() {
+        Map<String, Object> data = new HashMap<>();
+        data.put(GENERAL, "Device restarted");
+        FirebaseWrapper.push(LOGS, data);
+    }
+
+    // Log when the app has generated a UUID
+    public static void generatedUUID() {
+        Map<String, Object> data = new HashMap<>();
+        data.put(GENERAL, "UUID has been generated");
+
+        FirebaseWrapper.push(LOGS, data);
+    }
+
+
 
 
     /****************************************************************************
