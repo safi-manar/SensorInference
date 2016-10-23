@@ -63,10 +63,12 @@ public class FBLogger {
         FirebaseWrapper.push(LOGS, data);
     }
 
-    // Log when the app has generated a UUID
-    public static void generatedUUID() {
+    // Log when the app has generated a UUID and log that UUID
+    public static void generatedUUID(String uuid) {
         Map<String, Object> data = new HashMap<>();
         data.put(GENERAL, "UUID has been generated");
+        String uuidlog = "UUID = " + uuid;
+        data.put(GENERAL, uuidlog);
 
         FirebaseWrapper.push(LOGS, data);
     }
