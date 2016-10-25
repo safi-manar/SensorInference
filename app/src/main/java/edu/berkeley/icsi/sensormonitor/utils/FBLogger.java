@@ -71,7 +71,7 @@ public class FBLogger {
         Map<String, ?> prefsMap = PreferencesWrapper.getSharedPrefs();
 
         for (Map.Entry<String, ?> entry : prefsMap.entrySet()) {
-            data.put(entry.getKey(), entry.getValue().toString());
+            data.put(entry.getKey(), entry.getValue());
         }
 
         FirebaseWrapper.push(LOGS, data);
