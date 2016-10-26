@@ -155,6 +155,9 @@ public class PreferencesWrapper {
         if(id == null) {
             id = UUID.randomUUID().toString();
             prefs.edit().putString(DEVICE_ID, id).commit();
+
+            // Log the creation of a new UUID
+            FBLogger.generatedUUID(id);
         }
 
         return id;
