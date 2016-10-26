@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import edu.berkeley.icsi.sensormonitor.R;
+import edu.berkeley.icsi.sensormonitor.utils.FBLogger;
 import edu.berkeley.icsi.sensormonitor.utils.PreferencesWrapper;
 
 /**
@@ -36,6 +37,9 @@ public class DailySurveyActivity extends Activity {
         AlertDialog dailySurveyDialog = createDailySurveyDialog();
         dailySurveyDialog.show();
         PreferencesWrapper.setDailyOverlayFlagged();
+
+        // Internal logging
+        FBLogger.dailySurveyActivity();
     }
 
 
@@ -51,6 +55,9 @@ public class DailySurveyActivity extends Activity {
 
         builder.setPositiveButton(R.string.dailysurvey_yes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+                // Internal logging
+                FBLogger.dailySurveyAccepted();
+
                 PreferencesWrapper.setDailyOverlayUnFlagged();
                 // Assume the user finishes the survey. Update the schedule.
                 PreferencesWrapper.updateDailyDeadline();
@@ -62,6 +69,9 @@ public class DailySurveyActivity extends Activity {
 
         builder.setNeutralButton(R.string.dailysurvey_postpone, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+                // Internal logging
+                FBLogger.dailySurveyPostponed();
+
                 PreferencesWrapper.setDailyOverlayUnFlagged();
                 postponeDeadline();
                 //moveTaskToBack(true);
@@ -71,6 +81,9 @@ public class DailySurveyActivity extends Activity {
 
         builder.setNegativeButton(R.string.dailysurvey_no, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+                // Internal logging
+                FBLogger.dailySurveyAbstained();
+
                 PreferencesWrapper.setDailyOverlayUnFlagged();
                 skipTodaySurvey();
             }

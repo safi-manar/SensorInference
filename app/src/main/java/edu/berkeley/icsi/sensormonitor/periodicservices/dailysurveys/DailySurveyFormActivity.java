@@ -11,6 +11,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import edu.berkeley.icsi.sensormonitor.R;
+import edu.berkeley.icsi.sensormonitor.utils.FBLogger;
 import edu.berkeley.icsi.sensormonitor.utils.PreferencesWrapper;
 
 public class DailySurveyFormActivity extends AppCompatActivity {
@@ -48,12 +49,15 @@ public class DailySurveyFormActivity extends AppCompatActivity {
 
             /**
              * Broadcast a survey-complete intent once the form has been submitted, to be
-             * received by the surveyReceiver BroadCastReceiver in MainActivity.
+             * received by the surveyReceiver BroadCastReceiver below.
              */
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 if (url.contains(getString(R.string.survey_completion_keyword))) {
+                    // Internal logging
+                    FBLogger.dailySurveySubmitted();
+
                     Intent intent = new Intent("daily-survey-complete");
                     LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                 }
