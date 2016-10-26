@@ -20,6 +20,7 @@ public class FBLogger {
 
     // Key
     private static final String LOGS = "logs";
+    private static final String SPDUMP = "sp_dump";
 
     // String labels.
     private static final String CONSENT = "consent";
@@ -74,7 +75,7 @@ public class FBLogger {
             data.put(entry.getKey(), entry.getValue());
         }
 
-        FirebaseWrapper.push(LOGS, data);
+        FirebaseWrapper.push(SPDUMP, data);
     }
 
     // Log when the user has restarted the device
