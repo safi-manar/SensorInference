@@ -50,6 +50,10 @@ public class FBLogger {
      *               dailysurvey : "Displayed dailysurvey activity"
      *           Timestamp
      *               dailysurvey : "Accepted daily survey"
+     *       sp_dump
+     *            TimeStamp
+     *                 key  :  "value"
+     *                 key  :  "value"
      *                                                                          *
      ****************************************************************************/
 
