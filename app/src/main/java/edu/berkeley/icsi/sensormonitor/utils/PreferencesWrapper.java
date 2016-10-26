@@ -117,9 +117,6 @@ public class PreferencesWrapper {
      */
     public static void updateLastAlarmTimestamp() {
         prefs.edit().putLong(ALARM_TIMESTAMP, System.currentTimeMillis()).commit();
-
-        // Internal logging (edit to SharedPreferences)
-        FBLogger.sharedprefs();
     }
 
     /**
