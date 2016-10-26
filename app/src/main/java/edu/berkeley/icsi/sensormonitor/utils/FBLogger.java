@@ -70,7 +70,7 @@ public class FBLogger {
         // consentActivity currently disabled -- FireBase cannot push at
         // consent activity because Firebase and UUID are not initialized!
 
-        if (false) {
+        if (ENABLED) {
             Map<String, Object> data = new HashMap<>();
             data.put(CONSENT, "Displayed consent activity");
             FirebaseWrapper.push(LOGS, data);
@@ -104,6 +104,15 @@ public class FBLogger {
     }
 
     // Log when the app has generated a UUID and log that UUID
+
+    /**
+     *
+     * Unlike most of the SharedPrefs edits that are logged from PreferencesWrapper,
+     * UUID needs to be logged from FirebaseWrapper to avoid the issue where the UUID is
+     * generated without the Firebase instance actually being initialized, causing a problematic
+     * push via a null UUID in the middle of the Firebase initialization. To avoid this, the log calls
+     * are happened in FirebaseWrapper immediately after the Firebase has finished initialization.
+     */
     public static void generatedUUID(String uuid) {
         if (ENABLED) {
             Map<String, Object> data = new HashMap<>();
@@ -113,7 +122,7 @@ public class FBLogger {
 
             FirebaseWrapper.push(LOGS, data);
         }
-            }
+    }
 
 
 
