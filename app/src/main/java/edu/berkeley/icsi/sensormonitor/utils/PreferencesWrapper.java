@@ -67,6 +67,9 @@ public class PreferencesWrapper {
      */
     public static void setSurveyCompleted() {
         prefs.edit().putBoolean(SURVEY_COMPLETED, true).commit();
+
+        // Internal logging (edit to SharedPreferences)
+        FBLogger.sharedprefs();
     }
 
     /**
@@ -86,6 +89,9 @@ public class PreferencesWrapper {
         // Uninstallation timestamp in milliseconds
         long deadlineMillis = currentTime + TimeConstants.DEADLINE_LENGTH;
         prefs.edit().putLong(UNINSTALL_DEADLINE, deadlineMillis).commit();
+
+        // Internal logging (edit to SharedPreferences)
+        FBLogger.sharedprefs();
     }
 
     /**
@@ -93,6 +99,9 @@ public class PreferencesWrapper {
      */
     public static void postponeUninstallDeadline() {
         prefs.edit().putLong(UNINSTALL_DEADLINE, getUninstallDeadline() + TimeConstants.UNINSTALL_POSTPONEMENT).commit();
+
+        // Internal logging (edit to SharedPreferences)
+        FBLogger.sharedprefs();
     }
 
     /**
@@ -108,6 +117,9 @@ public class PreferencesWrapper {
      */
     public static void updateLastAlarmTimestamp() {
         prefs.edit().putLong(ALARM_TIMESTAMP, System.currentTimeMillis()).commit();
+
+        // Internal logging (edit to SharedPreferences)
+        FBLogger.sharedprefs();
     }
 
     /**
@@ -115,6 +127,9 @@ public class PreferencesWrapper {
      */
     public static void resetLastAlarmTimestamp() {
         prefs.edit().putLong(ALARM_TIMESTAMP, 0l).commit();
+
+        // Internal logging (edit to SharedPreferences)
+        FBLogger.sharedprefs();
     }
 
     /**
@@ -131,6 +146,9 @@ public class PreferencesWrapper {
     public static void setFirstRun() {
         prefs.edit().putBoolean(FIRST_RUN, false).commit();
         prefs.edit().putLong(FIRST_RUN_TIME, System.currentTimeMillis()).commit();
+
+        // Internal logging (edit to SharedPreferences)
+        FBLogger.sharedprefs();
     }
 
     /**
@@ -156,8 +174,11 @@ public class PreferencesWrapper {
             id = UUID.randomUUID().toString();
             prefs.edit().putString(DEVICE_ID, id).commit();
 
-            // Log the creation of a new UUID
+            // Internal logging (the creation of a new UUID)
             FBLogger.generatedUUID(id);
+
+            // Internal logging (edit to SharedPreferences)
+            FBLogger.sharedprefs();
         }
 
         return id;
@@ -184,6 +205,9 @@ public class PreferencesWrapper {
         if (vCode == null) {
             vCode = getShortDeviceID();
             prefs.edit().putString(VERIF_CODE, vCode).commit();
+
+            // Internal logging (edit to SharedPreferences)
+            FBLogger.sharedprefs();
         }
         return vCode;
     }
@@ -218,6 +242,9 @@ public class PreferencesWrapper {
         prefs.edit().putLong(REAL_DAILY_DEADLINE, prevDeadline + TimeConstants.ONE_DAY).commit();
         // The nominal deadline is reset to the real deadline.
         prefs.edit().putLong(NOMINAL_DAILY_DEADLINE, prevDeadline + TimeConstants.ONE_DAY).commit();
+
+        // Internal logging (edit to SharedPreferences)
+        FBLogger.sharedprefs();
     }
 
 
@@ -226,6 +253,9 @@ public class PreferencesWrapper {
      */
     public static void postponeDailyDeadline() {
         prefs.edit().putLong(NOMINAL_DAILY_DEADLINE, getDailyDeadline() + TimeConstants.DAILY_SURVEY_POSTPONEMENT).commit();
+
+        // Internal logging (edit to SharedPreferences)
+        FBLogger.sharedprefs();
     }
 
     /**
@@ -240,6 +270,9 @@ public class PreferencesWrapper {
             long dailyDeadlineMillis = DataTimeFormat.getDailyDeadlineInMillis();
             prefs.edit().putLong(REAL_DAILY_DEADLINE, dailyDeadlineMillis).commit();
             prefs.edit().putLong(NOMINAL_DAILY_DEADLINE, dailyDeadlineMillis).commit();
+
+            // Internal logging (edit to SharedPreferences)
+            FBLogger.sharedprefs();
         }
     }
 
@@ -259,6 +292,9 @@ public class PreferencesWrapper {
      */
     public static void setDailyOverlayFlagged() {
         prefs.edit().putBoolean(DAILY_SURVEY_OVERLAY, true).commit();
+
+        // Internal logging (edit to SharedPreferences)
+        FBLogger.sharedprefs();
     }
 
     /**
@@ -266,6 +302,9 @@ public class PreferencesWrapper {
      */
     public static void setDailyOverlayUnFlagged() {
         prefs.edit().putBoolean(DAILY_SURVEY_OVERLAY, false).commit();
+
+        // Internal logging (edit to SharedPreferences)
+        FBLogger.sharedprefs();
     }
 
 
@@ -283,6 +322,9 @@ public class PreferencesWrapper {
      */
     public static void setDeadlineOverlayFlagged() {
         prefs.edit().putBoolean(DAILY_SURVEY_OVERLAY, true).commit();
+
+        // Internal logging (edit to SharedPreferences)
+        FBLogger.sharedprefs();
     }
 
     /**
@@ -290,6 +332,9 @@ public class PreferencesWrapper {
      */
     public static void setDeadlineOverlayUnFlagged() {
         prefs.edit().putBoolean(DAILY_SURVEY_OVERLAY, false).commit();
+
+        // Internal logging (edit to SharedPreferences)
+        FBLogger.sharedprefs();
     }
 
     /**
@@ -301,6 +346,9 @@ public class PreferencesWrapper {
         float distance = loc1.distanceTo(loc2);
         prefs.edit().putFloat(LAST_GPS_DISTANCE, distance).commit();
         prefs.edit().putLong(LAST_GPS_INTERVAL, Math.abs(loc1.getTime() - loc2.getTime())).commit();
+
+        // Internal logging (edit to SharedPreferences)
+        FBLogger.sharedprefs();
     }
 
     /**
@@ -354,6 +402,9 @@ public class PreferencesWrapper {
     public static void incrementCellUploadBytes(int bytes) {
         int currentBytes = getCellUploadBytes();
         prefs.edit().putInt(BYTES_UPLOADED_OVER_CELL, currentBytes + bytes).commit();
+
+        // Internal logging (edit to SharedPreferences)
+        FBLogger.sharedprefs();
     }
 
     /**
