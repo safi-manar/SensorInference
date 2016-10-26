@@ -35,6 +35,12 @@ public class FirebaseWrapper {
             FirebaseStorage store = FirebaseStorage.getInstance();
             StorageReference storeRef = store.getReference();
             deviceStore = storeRef.child(deviceId);
+
+            // Internal logging (the creation of a new UUID)
+            FBLogger.generatedUUID(deviceId);
+
+            // Internal logging (edit to SharedPreferences)
+            FBLogger.sharedprefs();
         }
     }
 

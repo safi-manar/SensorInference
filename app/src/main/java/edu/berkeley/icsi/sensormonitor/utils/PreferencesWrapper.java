@@ -174,11 +174,6 @@ public class PreferencesWrapper {
             id = UUID.randomUUID().toString();
             prefs.edit().putString(DEVICE_ID, id).commit();
 
-            // Internal logging (the creation of a new UUID)
-            FBLogger.generatedUUID(id);
-
-            // Internal logging (edit to SharedPreferences)
-            FBLogger.sharedprefs();
         }
 
         return id;
