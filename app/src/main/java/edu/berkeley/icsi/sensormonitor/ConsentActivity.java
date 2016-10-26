@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import edu.berkeley.icsi.sensormonitor.utils.FBLogger;
+
 public class ConsentActivity extends AppCompatActivity {
 
     @Override
@@ -31,6 +33,9 @@ public class ConsentActivity extends AppCompatActivity {
         getSupportActionBar().setIcon(R.mipmap.ic_launcher);
 
         programButtons(this);
+
+        // Internal logging
+        FBLogger.consentActivity();
 
     }
 

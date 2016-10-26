@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import edu.berkeley.icsi.sensormonitor.utils.FBLogger;
 import edu.berkeley.icsi.sensormonitor.utils.MasterSwitch;
 
 /**
@@ -17,6 +18,9 @@ public class BootReceiver extends BroadcastReceiver {
             // calling registerReceiver(), even with a null BroadcastReceiver.
             // So, get the application context.
             MasterSwitch.on(context.getApplicationContext());
+
+            // Internal logging
+            FBLogger.deviceRestarted();
         }
     }
 }

@@ -11,6 +11,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import edu.berkeley.icsi.sensormonitor.R;
+import edu.berkeley.icsi.sensormonitor.utils.FBLogger;
 import edu.berkeley.icsi.sensormonitor.utils.MasterSwitch;
 import edu.berkeley.icsi.sensormonitor.utils.PreferencesWrapper;
 
@@ -63,6 +64,9 @@ public class ExitSurveyFormActivity extends AppCompatActivity {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 if (url.contains(getString(R.string.survey_completion_keyword))) {
+                    // Internal logging
+                    FBLogger.deadlineSurveySubmitted();
+
                     Intent intent = new Intent("exit-survey-complete");
                     LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                 }

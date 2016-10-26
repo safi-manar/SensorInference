@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import edu.berkeley.icsi.sensormonitor.R;
+import edu.berkeley.icsi.sensormonitor.utils.FBLogger;
 import edu.berkeley.icsi.sensormonitor.utils.MasterSwitch;
 import edu.berkeley.icsi.sensormonitor.utils.PreferencesWrapper;
 
@@ -38,6 +39,9 @@ public class DeadlineActivity extends Activity {
         PreferencesWrapper.setDeadlineOverlayFlagged();
         exitSurveyDialog.show();
 
+        // Internal logging
+        FBLogger.deadlineActivity();
+
     }
 
 
@@ -46,6 +50,9 @@ public class DeadlineActivity extends Activity {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setNeutralButton(R.string.deadline_postpone_button, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+                // Internal logging
+                FBLogger.deadlineSurveyPostponed();
+
                 PreferencesWrapper.setDeadlineOverlayUnFlagged();
                 PreferencesWrapper.postponeUninstallDeadline();
                 moveTaskToBack(true);
@@ -54,6 +61,9 @@ public class DeadlineActivity extends Activity {
         });
         builder.setNegativeButton(R.string.deadline_uninstall_button, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+                // Internal logging
+                FBLogger.deadlineSurveyAbstained();
+
                 PreferencesWrapper.setDeadlineOverlayUnFlagged();
                 Intent intent = new Intent(context, UninstallPromptActivity.class);
                 startActivity(intent);
@@ -61,6 +71,9 @@ public class DeadlineActivity extends Activity {
         });
         builder.setPositiveButton(R.string.deadline_proceed_button, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+                // Internal logging
+                FBLogger.deadlineSurveyAccepted();
+
                 PreferencesWrapper.setDeadlineOverlayUnFlagged();
                 Intent intent = new Intent(context, ExitSurveyFormActivity.class);
                 startActivity(intent);
