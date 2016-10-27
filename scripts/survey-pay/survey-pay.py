@@ -30,7 +30,7 @@ def get_uuid_mturk_mapping():
     mturk_mapping = {}
     if my_hit is not None:
         id = my_hit.HITId
-        for assignment in mtk.get_assignments(id):
+        for assignment in mtk.get_assignments(id, page_size=100):
             assignment_id = assignment.AssignmentId
             turk_id = assignment.WorkerId
             uuid = assignment.answers[0][0].fields[0]
