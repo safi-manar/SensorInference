@@ -3,3 +3,4 @@ aws-mturk-clt-*/
 mturk.properties
 *.input.success
 *.results
+participated.txt
