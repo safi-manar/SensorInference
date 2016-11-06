@@ -5,6 +5,7 @@ import json
 import csv
 
 from zipfile import ZipFile
+from zipfile import BadZipfile
 
 def parse_args():
     """Specify a parser for a single mandatory command-line argument"""
@@ -27,12 +28,25 @@ def process_batch(dump_path, out_path, batch_list):
     # Extract
     sensor = None
     for filename in batch_list:
+        zip_path = os.path.join(dump_path, filename)
+
         if sensor is None:
             sensor = filename.split('--')[0]
 
-        zip = ZipFile(os.path.join(dump_path, filename), 'r')
-        zip.extractall(temp_path)
-        zip.close()
+        try:
+            zip = ZipFile(zip_path, 'r')
+            zip.extractall(temp_path)
+            zip.close()
+        except BadZipfile:
+            print 'Encountered bad zip file "%s", attempting to fix' % zip_path
+
+            try:
+                fixBadZipfile(zip_path)
+                zip = ZipFile(zip_path, 'r')
+                zip.extractall(temp_path)
+                zip.close()
+            except BadZipfile:
+                print '"%s" can\'t be fixed, skipping' % zip_path
 
     # Generate CSV
     csv_file = open(os.path.join(out_path, '%s.csv' % sensor), 'wb')
@@ -51,6 +65,24 @@ def process_batch(dump_path, out_path, batch_list):
 
     # Clean up
     shutil.rmtree(temp_path)
+
+
+def fixBadZipfile(zipFile):  
+    """Attempt to fix corrupt zip files, 
+       from https://stackoverflow.com/questions/3083235/unzipping-file-results-in-badzipfile-file-is-not-a-zip-file"""
+    shutil.copyfile(zipFile, zipFile + '.original')
+
+    f = open(zipFile, 'r+b')  
+    data = f.read()  
+    pos = data.find('\x50\x4b\x05\x06') # End of central directory signature  
+    if (pos > 0):  
+        self._log("Trancating file at location " + str(pos + 22)+ ".")  
+        f.seek(pos + 22)   # size of 'ZIP end of central directory record' 
+        f.truncate()  
+        f.close()  
+    else:  
+        # raise error, file is truncated  
+        raise BadZipfile
 
 def read_json(path):
     """Return a dict representation of a JSON file"""
