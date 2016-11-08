@@ -9,9 +9,9 @@ from zipfile import BadZipfile
 
 def parse_args():
     """Specify a parser for a single mandatory command-line argument"""
-    parser = argparse.ArgumentParser(description='generate time-ordered CSVs of measurement data as produced by firebase-dump.py')
+    parser = argparse.ArgumentParser(description='generate of measurement data as produced by firebase-dump.py')
     parser.add_argument('dump_path', help='path to a single device\'s data dump')
-    parser.add_argument('-o', '--out_path', help='path to the output directory, defaults to dump_path/extract')
+    parser.add_argument('-o', '--out-path', help='path to the output directory, defaults to dump_path/extract')
 
     return parser.parse_args()
 
@@ -70,7 +70,10 @@ def process_batch(dump_path, out_path, batch_list):
 def fixBadZipfile(zipFile):  
     """Attempt to fix corrupt zip files, 
        from https://stackoverflow.com/questions/3083235/unzipping-file-results-in-badzipfile-file-is-not-a-zip-file"""
-    shutil.copyfile(zipFile, zipFile + '.original')
+
+    if not os.path.exists(zipFile + '.original'):
+        # Make a copy of the original file before operating on it
+        shutil.copyfile(zipFile, zipFile + '.original')
 
     f = open(zipFile, 'r+b')  
     data = f.read()  

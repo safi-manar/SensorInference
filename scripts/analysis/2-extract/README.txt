@@ -1,4 +1,4 @@
-Script to generate time-ordered CSVs of measurement data as produced by firebase-dump.py
+Script to generate CSVs of measurement data as produced by firebase-dump.py
 
 REQUIRES
 - Python 2.7.x
@@ -8,4 +8,4 @@ USAGE
     python data-extract.py <path to dump>/<user-uuid>
 
     Genereate CSVs and store in custom output path
-    python data.extract <path to dump>/<user-uuid> --out_path <custom output path>
+    python data.extract <path to dump>/<user-uuid> --out-path <custom output path>

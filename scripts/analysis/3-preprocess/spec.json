@@ -1,0 +1,70 @@
+{
+    "accelerometer.csv":{
+        "primary-cols":"timestamp,timeReadable,timestampRaw,timestampType,values-00,values-01,values-02",
+        "rename":{
+            "values-00":"x-minus-gx",
+            "values-01":"y-minux-gx",
+            "values-02":"z-minus-gx"
+        }
+    },
+
+    "gyroscope.csv":{
+        "primary-cols":"timestamp,timeReadable,timestampRaw,timestampType,values-00,values-01,values-02",
+        "rename":{
+            "values-00":"ang-speed-x",
+            "values-01":"ang-speed-y",
+            "values-02":"ang-speed-z"
+        }
+    },
+
+    "light.csv":{
+        "primary-cols":"timestamp,timeReadable,timestampRaw,timestampType,values-00,values-01,values-02",
+        "rename":{
+            "values-00":"ambient-lux"
+        }
+    },
+
+    "location.csv":{
+        "primary-cols":"timestamp,timeReadable,lat,lon,provider"
+    },
+
+    "power.csv":{
+        "primary-cols":"timestamp,timeReadable,charging,chargeLevel,usbCharging,acCharging,temperature,voltage"
+    },
+
+    "pressure.csv":{
+        "primary-cols":"timestamp,timeReadable,timestampRaw,timestampType,values-00,values-01,values-02",
+        "rename":{
+            "values-00":"millibars"
+        }
+    },
+
+    "proximity.csv":{
+        "primary-cols":"timestamp,timeReadable,timestampRaw,timestampType,values-00,values-01,values-02",
+        "rename":{
+            "values-00":"distance-cm"
+        }
+    },
+
+    "rotation.csv":{
+        "primary-cols":"timestamp,timeReadable,timestampRaw,timestampType,values-00,values-01,values-02,values-03,values-04",
+        "rename":{
+            "values-00":"x-sin-theta/2",
+            "values-01":"y-sin-theta/2",
+            "values-02":"z-sin-theta/2",
+            "values-03":"cos-theta/2",
+            "values-04":"accuracy-rads"
+        }
+    },
+
+    "screen.csv":{
+        "primary-cols":"timestamp,timeReadable,screenState"
+    },
+
+    "steps.csv":{
+        "primary-cols":"timestamp,timeReadable,timestampRaw,timestampType,values-00",
+        "rename":{
+            "values-00":"cumulative-steps"
+        }
+    }
+}
