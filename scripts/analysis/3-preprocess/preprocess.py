@@ -28,6 +28,7 @@ def read_spec(spec_file):
 script_path = os.path.dirname(os.path.realpath(__file__))
 default_spec_file = os.path.join(script_path, 'spec.json')
 cols_key = 'primary-cols'
+rename_key = 'rename'
 
 args = parse_args()
 extract_path = args.extract_path
@@ -52,8 +53,9 @@ to_ignore = [f for f in extracted_files if f not in target_files]
 for target in to_preprocess:
     target_path = os.path.join(extract_path, target)
     columns = spec[target][cols_key].split(',')
+    renames = spec[target][rename_key] if rename_key in spec[target].keys() else None
 
-    pp = Preprocessor(target_path, columns)
+    pp = Preprocessor(target_path, columns, renames)
     pp.run(out_path)
 
 for ignore in to_ignore:
