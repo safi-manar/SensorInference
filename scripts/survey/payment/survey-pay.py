@@ -10,6 +10,7 @@ def parse_args():
     """Specify a parser for a single mandatory command-line argument"""
     parser = argparse.ArgumentParser(description='Examine survey submissions and pay participants')
     parser.add_argument('api_path', help='path to api.secret file')
+    parser.add_argument('-t', '--test', action='store_true', help='print out actions without changing state or issuing payments')
 
     return parser.parse_args()
 
@@ -40,7 +41,7 @@ def get_uuid_mturk_mapping():
 
     return (uuid_mapping, mturk_mapping)
 
-def process_survey_gizmo(id_mapping):
+def process_survey_gizmo(id_mapping, is_test_mode=False):
     """Identify survey submissions associated with MTURK workers, mark those as processed, and return lists of 
        MTURK IDs to pay"""
     # Identify surveys that belong to this project
@@ -51,18 +52,26 @@ def process_survey_gizmo(id_mapping):
     exit_survey_id = [survey['id'] for survey in survey_data if survey['title'] == api_secrets['sm_exit_survey_title']][0]
 
     # Find UUIDs present in both MTURK and SurveyGizmo
-    entry_payment_uuids = process_survey(entry_survey_id, id_mapping)
-    daily_payment_uuids = process_survey(daily_survey_id, id_mapping)
-    exit_payment_uuids = process_survey(exit_survey_id, id_mapping)
+    entry_payment_uuids = process_survey(entry_survey_id, id_mapping, is_test_mode)
+    daily_payment_uuids = process_survey(daily_survey_id, id_mapping, is_test_mode)
+    exit_payment_uuids = process_survey(exit_survey_id, id_mapping, is_test_mode)
 
     # Map those UUIDs back to the MTURK IDs for payment
     entry_payment_mturkers = [id_mapping[uuid] for uuid in entry_payment_uuids]
     daily_payment_mturkers = [id_mapping[uuid] for uuid in daily_payment_uuids]
     exit_payment_mturkers = [id_mapping[uuid] for uuid in exit_payment_uuids]
 
+    if is_test_mode:
+        log_message('entry_payment_uuids=%s' % entry_payment_uuids, level='TEST')
+        log_message('entry_payment_mturkers=%s' % entry_payment_mturkers, level='TEST')
+        log_message('daily_payment_uuids=%s' % daily_payment_uuids, level='TEST')
+        log_message('daily_payment_uuids=%s' % daily_payment_uuids, level='TEST')
+        log_message('exit_payment_mturkers=%s' % exit_payment_mturkers, level='TEST')
+        log_message('exit_payment_mturkers=%s' % exit_payment_mturkers, level='TEST')
+
     return (entry_payment_mturkers, daily_payment_mturkers, exit_payment_mturkers)
 
-def process_survey(survey_id, id_mapping):
+def process_survey(survey_id, id_mapping, is_test_mode=False):
     """Return UUIDs that should be paid for submitting entry survey. Mark those as processed."""
     (uuid_id, processed_id) = identify_uuid_and_processed(survey_id)
     uuid_field = '[question(%d), option(0)]' % uuid_id
@@ -70,6 +79,7 @@ def process_survey(survey_id, id_mapping):
 
     responses = sg.api.surveyresponse \
                 .filter('status', '!=', 'Deleted') \
+                .filter('status', '!=', 'Disqualified') \
                 .filter(processed_field, '=', 'false') \
                 .filter(uuid_field, 'IS NOT NULL', '') \
                 .list(survey_id)
@@ -82,8 +92,9 @@ def process_survey(survey_id, id_mapping):
         short_uuid = uuid.split('-')[0]
 
         if short_uuid in id_mapping.keys():
-            kwargs = {'data[%d][0]' % processed_id: 'true'}     # change the "processed" field from false to true
-            sg.api.surveyresponse.update(survey_id, response_id, **kwargs)
+            if not is_test_mode:
+                kwargs = {'data[%d][0]' % processed_id: 'true'}     # change the "processed" field from false to true
+                sg.api.surveyresponse.update(survey_id, response_id, **kwargs)
             processed.append(short_uuid)
 
     return processed
@@ -118,7 +129,7 @@ def pay_worker(worker_ids, assignment_mapping, is_bonus=False, amount_usd=0.0, s
                                        feedback='Thank you for completing the %s survey! Please participate in the daily and exit surveys to receive bonuses.' % survey_type)
 
                 log_message('Approved assignment %s given to worker %s for %s survey' % (assignment_id, worker_id, survey_type))
-                log_message('assignment_id=%s,worker_id=%s,survey_type=%s' % (assignment_id, worker_id, amount_usd, survey_type), level='APPROVE')
+                log_message('assignment_id=%s,worker_id=%s,amount_usd=%f,survey_type=%s' % (assignment_id, worker_id, amount_usd, survey_type), level='APPROVE')
             except MTurkRequestError as e:
                 log_message('Failed to approve assignment %s to worker %s for %s survey' % (assignment_id, worker_id, survey_type), level='ERROR')
                 log_message('Exception "%s"' % str(e).replace('\r','').replace('\n',''), level='ERROR')
@@ -143,10 +154,18 @@ mtk = MTurkConnection(
     aws_secret_access_key = api_secrets['mt_aws_secret_key'],
     host = api_secrets['mt_host']
 )
+is_test_mode = args.test
 
 (uuids_mturkids, mturkids_assignments) = get_uuid_mturk_mapping()
-mturkers_to_pay = process_survey_gizmo(uuids_mturkids)
+if is_test_mode:
+    log_message('uuids_mturkids=%s' % uuids_mturkids, level='TEST')
+    log_message('mturkids_assignments=%s' % mturkids_assignments, level='TEST')
 
-pay_worker(mturkers_to_pay[0], mturkids_assignments, survey_type = 'entry')
-pay_worker(mturkers_to_pay[1], mturkids_assignments, is_bonus=True, amount_usd=1.00, survey_type = 'daily')
-pay_worker(mturkers_to_pay[2], mturkids_assignments, is_bonus=True, amount_usd=2.00, survey_type = 'exit')
+mturkers_to_pay = process_survey_gizmo(uuids_mturkids, is_test_mode)
+if is_test_mode:
+    for to_pay in mturkers_to_pay:
+        log_message('mturkers_to_pay=%s' % to_pay, level='TEST')
+else:
+    pay_worker(mturkers_to_pay[0], mturkids_assignments, amount_usd=1.00, survey_type = 'entry')
+    pay_worker(mturkers_to_pay[1], mturkids_assignments, is_bonus=True, amount_usd=1.00, survey_type = 'daily')
+    pay_worker(mturkers_to_pay[2], mturkids_assignments, is_bonus=True, amount_usd=2.00, survey_type = 'exit')
