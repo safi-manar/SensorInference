@@ -14,7 +14,7 @@ def parse_args():
 
     script_dir = os.path.dirname(os.path.realpath(__file__))
     default_sched = os.path.join(script_dir, 'schedule.json')
-    parser.add_argument('-s', '--schedule-path', help='path to load/save a file containing the reminder schedule (default: <script-dir>/schedule.json', default=default_sched)
+    parser.add_argument('-s', '--schedule-path', help='path to load/save a file containing the reminder schedule (default: <script-dir>/schedule.json)', default=default_sched)
 
     return parser.parse_args()
 
