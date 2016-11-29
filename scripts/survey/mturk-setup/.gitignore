@@ -4,3 +4,4 @@ mturk.properties
 *.input.success
 *.results
 participated.txt
+runs/
