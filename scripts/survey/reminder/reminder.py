@@ -43,10 +43,10 @@ mtk = MTurkConnection(
     host = api_secrets['mt_host']
 )
 
-# Get our HIT
+# Get our HIT (the latest with its name)
 target_hit_title = api_secrets['mt_hit_title']
-matching_hits = [hit for hit in mtk.get_all_hits() if hit.Title == target_hit_title and hit.HITStatus == 'Assignable']
-hit = matching_hits[0] if len(matching_hits) > 0 else None
+matching_hits = [hit for hit in mtk.get_all_hits() if hit.Title == target_hit_title and hit.HITStatus != 'Disposed']
+hit = matching_hits[-1] if len(matching_hits) > 0 else None
 if hit != None:
     print 'Found HIT "%s" (ID# %s)' % (hit.Title, hit.HITId)
 else:
