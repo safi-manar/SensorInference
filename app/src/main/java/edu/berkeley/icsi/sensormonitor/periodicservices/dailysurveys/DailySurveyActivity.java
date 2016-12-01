@@ -100,6 +100,12 @@ public class DailySurveyActivity extends Activity {
             @Override
             public void onCancel(DialogInterface dialog) {
                 Log.d("DailySurveyActivity", "Back button pressed inside of dialog.");
+
+                // If they have hit back button, force the flag to false.
+                PreferencesWrapper.setDailyOverlayUnFlagged();
+                // Internal logging
+                FBLogger.dailySurveyPostponed();
+
                 postponeDeadline();
                 moveTaskToBack(true);
                 finish();

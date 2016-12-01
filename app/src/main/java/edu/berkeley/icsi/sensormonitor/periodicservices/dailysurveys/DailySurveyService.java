@@ -24,8 +24,16 @@ public class DailySurveyService extends IntentService {
     /**
      * Check the current time against the daily survey deadline times.
      */
+    /**
+     *  There is a bug where the survey dialog sets the overlay flag to true, and if
+     *  the user never accepts or if there is a crash in the 4-year window, the flag
+     *  is never set to false. So, we manually set the flag to false. Also, set
+     *  DailySurveyActivity.builder.setOnCancelListener() to force the flag unsetting.
+     */
     private void checkDeadline() {
         if (isPassedWindow()) {
+            PreferencesWrapper.setDailyOverlayUnFlagged();
+            // Force the flag to false.
             PreferencesWrapper.updateDailyDeadline();
         } else if (isPassedDeadline() && !PreferencesWrapper.isGPSSpeedExceed20KPH()
                                     && !PreferencesWrapper.isDailyDialogOverlayed()
@@ -49,6 +57,7 @@ public class DailySurveyService extends IntentService {
      *
      * @return true if the current time is passed the nominal (possibly postponed)
      *          daily deadline.
+     *
      */
     protected boolean isPassedDeadline() {
         long currentTime = System.currentTimeMillis();
