@@ -26,7 +26,7 @@ public class DailySurveyService extends IntentService {
      */
     /**
      *  There is a bug where the survey dialog sets the overlay flag to true, and if
-     *  the user never accepts or if there is a crash in the 4-year window, the flag
+     *  the user never accepts or if there is a crash in the 4-hour window, the flag
      *  is never set to false. So, we manually set the flag to false. Also, set
      *  DailySurveyActivity.builder.setOnCancelListener() to force the flag unsetting.
      */
@@ -35,9 +35,7 @@ public class DailySurveyService extends IntentService {
             PreferencesWrapper.setDailyOverlayUnFlagged();
             // Force the flag to false.
             PreferencesWrapper.updateDailyDeadline();
-        } else if (isPassedDeadline() && !PreferencesWrapper.isGPSSpeedExceed20KPH()
-                                    && !PreferencesWrapper.isDailyDialogOverlayed()
-                                    && PreferencesWrapper.isPastSixHoursSinceInstall()) {
+        } else if (isTimeForSurvey()) {
             startDailySurveyActivity();
         }
     }
@@ -50,6 +48,12 @@ public class DailySurveyService extends IntentService {
      */
     public static boolean isPassedWindow() {
         return (System.currentTimeMillis() > (PreferencesWrapper.getDailyDeadlineThreshold()));
+    }
+
+    public static boolean isTimeForSurvey() {
+        return isPassedDeadline() && !PreferencesWrapper.isGPSSpeedExceed20KPH()
+                                    && !PreferencesWrapper.isDailyDialogOverlayed()
+                                    && PreferencesWrapper.isPastSixHoursSinceInstall();
     }
 
 

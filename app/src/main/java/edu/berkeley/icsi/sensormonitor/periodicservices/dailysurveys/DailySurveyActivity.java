@@ -69,9 +69,6 @@ public class DailySurveyActivity extends Activity {
 
         builder.setNeutralButton(R.string.dailysurvey_postpone, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                // Internal logging
-                FBLogger.dailySurveyPostponed();
-
                 PreferencesWrapper.setDailyOverlayUnFlagged();
                 postponeDeadline();
                 //moveTaskToBack(true);
@@ -82,8 +79,6 @@ public class DailySurveyActivity extends Activity {
         builder.setNegativeButton(R.string.dailysurvey_no, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // Internal logging
-                FBLogger.dailySurveyAbstained();
-
                 PreferencesWrapper.setDailyOverlayUnFlagged();
                 skipTodaySurvey();
             }
@@ -103,8 +98,6 @@ public class DailySurveyActivity extends Activity {
 
                 // If they have hit back button, force the flag to false.
                 PreferencesWrapper.setDailyOverlayUnFlagged();
-                // Internal logging
-                FBLogger.dailySurveyPostponed();
 
                 postponeDeadline();
                 moveTaskToBack(true);
@@ -121,6 +114,7 @@ public class DailySurveyActivity extends Activity {
      */
     private void postponeDeadline() {
         PreferencesWrapper.postponeDailyDeadline();
+        FBLogger.dailySurveyPostponed();
     }
 
 
@@ -129,6 +123,7 @@ public class DailySurveyActivity extends Activity {
      */
     private void skipTodaySurvey() {
         PreferencesWrapper.updateDailyDeadline();
+        FBLogger.dailySurveyAbstained();
     }
 
 
