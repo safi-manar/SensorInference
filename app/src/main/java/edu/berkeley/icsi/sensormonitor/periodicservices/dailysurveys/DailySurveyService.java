@@ -59,7 +59,7 @@ public class DailySurveyService extends IntentService {
      *          daily deadline.
      *
      */
-    protected boolean isPassedDeadline() {
+    public static boolean isPassedDeadline() {
         long currentTime = System.currentTimeMillis();
         long deadlineTime = PreferencesWrapper.getDailyDeadline();
         return (currentTime > deadlineTime);

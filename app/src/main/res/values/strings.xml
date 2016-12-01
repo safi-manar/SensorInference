@@ -214,7 +214,7 @@
 
     <string name="info_done_button">Done!</string>
 
-    <string name="info_dailystatus_button">Check Today\'s Survey Status</string>
+    <string name="info_dailystatus_button">Is today\'s survey available?</string>
 
     <string name="info_ok">Ok</string>
     <string name="info_unavailable_title">Survey Currently Unavailable</string>
@@ -236,7 +236,7 @@
     <string name="exit_survey_url">https://www.surveygizmo.com/s3/2950911/Sensors-Inference-Exit-Survey?uuid=</string>
 
     <!-- Auto-generated Git version DO NOT EDIT -->
-    <string name="app_version">0fc45af</string>
+    <string name="app_version">2ce1eb1</string>
 
 
     <!--                                                     -->

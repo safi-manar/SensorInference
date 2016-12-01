@@ -16,6 +16,9 @@ import edu.berkeley.icsi.sensormonitor.periodicservices.dailysurveys.DailySurvey
 import edu.berkeley.icsi.sensormonitor.periodicservices.dailysurveys.DailySurveyService;
 import edu.berkeley.icsi.sensormonitor.utils.PreferencesWrapper;
 
+import static edu.berkeley.icsi.sensormonitor.periodicservices.dailysurveys.DailySurveyService.isPassedDeadline;
+
+
 public class InfoActivity extends AppCompatActivity {
 
     @Override
@@ -34,8 +37,12 @@ public class InfoActivity extends AppCompatActivity {
         final Button statusButton = (Button) findViewById(R.id.info_dailystatus_button);
         statusButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // Make the Done button button take the user to the home screen
-                if (DailySurveyService.isPassedWindow()) {
+                // (Mimic DailySurveyService.checkDeadline() method.
+                // Reevaluate: If passed deadline/not driving/second day, then
+                // show the dialog.
+                if ((isPassedDeadline() && !PreferencesWrapper.isGPSSpeedExceed20KPH()
+                        && !PreferencesWrapper.isDailyDialogOverlayed()
+                        && PreferencesWrapper.isPastSixHoursSinceInstall())) {
                     Intent deadlineDialog = new Intent(context, DailySurveyActivity.class);
                     deadlineDialog.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(deadlineDialog);
