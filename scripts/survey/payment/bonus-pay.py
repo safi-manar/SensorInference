@@ -41,6 +41,7 @@ mtk = MTurkConnection(
 # Read in the log file
 logfile = open(args.log_path, 'r')
 all_successful = True
+paid_workers = []
 for line in logfile:
     line = line.strip()
     if line.startswith('(BONUS)'):
@@ -51,15 +52,18 @@ for line in logfile:
             (label, value) = field.split('=')
             fields[label] = value
 
-        try:
-            mtk.grant_bonus(fields['worker_id'], \
-                            fields['assignment_id'], \
-                            Price(float(fields['amount_usd'])), \
-                            'Participation in a %s survey' % fields['survey_type'])
-            print 'Successfully paid %s' % str(fields)
-        except MTurkRequestError as e:
-            print str(e)
-            all_successful = False
+        worker_id = fields['worker_id']
+        if worker_id not in paid_workers:
+            try:
+                mtk.grant_bonus(worker_id, \
+                                fields['assignment_id'], \
+                                Price(float(fields['amount_usd'])), \
+                                'Participation in a %s survey' % fields['survey_type'])
+                paid_workers.append(worker_id)
+                print 'Successfully paid %s' % str(fields)
+            except MTurkRequestError as e:
+                print str(e)
+                all_successful = False
 
 # Rename the log file if it was all successfully processed
 if all_successful:
