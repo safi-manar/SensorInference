@@ -28,13 +28,14 @@ class Preprocessor:
             # Preprocessing operations
             data = data[self._columns_list]                             # Reorder columns
             data.columns = headers                                      # Rename columns
-            data = data.sort_values(by=headers[0], ascending=[True])    # Sort by first column
 
-            # Write out the file
-            out_file = os.path.join(out_path, self._filename)
-            if os.path.isfile(out_file):
-                out_file = out_file + '.pprc'   # Add extension to avoid overwrites
-            data.to_csv(path_or_buf=out_file, header=headers, index=False)
+            return data
+
+            ## Write out the file
+            #out_file = os.path.join(out_path, self._filename)
+            #if os.path.isfile(out_file):
+            #    out_file = out_file + '.pprc'   # Add extension to avoid overwrites
+            #data.to_csv(path_or_buf=out_file, header=headers, index=False)
 
     def _column_check(self, in_path=None):
         """Ensure that the source CSV has the expected number of columns with the right headers"""

@@ -24,7 +24,9 @@
     "light.csv":{
         "primary-cols":"timestamp,timeReadable,timestampRaw,timestampType,values-00,values-01,values-02",
         "rename":{
-            "values-00":"ambient-lux"
+            "values-00":"ambient-lux",
+            "values-01":"light-val-01",
+            "values-02":"light-val-02"
         }
     },
 
@@ -39,14 +41,18 @@
     "pressure.csv":{
         "primary-cols":"timestamp,timeReadable,timestampRaw,timestampType,values-00,values-01,values-02",
         "rename":{
-            "values-00":"millibars"
+            "values-00":"millibars",
+            "values-01":"press-val-01",
+            "values-02":"press-val-02"
         }
     },
 
     "proximity.csv":{
         "primary-cols":"timestamp,timeReadable,timestampRaw,timestampType,values-00,values-01,values-02",
         "rename":{
-            "values-00":"distance-cm"
+            "values-00":"distance-cm",
+            "values-01":"prox-val-01",
+            "values-02":"prox-val-02"
         }
     },
 
@@ -70,5 +76,10 @@
         "rename":{
             "values-00":"cumulative-steps"
         }
+    },
+
+    "meta":{
+        "sensormerge":"timestamp,timeReadable,timestampRaw,timestampType",
+        "allmerge":"timestamp,timeReadable"
     }
 }

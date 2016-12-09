@@ -6,6 +6,7 @@ import json
 from pprint import pprint
 
 from preprocessor import Preprocessor
+import pandas
 
 def parse_args():
     """Specify a parser for a single mandatory command-line argument"""
@@ -43,20 +44,34 @@ if(not os.path.isdir(out_path)):
 
 # Read spec
 spec = read_spec(spec_file)
-target_files = spec.keys()
+target_files = [val for val in spec.keys() if val.endswith('.csv')]
+sensor_keys = spec['meta']['sensormerge'].split(',')
+all_keys = spec['meta']['allmerge'].split(',')
 
 # Preprocess extracted data
 extracted_files = [f for f in os.listdir(extract_path) if os.path.isfile(os.path.join(extract_path, f))]
 to_preprocess = [f for f in extracted_files if f in target_files]
 to_ignore = [f for f in extracted_files if f not in target_files]
 
+sensormerge = []
+othermerge = []
 for target in to_preprocess:
     target_path = os.path.join(extract_path, target)
     columns = spec[target][cols_key].split(',')
     renames = spec[target][rename_key] if rename_key in spec[target].keys() else None
 
     pp = Preprocessor(target_path, columns, renames)
-    pp.run(out_path)
+
+    preproced = pp.run(out_path)
+    if set(sensor_keys) < set(columns):
+        sensormerge.append(preproced)
+    else:
+        othermerge.append(preproced)
+
+# Merge sensors together first, then everything else, then write it out
+merged = reduce(lambda x,y: x.merge(y, how='outer', on=sensor_keys, sort=False), sensormerge)
+merged = reduce(lambda x,y: x.merge(y, how='outer', on=all_keys, sort=True), othermerge, merged)
+merged.to_csv(os.path.join(out_path, 'merged.csv'), header=merged.columns, index=False)
 
 for ignore in to_ignore:
     print 'Ignored %s' % ignore
