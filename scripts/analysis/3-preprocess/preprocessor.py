@@ -53,7 +53,7 @@ class Preprocessor:
     def _write_out(self, csv_data, out_path):
         """Write out the file in the ordering specified by the columns list"""
 
-        # Write the updated headers first, if available
+        # Get the updated headers, if available
         headers = []
         if self._rename_map != None:
             for header in self._columns_list:
@@ -65,8 +65,10 @@ class Preprocessor:
             headers = self._columns_list
 
         with open(out_path, 'w') as outfile:
-            writer = csv.DictWriter(outfile, fieldnames=self._columns_list)
+            # Write the headers first
+            outfile.write(','.join(headers) + '\n')
 
-            writer.writeheader()
+            # Then the data
+            writer = csv.DictWriter(outfile, fieldnames=self._columns_list)
             for row in csv_data:
                 writer.writerow(row)

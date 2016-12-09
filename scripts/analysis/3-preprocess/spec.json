@@ -8,6 +8,10 @@
         }
     },
 
+    "generic.csv":{
+        "primary-cols":"timestamp,timeReadable,intent"
+    },
+
     "gyroscope.csv":{
         "primary-cols":"timestamp,timeReadable,timestampRaw,timestampType,values-00,values-01,values-02",
         "rename":{
