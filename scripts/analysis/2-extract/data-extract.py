@@ -140,3 +140,20 @@ if is_valid:
                 csv_writer.writerow(sensor_headers)
             data_row = [data_point[header] for header in sensor_headers]
             csv_writer.writerow(data_row)
+
+    # Generate a CSV for generic system-wide events
+    generic_key = 'generic'
+    generic_headers = ['timestamp', 'timeReadable', 'intent']
+    if generic_key in db.keys():
+        generic_data = db[generic_key]
+
+        generic_file = open(os.path.join(out_path, 'generic.csv'), 'wb')
+        csv_writer = csv.writer(generic_file)
+        csv_writer.writerow(generic_headers)
+
+        for readable_time in generic_data.keys():
+            data_point = generic_data[readable_time]
+            for timestamp in data_point.keys():
+                data_row = [timestamp, readable_time, data_point[timestamp]]
+                csv_writer.writerow(data_row)
+            
