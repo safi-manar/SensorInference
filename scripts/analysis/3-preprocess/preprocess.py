@@ -14,6 +14,7 @@ def parse_args():
     parser.add_argument('extract_path', help='path to a single device\'s extracted data')
     parser.add_argument('-o', '--out-path', help='path to the output directory, defaults to in-place preprocessing if left unspecified')
     parser.add_argument('-s', '--spec-file', help='path to a custom preprocessing spec file')
+    parser.add_argument('-m', '--merge', action='store_true')
 
     return parser.parse_args()
 
@@ -35,6 +36,7 @@ args = parse_args()
 extract_path = args.extract_path
 out_path = os.path.abspath(args.out_path) if args.out_path is not None else extract_path
 spec_file = args.spec_file if args.spec_file is not None else default_spec_file
+to_merge = args.merge
 
 print 'extract_path="%s"' % extract_path
 print 'out_path="%s"' % out_path
@@ -63,15 +65,20 @@ for target in to_preprocess:
     pp = Preprocessor(target_path, columns, renames)
 
     preproced = pp.run(out_path)
-    if set(sensor_keys) < set(columns):
-        sensormerge.append(preproced)
-    else:
-        othermerge.append(preproced)
+    if to_merge:
+        if set(sensor_keys) < set(columns):
+            sensormerge.append(preproced)
+        else:
+            othermerge.append(preproced)
+
+    # Write out a standalone file for each preprocessed data source
+    preproced.to_csv(os.path.join(out_path, target + '.pprc'), header=preproced.columns, index=False)
 
 # Merge sensors together first, then everything else, then write it out
-merged = reduce(lambda x,y: x.merge(y, how='outer', on=sensor_keys, sort=False), sensormerge)
-merged = reduce(lambda x,y: x.merge(y, how='outer', on=all_keys, sort=True), othermerge, merged)
-merged.to_csv(os.path.join(out_path, 'merged.csv'), header=merged.columns, index=False)
+if to_merge:
+    merged = reduce(lambda x,y: x.merge(y, how='outer', on=sensor_keys, sort=False), sensormerge)
+    merged = reduce(lambda x,y: x.merge(y, how='outer', on=all_keys, sort=True), othermerge, merged)
+    merged.to_csv(os.path.join(out_path, 'merged.pprc'), header=merged.columns, index=False)
 
 for ignore in to_ignore:
     print 'Ignored %s' % ignore
