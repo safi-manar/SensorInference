@@ -1,6 +1,10 @@
 import os
 import csv
 import pandas
+import re
+
+nums = re.compile('\d+')
+tz = re.compile('[A-Z]{3}')
 
 class Preprocessor:
     'Preprocessing operations for CVS\'d Firebase data'
@@ -28,6 +32,8 @@ class Preprocessor:
             # Preprocessing operations
             data = data[self._columns_list]                             # Reorder columns
             data.columns = headers                                      # Rename columns
+            if('timeReadable' in data.columns):                         # Ensure the timeReadable column (if present) has the expected zero-padding
+                data['timeReadable'] = data['timeReadable'].apply(zeroFix)
             data.sort_values(by=headers[0], inplace=True)               # Sort by first column (timestamp)
 
             return data
@@ -56,3 +62,22 @@ class Preprocessor:
             headers = self._columns_list
 
         return headers
+
+def zeroFix(readable_time):
+    # Example desired time format (24 characters):  2016-11-29-11:42:05(EST)
+    # Example incorrectly-padded time format:       2016-000011-29-11:42:5(EST)
+    desired_length = len('2016-11-29-11:42:05(EST)')
+    if(len(readable_time) != desired_length):
+        datetime_components = nums.findall(readable_time)
+        timezone_component = tz.search(readable_time)
+
+        # Only proceed if we have year-month-day-hour:min:sec(tz)
+        if(len(datetime_components) == 6 and timezone_component != None):
+            zero_fixed = [comp.lstrip('0').rjust(2, '0') for comp in datetime_components]
+            timezone = timezone_component.group(0)
+
+            corrected_time = '%s-%s-%s-%s:%s:%s(%s)' % (zero_fixed[0], zero_fixed[1], zero_fixed[2], zero_fixed[3], zero_fixed[4], zero_fixed[5], timezone)
+            return corrected_time
+
+    return readable_time
+
