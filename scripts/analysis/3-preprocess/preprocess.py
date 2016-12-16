@@ -65,19 +65,17 @@ for target in to_preprocess:
     columns = spec[target][cols_key].split(',')
     renames = spec[target][rename_key] if rename_key in spec[target].keys() else None
 
-    # Preprocess
+    # Preprocess and write out a standalone file for the data source
     preproced = Preprocessor(target_path, columns, renames).run()
     if to_merge:
         if set(sensor_keys) < set(columns):
             sensormerge.append(preproced)
         else:
             othermerge.append(preproced)
+    preproced.to_csv(os.path.join(out_path, target + '.pprc'), header=preproced.columns, index=False)
 
     # Generate summary of preprocessed data
     summary[target] = Summarizer(preproced).get_full_report()
-
-    # Write out a standalone file for each preprocessed data source
-    preproced.to_csv(os.path.join(out_path, target + '.pprc'), header=preproced.columns, index=False)
 
 # Note missing files and write out a standalone summary file
 summary['missing'] = [f for f in target_files if f not in to_preprocess]
