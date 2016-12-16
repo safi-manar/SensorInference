@@ -7,7 +7,7 @@ nums = re.compile('\d+')
 tz = re.compile('[A-Z]{3}')
 
 class Preprocessor:
-    'Preprocessing operations for CVS\'d Firebase data'
+    """Preprocessing operations for CSV\'d Firebase data"""
     _csv_path = ''
     _filename = ''
     _columns_list = []
@@ -22,7 +22,7 @@ class Preprocessor:
         else:
             raise IOError('File "%s" does not exist' % csv_path)
 
-    def run(self, out_path):
+    def run(self):
         good_columns = self._column_check()
         if(good_columns):
             # Read in file and desired headers
@@ -35,6 +35,7 @@ class Preprocessor:
             if('timeReadable' in data.columns):                         # Ensure the timeReadable column (if present) has the expected zero-padding
                 data['timeReadable'] = data['timeReadable'].apply(zeroFix)
             data.sort_values(by=headers[0], inplace=True)               # Sort by first column (timestamp)
+            data = data.reset_index(drop=True)
 
             return data
 

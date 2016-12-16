@@ -6,6 +6,7 @@ import json
 from pprint import pprint
 
 from preprocessor import Preprocessor
+from summarizer import Summarizer
 import pandas
 
 def parse_args():
@@ -15,6 +16,7 @@ def parse_args():
     parser.add_argument('-o', '--out-path', help='path to the output directory, defaults to in-place preprocessing if left unspecified')
     parser.add_argument('-s', '--spec-file', help='path to a custom preprocessing spec file')
     parser.add_argument('-m', '--merge', action='store_true')
+    parser.add_argument('-t', '--timestep', type=int, help='the number of minutes in a data coverage timestep (currently not implemented)')
 
     return parser.parse_args()
 
@@ -50,29 +52,37 @@ target_files = [val for val in spec.keys() if val.endswith('.csv')]
 sensor_keys = spec['meta']['sensormerge'].split(',')
 all_keys = spec['meta']['allmerge'].split(',')
 
-# Preprocess extracted data
+# Preprocess and summarize extracted data
 extracted_files = [f for f in os.listdir(extract_path) if os.path.isfile(os.path.join(extract_path, f))]
 to_preprocess = [f for f in extracted_files if f in target_files]
 to_ignore = [f for f in extracted_files if f not in target_files]
 
 sensormerge = []
 othermerge = []
+summary = {}
 for target in to_preprocess:
     target_path = os.path.join(extract_path, target)
     columns = spec[target][cols_key].split(',')
     renames = spec[target][rename_key] if rename_key in spec[target].keys() else None
 
-    pp = Preprocessor(target_path, columns, renames)
-
-    preproced = pp.run(out_path)
+    # Preprocess
+    preproced = Preprocessor(target_path, columns, renames).run()
     if to_merge:
         if set(sensor_keys) < set(columns):
             sensormerge.append(preproced)
         else:
             othermerge.append(preproced)
 
+    # Generate summary of preprocessed data
+    summary[target] = Summarizer(preproced).get_full_report()
+
     # Write out a standalone file for each preprocessed data source
     preproced.to_csv(os.path.join(out_path, target + '.pprc'), header=preproced.columns, index=False)
+
+# Note missing files and write out a standalone summary file
+summary['missing'] = [f for f in target_files if f not in to_preprocess]
+with open(os.path.join(out_path, 'summary.json'), 'w') as sumfile:
+    json.dump(summary, sumfile, sort_keys=True, indent=4)
 
 # Merge sensors together first, then everything else, then write it out
 if to_merge:

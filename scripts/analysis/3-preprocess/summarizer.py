@@ -146,15 +146,15 @@ class Summarizer:
         max_gap = self.get_max_gap()
 
 
-        return { 'observation-start' : self.get_start().isoformat(),
+        return { 'observation-begin' : self.get_start().isoformat(),
                  'observation-seconds' : self.get_duration().total_seconds(),
                  'observation-end' : self.get_end().isoformat(),
-                 'max-gap-start' : max_gap[0].isoformat(),
-                 'max-gap-seconds' : str(max_gap[2].total_seconds()),
+                 'max-gap-begin' : max_gap[0].isoformat(),
+                 'max-gap-seconds' : max_gap[2].total_seconds(),
                  'max-gap-end' : max_gap[1].isoformat(),
-                 'median-gap-seconds' : str(self.get_median_gap().total_seconds()),
-                 'mean-gap-seconds' : str(self.get_mean_gap().total_seconds()),
-                 'is-batched' : str(self.is_batched())
+                 'median-gap-seconds' : self.get_median_gap().total_seconds(),
+                 'mean-gap-seconds' : self.get_mean_gap().total_seconds(),
+                 'batched' : self.is_batched()
                }
 
 def _to_datetime(timestamp_ms):
