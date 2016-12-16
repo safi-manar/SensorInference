@@ -121,7 +121,7 @@ class Summarizer:
         return self._max_gap
 
     def get_median_gap(self):
-        if self._median_gap:
+        if self._median_gap is None:
             median_gap_ms = self._data[self._gap_key].median()
             self._median_gap = datetime.timedelta(milliseconds=median_gap_ms)
         return self._median_gap
@@ -141,6 +141,21 @@ class Summarizer:
 
     def is_batched(self):
         return self.get_median_gap().total_seconds() < 1           # When batching, most measurements are less than 1 second after the previous one
+
+    def get_full_report(self):
+        max_gap = self.get_max_gap()
+
+
+        return { 'observation-start' : self.get_start().isoformat(),
+                 'observation-seconds' : self.get_duration().total_seconds(),
+                 'observation-end' : self.get_end().isoformat(),
+                 'max-gap-start' : max_gap[0].isoformat(),
+                 'max-gap-seconds' : str(max_gap[2].total_seconds()),
+                 'max-gap-end' : max_gap[1].isoformat(),
+                 'median-gap-seconds' : str(self.get_median_gap().total_seconds()),
+                 'mean-gap-seconds' : str(self.get_mean_gap().total_seconds()),
+                 'is-batched' : str(self.is_batched())
+               }
 
 def _to_datetime(timestamp_ms):
     return datetime.datetime.utcfromtimestamp(timestamp_ms / 1e3)   # ms to s
