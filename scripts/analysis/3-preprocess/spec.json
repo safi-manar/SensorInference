@@ -3,8 +3,8 @@
         "primary-cols":"timestamp,timeReadable,timestampRaw,timestampType,values-00,values-01,values-02",
         "rename":{
             "values-00":"x-minus-gx",
-            "values-01":"y-minux-gx",
-            "values-02":"z-minus-gx"
+            "values-01":"y-minux-gy",
+            "values-02":"z-minus-gz"
         }
     },
 
