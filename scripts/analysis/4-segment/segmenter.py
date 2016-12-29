@@ -44,7 +44,11 @@ is_good_out = os.path.isdir(out_path)
 
 if is_good_pprc and is_good_segment and is_good_out:
     sg = instantiate_seg_class(segment)
-    sg.run(pprc_path)
+    segdata = sg.run(pprc_path)
+
+    if segdata is not None:
+        out_file = os.path.join(out_path, segment + '.csv.pprc')
+        segdata.to_csv(out_file, index=False)
 else:
     if not is_good_pprc:
         print 'ERROR: Preprocessed data folder "%s" does not exist' % pprc_path

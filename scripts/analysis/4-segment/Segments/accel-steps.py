@@ -1,5 +1,6 @@
 import os
 import pandas
+import numpy
 
 from Segments.__SegBase__ import SegBase
 
@@ -29,15 +30,29 @@ class AccelSteps(SegBase):
             steps_df = steps_df[steps_df['delta-t'] > 1]    # Remove non-elapsed times
             steps_df['steps-per-second'] = steps_df['delta-steps'].divide(steps_df['delta-t'])  # Compute rate
             steps_df = steps_df[(steps_df['steps-per-second'] > 1) & (steps_df['steps-per-second'] < 4)]    # Filter out non-movements and inhuman speeds 
+            steps_df['timestamp-prev'] = steps_df['timestamp-prev'].astype(int)
 
-            walking_times = steps_df[['timestamp','timeReadable','timestamp-prev','delta-t','steps-per-second']]
-            print walking_times
+            walking_windows = steps_df[['timestamp-prev','timestamp']]
+            walking_windows.columns = ['start-ms', 'end-ms']
 
-            #for index, row in walking_times.iterrows():
-            #    print row['timestamp'] - row['timestamp-prev']
+            # Get the accelerometer data in those windows
+            accel_df = pandas.read_csv(os.path.join(files_path, accel_file))
+            window_num = 0
+            combined = None
+            for index, row in walking_windows.iterrows():
+                start_ms = row['start-ms']
+                end_ms = row['end-ms']
 
-            # Get the accelerometer readings within those walking times
-            #acc_df = pandas.read_csv(os.path.join(files_path, accel_file))
+                accel_window = accel_df[(accel_df['timestamp'] >= start_ms) & (accel_df['timestamp'] <= end_ms)].copy()
+                accel_components = accel_window[['x-minus-gx','y-minus-gy','z-minus-gz']]
+                accel_window['l2-norm'] = numpy.sqrt(numpy.square(accel_components).sum(axis=1))
+                accel_window['window-num'] = [window_num] * len(accel_window.index)
+                window_num += 1
+
+                combined = pandas.concat([combined, accel_window]) if combined is not None else accel_window
+
+            # Return a dataframe containing all accelerometer readings during walking, None if no such readings
+            return combined 
 
         Exception('"%s" needs to contain exactly 2 files, one for the accelerometer and another for the step counter' % files_list)
 
