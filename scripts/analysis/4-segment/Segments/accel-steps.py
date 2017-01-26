@@ -32,8 +32,8 @@ class AccelSteps(SegBase):
             steps_df = steps_df[(steps_df['steps-per-second'] > 1) & (steps_df['steps-per-second'] < 4)]    # Filter out non-movements and inhuman speeds 
             steps_df['timestamp-prev'] = steps_df['timestamp-prev'].astype(int)
 
-            walking_windows = steps_df[['timestamp-prev','timestamp']]
-            walking_windows.columns = ['start-ms', 'end-ms']
+            walking_windows = steps_df[['timestamp-prev','timestamp','steps-per-second']]
+            walking_windows.columns = ['start-ms','end-ms','steps-per-second']
 
             # Get the accelerometer data in those windows
             accel_df = pandas.read_csv(os.path.join(files_path, accel_file))
@@ -42,10 +42,12 @@ class AccelSteps(SegBase):
             for index, row in walking_windows.iterrows():
                 start_ms = row['start-ms']
                 end_ms = row['end-ms']
+                step_rate = row['steps-per-second']
 
                 accel_window = accel_df[(accel_df['timestamp'] >= start_ms) & (accel_df['timestamp'] <= end_ms)].copy()
                 accel_components = accel_window[['x-minus-gx','y-minus-gy','z-minus-gz']]
                 accel_window['l2-norm'] = numpy.sqrt(numpy.square(accel_components).sum(axis=1))
+                accel_window['steps-per-second'] = [step_rate] * len(accel_window.index)
                 accel_window['window-num'] = [window_num] * len(accel_window.index)
                 window_num += 1
 
