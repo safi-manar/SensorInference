@@ -13,7 +13,7 @@ def interpolate(accel, PARALLEL=False, CORES=4):
     columns = accel.columns # backup the original columns
     accel = trim(accel)
     accel = cleanTime(accel)
-    #accel = L2(accel) # Add the L2 column.
+    accel = L2(accel) # Add the L2 column.
     return accel
 
 
@@ -41,11 +41,11 @@ def normalize(time):
 
 
 def L2(accel):
-    np.square(accel['x-minus-gx', 'y-minus-gy', 'z-minus-gz'])
+    np.square(accel[['x', 'y', 'z']])
     # Sum the rows into a new column
     accel['sum'] = accel['x'] + accel['y'] + accel['z']
     np.sqrt(accel['sum'])
-    accel.columns = ['t', 'x', 'y', 'z', 'L2'] # Rename sum
+    accel.columns = ['t', 'time', 'x', 'y', 'z', 'L2'] # Rename sum
     return accel
 
 # The linear interpolation between two points.
