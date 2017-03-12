@@ -5,12 +5,17 @@
 
 import pandas as pd
 import numpy as np
+from multiprocessing import Pool # [2]
 
+NUM_PARTITIONS = 8
 
-def interpolate(accel):
+def interpolate(accel, PARALLEL=False, CORES=4):
     columns = accel.columns # backup the original columns
     accel = trim(accel)
-    accel = cleanTime(accel)
+    if (PARALLEL):
+        accel = cleanTimeParallel(accel, CORES)
+    else:
+        accel = cleanTime(accel)
     #accel = L2(accel) # Add the L2 column.
     return accel
 
@@ -34,6 +39,23 @@ def cleanTime(accel):
     print(accel.columns.tolist())
     accel = accel[['t', 'time', 'x', 'y', 'z']]# TODO Delete
     return accel
+
+# At 50Hz, there should be an event every 20ms.
+def cleanTimeParallel(accel, CORES):
+    print("PreTest: Parallel")
+    print(accel.columns.tolist())
+    accel_split = np.array_split(accel, NUM_PARTITIONS)
+    pool = Pool(CORES)
+    accel = pd.concat(pool.map(normalizeFunc, accel_split))
+    pool.close()
+    pool.join()
+    print("PostTest")
+    print(accel.columns.tolist())
+    accel = accel[['t', 'time', 'x', 'y', 'z']]# TODO Delete
+    return accel
+
+def normalizeFunc(df):
+    return df.apply(normalize, axis=1)
 
 # Round the time value to the nearest 20 [1]
 def normalize(row):
@@ -59,3 +81,4 @@ def interp(x0, y0, x1, y1, x):
 
 
 # [1] http://stackoverflow.com/questions/9810391/round-to-the-nearest-500-python
+# [2] http://www.racketracer.com/2016/07/06/pandas-in-parallel/
