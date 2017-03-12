@@ -41,10 +41,10 @@ def normalize(time):
 
 
 def L2(accel):
-    np.square(accel[['x', 'y', 'z']])
+    accel[['x', 'y', 'z']] = np.square(accel[['x', 'y', 'z']])
     # Sum the rows into a new column
     accel['sum'] = accel['x'] + accel['y'] + accel['z']
-    np.sqrt(accel['sum'])
+    accel['sum'] = np.sqrt(accel['sum'])
     accel.columns = ['t', 'time', 'x', 'y', 'z', 'L2'] # Rename sum
     return accel
 
