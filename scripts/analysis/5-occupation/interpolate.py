@@ -37,26 +37,34 @@ def L2(accel):
 
 # Returns a time series for the L2 data, using time as the index.
 def getTimeSeries(accel):
-    times = pd.to_datetime(accel['t'], unit='ms') # Create a DateTimeIndex series from 't'
+    times = None
+    try:
+        times = pd.to_datetime(accel['t'], unit='ms') # Create a DateTimeIndex series from 't'
+    except:
+        exit(1)
+    assert times is not None
     data = accel['L2'] # Create a series from the L2 data.
     return pd.Series(data.values, times) # Create a Series from L2 data and using times as the index
 
 # Given the accelerometer data, return a time seriess index with the times snapped to the nearest 20ms.
 def getResampledSeries(accel):
     snap = 20 # Interval in milliseconds.
+    old = accel['t'].copy()
     accel['t'] = accel['t'].apply(normalize) # Normalize the times.
     rts = getTimeSeries(accel)
     rs = pd.Series(index=rts.index) # Replaces L2 values with NaN, keeping only the time.
     return rs # return only the index.
 
-# Round the time value to the nearest 20 [1]
+# Snap the time value to the nearest 20 [1]
 def normalize(time):
     return int(round(float(time) / 20) * 20)
 
 # Given time series ts = with L2 data and time as the index, and
 # time series index rs, return the interpolated values of rs. From [3]
 def interpFromIndex(ts, rs):
-    ip = pd.concat([ts, rs]).sort_index()
+    rs = rs.groupby(rs.index).first() # Filter out duplicate snaps.
+    ip = pd.concat([ts, rs]).sort_index() # Concat
+    ip = ip.groupby(ip.index).first() # Filter out duplicate join
     ip = ip.interpolate()
     return ip[rs.index] # Return only those values that were in rs.
 
