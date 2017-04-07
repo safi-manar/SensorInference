@@ -2,6 +2,7 @@ import os
 import csv
 import pandas
 import re
+import time
 
 nums = re.compile('\d+')
 tz = re.compile('[A-Z]{3}')
@@ -29,9 +30,13 @@ class Preprocessor:
             data = pandas.read_csv(self._csv_path)
             headers = self._get_renamed_headers()
 
+            # Get the current timestamp in milliseconds
+            current_time_ms = time.time() * 1000
+
             # Preprocessing operations
             data = data[self._columns_list]                             # Reorder columns
             data.columns = headers                                      # Rename columns
+            data = data[data['timestamp'] < current_time_ms]            # Only grab the rows that occurred in the past
             if('timeReadable' in data.columns):                         # Ensure the timeReadable column (if present) has the expected zero-padding
                 data['timeReadable'] = data['timeReadable'].apply(zeroFix)
             data.sort_values(by=headers[0], inplace=True)               # Sort by first column (timestamp)
