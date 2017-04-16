@@ -5,10 +5,12 @@ import datetime
 
 # Given a UUID, scans the daily.csv survey source, and return a DataFrame
 # with the uuid and start and end timestamps for the user's work schedule.
+#  @ Columns = ['uuid', 'start', 'end']
+#
 # The script will scan the daily.csv file, filtering for only the uuid and valid non-Null values.
 # Note that the time_start and time_end columns must be pre-processed in 24 hour 00:00 format.
 
-FILE = './../data/survey_response/daily_modified.csv'
+FILE = './data/daily_modified.csv'
 
 # Main Method
 def getWindows(uuid):
@@ -78,7 +80,3 @@ def cleanColumns(daily):
     daily = daily.loc[:, ['uuid', 'start_stamp', 'end_stamp']]
     daily.columns = ['uuid', 'start', 'end']
     return daily
-
-
-
-print("work_windows.py.")
