@@ -10,11 +10,10 @@ import datetime
 # The script will scan the daily.csv file, filtering for only the uuid and valid non-Null values.
 # Note that the time_start and time_end columns must be pre-processed in 24 hour 00:00 format.
 
-FILE = './data/daily_modified.csv'
 
 # Main Method
-def getWindows(uuid):
-    daily = read_data(FILE)
+def getWindows(uuid, DAILY_PATH):
+    daily = read_data(DAILY_PATH)
     daily = filterValid(daily, uuid)
     daily = calculate_day(daily)
     daily = calculate_windows(daily)

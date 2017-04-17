@@ -5,12 +5,58 @@ import time
 
 import work_windows as ww
 
+import os
+
 
 THRESHOLD = 2.0
-UUID = 'c1db31bb-de17-4be4-a4c6-59135cf274f7'
 ACCEL_PATH = './data/in.csv'
 
 ONE_SECOND = 1000 # 1000 ms
+
+DATA_PATH = '/home/ioreyes/wearables/data/full-1/extract/batched'
+ACCEL_NAME = 'accelerometer.csv.pprc'
+DAILY_PATH = '/home/manar/scratch/5-occupation/data/daily_modified.csv'
+
+def inMotion(DATA_PATH, ACCEL_NAME):
+    uuidsBatched = os.listdir(DATA_PATH) # Get all the uuid's that have batched accelerometer
+    uuidsDaily = getDailyUUIDs(DAILY_PATH) # Get all uuid's that submitted surveys.
+    uuids = [uuid for uuid in uuidsDaily if uuid in uuidsBatched] # Find the intersection
+    uuids = sorted(uuids)
+    # Get paths to the accelerometer data for each uuid.
+    accel_paths = [DATA_PATH + '/' + uuid + '/' + ACCEL_NAME for uuid in uuids]
+    # Create tuples of (uuid, accel_path)
+    accelPairs = [ (uuids[i], accel_paths[i])  for i in range(0, len(uuids))]
+
+    print("Beginning inMotion analysis for " + str(len(uuids)) + " users...\n")
+
+    proportions = [processUser(pair[0], pair[1]) for pair in accelPairs]
+
+    # for pair in accelPairs:
+    #     print(pair)
+
+def getDailyUUIDs(DAILY_PATH):
+    daily = pd.read_csv(DAILY_PATH)
+    return daily['uuid'].unique()
+
+
+
+def processUser(uuid, accel_path):
+    print("\nReading in data for user: \'" + uuid + "\' ...")
+    accel = read_data(accel_path)
+    print("Getting work windows...")
+    daily = getWindows(uuid)
+    print("Partitioning work days...")
+    days = partitionWorkTimes(accel, daily)
+    print("Analyzing all work days...")
+    values = analyze_days(days)
+    print("Computing proportion...")
+    proportion = thresholdedProportion(values)
+    print("Analysis complete!")
+    print("\t Proportion of time that the user is at rest: " + str(proportion))
+    print("\t Proportion of time that the user is in motion: " + str(1 - proportion))
+
+    return proportion
+
 
 def read_data(path):
     accel = pd.read_csv(path)
@@ -35,7 +81,7 @@ def convert_time_format(df, columName='t'):
     return df
 
 def getWindows(uuid):
-    daily = ww.getWindows(uuid)
+    daily = ww.getWindows(uuid, DAILY_PATH)
     daily = convert_time_format(daily, 'start')
     daily = convert_time_format(daily, 'end')
     return daily
@@ -108,18 +154,9 @@ def thresholdedProportion(values):
 
 
 
+# Process the single user, for testing.
+#processUser(UUID, ACCEL_PATH)
 
 
-print("Reading in data...")
-accel = read_data(ACCEL_PATH)
-print("Getting work windows...")
-daily = getWindows(UUID)
-print("Partitioning work days...")
-days = partitionWorkTimes(accel, daily)
-print("Analyzing all work days...")
-values = analyze_days(days)
-print("Computing proportion...")
-proportion = thresholdedProportion(values)
-print("Analysis complete!")
-print("\t Proportion of time that the user is at rest: " + str(proportion))
-print("\t Proportion of time that the user is in motion: " + str(1 - proportion))
+# In motion script:
+inMotion(DATA_PATH, ACCEL_NAME)
