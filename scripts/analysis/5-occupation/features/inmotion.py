@@ -17,6 +17,9 @@ DATA_PATH = '/home/ioreyes/wearables/data/full-1/extract/batched'
 ACCEL_NAME = 'accelerometer.csv.pprc'
 DAILY_PATH = '/home/manar/scratch/5-occupation/data/daily_modified.csv'
 
+## For Debugging. Safe to remove all (if DEBUG) lines in code during processing.
+DEBUG = True
+
 def inMotion(DATA_PATH, ACCEL_NAME):
     uuidsBatched = os.listdir(DATA_PATH) # Get all the uuid's that have batched accelerometer
     uuidsDaily = getDailyUUIDs(DAILY_PATH) # Get all uuid's that submitted surveys.
@@ -34,12 +37,29 @@ def inMotion(DATA_PATH, ACCEL_NAME):
     # for pair in accelPairs:
     #     print(pair)
 
+# Filter for only valid UUIDS in the Daily survey
 def getDailyUUIDs(DAILY_PATH):
     daily = pd.read_csv(DAILY_PATH)
+    date = 'Date Submitted'
+    time_start = 'What time did (or will) your workday start?:Work'
+    time_end = 'What time did (or will) your workday end?:Work'
+    uuid = 'uuid'
+    work_today = 'Did you work today?:Work'
+    daily = daily.loc[:, [uuid, work_today, date, time_start, time_end]]
+    daily.columns = ['uuid', 'work_today', 'date', 'time_start', 'time_end']
+    # Filter only those subjects that answered the work_today, time_start / time_end questions. (All other columns must have entries automatically.)
+    daily = daily.dropna(how='any')
+    if (DEBUG):
+        # Write out the order of uuid's being processed
+        print("Writing filtered_daily data to file...")
+        daily.to_excel('filtered_daily.xlsx', sheet_name='Sheet1')
+    # Filter only the days in which the subject worked
+    daily = daily[daily.work_today.str.contains('Yes', regex=True)]
+
     return daily['uuid'].unique()
 
 
-
+# Master flow for processing a single uuid
 def processUser(uuid, accel_path):
     print("\nReading in data for user: \'" + uuid + "\' ...")
     accel = read_data(accel_path)
@@ -47,6 +67,11 @@ def processUser(uuid, accel_path):
     daily = getWindows(uuid)
     print("Partitioning work days...")
     days = partitionWorkTimes(accel, daily)
+    # Ensure that accel data exists.
+    if (days == -1):
+        print("No corresponding accelerometer data for work times.")
+        print("\t*Skipping user: " + str(uuid))
+        return -1
     print("Analyzing all work days...")
     values = analyze_days(days)
     print("Computing proportion...")
@@ -106,6 +131,10 @@ def partitionWorkTimes(accel, daily):
             days.append(workday)
 
     print("\tOut of " + str(workdayCount) + " submitted work days, there were " + str(acceldataCount) + " corresponding days of accelerometer data collected.")
+
+    # If no accelerometer data was collected, signal to skip to the next subject.
+    if (acceldataCount == 0):
+        return -1
 
     return days
 
