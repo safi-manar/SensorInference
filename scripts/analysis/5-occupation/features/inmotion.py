@@ -15,16 +15,20 @@ ONE_SECOND = 1000 # 1000 ms
 
 DATA_PATH = '/home/ioreyes/wearables/data/full-1/extract/batched'
 ACCEL_NAME = 'accelerometer.csv.pprc'
-DAILY_PATH = '/home/manar/scratch/5-occupation/data/daily_modified.csv'
+DAILY_PATH = '/home/manar/scratch/5-occupation/data/daily_coded.csv'
 
 ## For Debugging. Safe to remove all (if DEBUG) lines in code during processing.
-DEBUG = True
+#DEBUG = True
+DEBUG = False
 
 def inMotion(DATA_PATH, ACCEL_NAME):
     uuidsBatched = os.listdir(DATA_PATH) # Get all the uuid's that have batched accelerometer
     uuidsDaily = getDailyUUIDs(DAILY_PATH) # Get all uuid's that submitted surveys.
     uuids = [uuid for uuid in uuidsDaily if uuid in uuidsBatched] # Find the intersection
     uuids = sorted(uuids)
+    if (DEBUG):
+        # Write the daily rows to file of the uuids being processed.
+        writeFilteredDaily(uuids, DAILY_PATH)
     # Get paths to the accelerometer data for each uuid.
     accel_paths = [DATA_PATH + '/' + uuid + '/' + ACCEL_NAME for uuid in uuids]
     # Create tuples of (uuid, accel_path)
@@ -32,31 +36,54 @@ def inMotion(DATA_PATH, ACCEL_NAME):
 
     print("Beginning inMotion analysis for " + str(len(uuids)) + " users...\n")
 
+    # Analyze the proportion of each user.
     proportions = [processUser(pair[0], pair[1]) for pair in accelPairs]
 
-    # for pair in accelPairs:
-    #     print(pair)
+    print("\t InMotion analysis complete! Writing results to file \'proportions.csv\'...")
+    writePropToFile(uuids, proportions, 'proportions.csv')
+    print("Done!")
+
+
 
 # Filter for only valid UUIDS in the Daily survey
+#   A modified version of ww.read_data() and ww.filterValid()
 def getDailyUUIDs(DAILY_PATH):
+    daily = getFilteredDaily(DAILY_PATH)
+    # Return a Series of the unique UUID's
+    return daily['uuid'].unique()
+
+# Returns the Daily DataFrame (with relevant columns) with the following filters:
+# 1. Those that answered some type of "Yes" for the "Did you work today?" question.
+# 2. Those that entered in some (non-Null) times for work start/end (more or less the same filter as 1) *AFTER MANUAL CODING
+def getFilteredDaily(DAILY_PATH):
     daily = pd.read_csv(DAILY_PATH)
     date = 'Date Submitted'
-    time_start = 'What time did (or will) your workday start?:Work'
-    time_end = 'What time did (or will) your workday end?:Work'
+    time_start = 'code-start'
+    time_end = 'code-end'
     uuid = 'uuid'
     work_today = 'Did you work today?:Work'
     daily = daily.loc[:, [uuid, work_today, date, time_start, time_end]]
     daily.columns = ['uuid', 'work_today', 'date', 'time_start', 'time_end']
     # Filter only those subjects that answered the work_today, time_start / time_end questions. (All other columns must have entries automatically.)
     daily = daily.dropna(how='any')
-    if (DEBUG):
-        # Write out the order of uuid's being processed
-        print("Writing filtered_daily data to file...")
-        daily.to_excel('filtered_daily.xlsx', sheet_name='Sheet1')
     # Filter only the days in which the subject worked
     daily = daily[daily.work_today.str.contains('Yes', regex=True)]
 
-    return daily['uuid'].unique()
+    return daily
+
+
+# Writes out the order of the UUID's being processed for reference.
+# uuids is the list of uuids that are being processed.
+def writeFilteredDaily(uuids, DAILY_PATH):
+    print("Writing filtered_daily data to file...")
+    daily = getFilteredDaily(DAILY_PATH)
+    daily = daily.sort(['uuid']) # Sort by uuid
+    # Find the intersection
+    daily = daily[daily['uuid'].isin(uuids)] # Get only the rows that are in uuids.
+
+    daily.to_csv('filtered_daily.csv', sheet_name='Sheet1')
+
+    return
 
 
 # Master flow for processing a single uuid
@@ -122,13 +149,14 @@ def partitionWorkTimes(accel, daily):
         start = row['start']
         end = row['end']
         workday = accel[(accel['t'] >= start) & (accel['t'] <= end)]
+        start_timestamp = pd.Timestamp(start*1000000) # Calculate timestamps from ms.
+        end_timestamp = pd.Timestamp(end*1000000)
         if (workday.shape[0] == 0):
-            start_timestamp = pd.Timestamp(start*1000000)
-            end_timestamp = pd.Timestamp(end*1000000)
-            print("\tNo accelerometer data collected for start: " + str(start_timestamp) + " and end: " + str(end_timestamp) )
+            print("\t- No accelerometer data collected for start: " + str(start_timestamp) + " and end: " + str(end_timestamp) )
         else:
             acceldataCount += 1
             days.append(workday)
+            print("\tFound workday:  start: " + str(start_timestamp) + "  end: " + str(end_timestamp) )
 
     print("\tOut of " + str(workdayCount) + " submitted work days, there were " + str(acceldataCount) + " corresponding days of accelerometer data collected.")
 
@@ -180,6 +208,22 @@ def thresholdedProportion(values):
     thresholded = values[values <= THRESHOLD] # Select threshold values
     proportion = float(thresholded.size) / float(values.size) # Use float division
     return proportion
+
+
+def writePropToFile(uuids, proportions, name='proportions.csv'):
+    # Take 1-p, or -1 if the proportion was -1.
+    def inverseProportion(p):
+        if (p == -1):
+            return -1
+        else:
+            return 1 - p
+    proportion_motion = [inverseProportion(p) for p in proportions]
+    propDf = pd.DataFrame()
+    propDf['uuid'] = uuids
+    propDf['proportion_rest'] = proportions
+    propDf['proportion_motion'] = proportion_motion
+    propDf.to_csv(name, sheet_name='Sheet1')
+
 
 
 

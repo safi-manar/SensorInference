@@ -3,12 +3,13 @@ import numpy as np
 import time
 import datetime
 
-# Given a UUID, scans the daily.csv survey source, and return a DataFrame
+# Given a UUID, scans the daily_coded.csv survey source, and return a DataFrame
 # with the uuid and start and end timestamps for the user's work schedule.
 #  @ Columns = ['uuid', 'start', 'end']
 #
-# The script will scan the daily.csv file, filtering for only the uuid and valid non-Null values.
-# Note that the time_start and time_end columns must be pre-processed in 24 hour 00:00 format.
+# The script will scan the daily_coded.csv file, filtering for only the uuid and valid non-Null values.
+# Note that the time_start and time_end columns must be pre-processed in 24 hour 00:00 format.*
+# *This assumption is satisfied by using the daily_coded.csv (manually coded version of daily.csv)
 
 
 # Main Method
@@ -22,12 +23,13 @@ def getWindows(uuid, DAILY_PATH):
     return daily
 
 # Read in the given daily csv, and return only the relevant columns for filtering and timestamp processing.
+# Use the coded start / end times.
 def read_data(file):
     daily = pd.read_csv(file)
     # Get only the relevant columns
     date = 'Date Submitted'
-    time_start = 'What time did (or will) your workday start?:Work'
-    time_end = 'What time did (or will) your workday end?:Work'
+    time_start = 'code-start'
+    time_end = 'code-end'
     uuid = 'uuid'
     work_today = 'Did you work today?:Work'
     daily = daily.loc[:, [uuid, work_today, date, time_start, time_end]]
