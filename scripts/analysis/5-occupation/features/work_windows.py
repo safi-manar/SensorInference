@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import time
-import datetime
+import datetime as dt
 
 # Given a UUID, scans the daily_coded.csv survey source, and return a DataFrame
 # with the uuid and start and end timestamps for the user's work schedule.
@@ -19,6 +19,7 @@ def getWindows(uuid, DAILY_PATH):
     daily = calculate_day(daily)
     daily = calculate_windows(daily)
     daily = cleanColumns(daily)
+    daily = check24Hour(daily)
 
     return daily
 
@@ -80,4 +81,17 @@ def calculate_windows(daily):
 def cleanColumns(daily):
     daily = daily.loc[:, ['uuid', 'start_stamp', 'end_stamp']]
     daily.columns = ['uuid', 'start', 'end']
+    return daily
+
+
+
+# Check the case in which the user has worked through the day, past midnight. In this case,
+#   the end timestamp will appear to be less than the start timestamp (ie, for a night shift, from start: 22:00 to end: 4:00)
+#   So, assume that if the end_stamp is less than start_stamp, then end_stamp actually belongs to the next day.
+def check24Hour(daily):
+    ONE_DAY = dt.timedelta(days=1)
+
+    # Then, select nly the 'end' Series of the cases where end < start, and edit those to add 1 Day.
+    daily['end'][daily['end'] < daily['start']] = daily['start'] + ONE_DAY
+
     return daily
