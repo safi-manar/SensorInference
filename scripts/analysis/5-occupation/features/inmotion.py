@@ -17,15 +17,18 @@ DATA_PATH = '/home/ioreyes/wearables/data/full-1/extract/batched'
 ACCEL_NAME = 'accelerometer.csv.pprc'
 DAILY_PATH = '/home/manar/scratch/5-occupation/data/daily_coded.csv'
 TZ_PATH = '/home/manar/scratch/5-occupation/data/timezones.csv'
+IGNORED_PATH = '/home/manar/scratch/5-occupation/data/ignored.csv'
 
 ## For Debugging. Safe to remove all (if DEBUG) lines in code during processing.
 #DEBUG = True
 DEBUG = False
 
 def inMotion(DATA_PATH, ACCEL_NAME):
+    # First, filter for the intersection of uuid's with batched accel and uuid's that submitted surveys.
     uuidsBatched = os.listdir(DATA_PATH) # Get all the uuid's that have batched accelerometer
     uuidsDaily = getDailyUUIDs(DAILY_PATH) # Get all uuid's that submitted surveys.
     uuids = [uuid for uuid in uuidsDaily if uuid in uuidsBatched] # Find the intersection
+    uuids = filterIgnored(uuids)
     uuids = sorted(uuids)
     if (DEBUG):
         # Write the daily rows to file of the uuids being processed.
@@ -43,6 +46,13 @@ def inMotion(DATA_PATH, ACCEL_NAME):
     print("\t InMotion analysis complete! Writing results to file \'proportions.csv\'...")
     writePropToFile(uuids, proportions, 'proportions.csv')
     print("Done!")
+
+# Manually filter out specified UUID's for any particular reason.
+def filterIgnored(uuids):
+    ignored = pd.read_csv(IGNORED_PATH)
+    ignored = ignored['uuid']
+    uuids = [uuid for uuid in uuids if uuid not in ignored]
+    return uuids
 
 
 
