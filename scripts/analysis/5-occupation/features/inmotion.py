@@ -8,7 +8,7 @@ import work_windows as ww
 import os
 
 
-THRESHOLD = 2.0
+THRESHOLD = 1.5
 ACCEL_PATH = './data/in.csv'
 
 ONE_SECOND = 1000 # 1000 ms
@@ -16,6 +16,7 @@ ONE_SECOND = 1000 # 1000 ms
 DATA_PATH = '/home/ioreyes/wearables/data/full-1/extract/batched'
 ACCEL_NAME = 'accelerometer.csv.pprc'
 DAILY_PATH = '/home/manar/scratch/5-occupation/data/daily_coded.csv'
+TZ_PATH = '/home/manar/scratch/5-occupation/data/timezones.csv'
 
 ## For Debugging. Safe to remove all (if DEBUG) lines in code during processing.
 #DEBUG = True
@@ -133,7 +134,7 @@ def convert_time_format(df, columName='t'):
     return df
 
 def getWindows(uuid):
-    daily = ww.getWindows(uuid, DAILY_PATH)
+    daily = ww.getWindows(uuid, DAILY_PATH, TZ_PATH)
     daily = convert_time_format(daily, 'start')
     daily = convert_time_format(daily, 'end')
     return daily

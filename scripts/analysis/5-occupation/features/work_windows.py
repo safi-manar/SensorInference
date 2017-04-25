@@ -11,10 +11,12 @@ import datetime as dt
 # Note that the time_start and time_end columns must be pre-processed in 24 hour 00:00 format.*
 # *This assumption is satisfied by using the daily_coded.csv (manually coded version of daily.csv)
 
+DAILY_PATH = '/Users/manar/Projects/ICSI/SensorInference/scripts/analysis/5-occupation/data/survey_response/daily_coded.csv'
 
 # Main Method
-def getWindows(uuid, DAILY_PATH):
+def getWindows(uuid, DAILY_PATH, TZ_PATH):
     daily = read_data(DAILY_PATH)
+    daily = fix_timezones(daily, TZ_PATH)
     daily = filterValid(daily, uuid)
     daily = calculate_day(daily)
     daily = calculate_windows(daily)
@@ -36,6 +38,46 @@ def read_data(file):
     daily = daily.loc[:, [uuid, work_today, date, time_start, time_end]]
     daily.columns = ['uuid', 'work_today', 'date', 'time_start', 'time_end']
     return daily
+
+def calculateOffset(tz):
+    if tz == 'PST':
+        return dt.timedelta(0)
+    elif tz == 'MST':
+        return dt.timedelta(hours=1)
+    elif tz == 'CST':
+        return dt.timedelta(hours=2)
+    elif tz == 'EST':
+        return dt.timedelta(hours=3)
+    elif tz == 'AST':
+        return dt.timedelta(hours=4)
+    elif tz == 'GMT+08:00':
+        return dt.timedelta(hours=15)
+
+# The 'date' submitted data from Daily.csv is fixed in PST. This function adjusts the times
+# by shifting the times according to the
+def fix_timezones(daily, TZ_PATH):
+
+    tz = pd.read_csv(TZ_PATH)
+    daily = daily.sort(['uuid']) # Sort by uuid
+    tz = tz.sort(['uuid'])
+    tz['offset'] = tz['zone'].apply(calculateOffset)
+
+    # Now, merge, keeping the uuid's of daily (the left table).
+    daily = pd.merge(daily, tz, how='left', on='uuid')
+
+    # Convert to Timestamp objects and add the offset
+    daily['date'] = pd.to_datetime(daily['date'], infer_datetime_format=True)
+    daily['date'] = daily['date'] + daily['offset']
+
+    # Convert back to String.
+    daily['date'] = daily['date'].apply(lambda date: str(date))
+
+    # To maintain the previously enforced invariant
+    daily = daily.loc[:, ['uuid', 'work_today', 'date', 'time_start', 'time_end']]
+
+
+    return daily
+
 
 # Applies the following filters:
 #   1. Filter by matching UUID.
