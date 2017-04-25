@@ -8,7 +8,7 @@ import work_windows as ww
 import os
 
 
-THRESHOLD = 1.5
+THRESHOLD = 2.0
 ACCEL_PATH = './data/in.csv'
 
 ONE_SECOND = 1000 # 1000 ms
@@ -234,13 +234,3 @@ def writePropToFile(uuids, proportions, name='proportions.csv'):
     propDf['proportion_rest'] = proportions
     propDf['proportion_motion'] = proportion_motion
     propDf.to_csv(name, sheet_name='Sheet1')
-
-
-
-
-# Process the single user, for testing.
-#processUser(UUID, ACCEL_PATH)
-
-
-# In motion script:
-inMotion(DATA_PATH, ACCEL_NAME)

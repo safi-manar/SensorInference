@@ -11,10 +11,12 @@ import datetime as dt
 # Note that the time_start and time_end columns must be pre-processed in 24 hour 00:00 format.*
 # *This assumption is satisfied by using the daily_coded.csv (manually coded version of daily.csv)
 
-DAILY_PATH = '/Users/manar/Projects/ICSI/SensorInference/scripts/analysis/5-occupation/data/survey_response/daily_coded.csv'
+
+DAILY_PATH = '/home/manar/scratch/5-occupation/data/daily_coded.csv'
+TZ_PATH = '/home/manar/scratch/5-occupation/data/timezones.csv'
 
 # Main Method
-def getWindows(uuid, DAILY_PATH, TZ_PATH):
+def getWindows(uuid, DAILY_PATH=DAILY_PATH, TZ_PATH=TZ_PATH):
     daily = read_data(DAILY_PATH)
     daily = fix_timezones(daily, TZ_PATH)
     daily = filterValid(daily, uuid)
