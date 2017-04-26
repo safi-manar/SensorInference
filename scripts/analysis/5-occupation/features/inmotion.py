@@ -51,7 +51,7 @@ def inMotion(DATA_PATH, ACCEL_NAME):
 def filterIgnored(uuids):
     ignored = pd.read_csv(IGNORED_PATH)
     ignored = ignored['uuid']
-    uuids = [uuid for uuid in uuids if uuid not in ignored]
+    uuids = [uuid for uuid in uuids if uuid not in ignored.values]
     return uuids
 
 

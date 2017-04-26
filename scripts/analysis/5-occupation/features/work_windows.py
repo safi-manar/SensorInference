@@ -14,12 +14,14 @@ import datetime as dt
 
 DAILY_PATH = '/home/manar/scratch/5-occupation/data/daily_coded.csv'
 TZ_PATH = '/home/manar/scratch/5-occupation/data/timezones.csv'
+DISAMB_PATH = '/home/manar/scratch/5-occupation/data/daily_disambiguated.csv'
 
 # Main Method
 def getWindows(uuid, DAILY_PATH=DAILY_PATH, TZ_PATH=TZ_PATH):
     daily = read_data(DAILY_PATH)
     daily = fix_timezones(daily, TZ_PATH)
     daily = filterValid(daily, uuid)
+    daily = overrideAmbiguousDates(daily, DISAMB_PATH) # Override dates before calculate_day()
     daily = calculate_day(daily)
     daily = calculate_windows(daily)
     daily = cleanColumns(daily)
@@ -92,6 +94,31 @@ def filterValid(daily, uuid):
     daily = daily.dropna(how='any')
     # Filter only the days in which the subject worked
     daily = daily[daily.work_today.str.contains('Yes', regex=True)]
+    return daily
+
+
+# For those rows that had either ambiguous Date-submitted times, OR had post-midnight Date-submitted
+# dates that actually belonged to the previous day (ie, 12-2-16 0:15:00 actually belongs to accel data for 12-1-16),
+# use the disambiguated data from DISAMB_PATH to manually override the dates.
+def overrideAmbiguousDates(daily, DISAMB_PATH=DISAMB_PATH):
+    disamb = pd.read_csv(DISAMB_PATH)
+    # Get disamb's date in the same format as daily.
+    disamb['date'] = pd.to_datetime(disamb['date'], infer_datetime_format=True)
+    disamb['date'] = disamb['date'].apply(lambda date: str(date))
+    # Merge on the columns of daily, keeping rows of daily rows.
+    numRows = len(daily)
+    joinOn = ['uuid', 'work_today', 'date', 'time_start', 'time_end']
+    daily = pd.merge(daily, disamb, how='left', on=joinOn)
+    assert(numRows == len(daily)) # Sanity check for join.
+
+    # Filter out all Tosses.
+    daily = daily[daily['notable'] != "TOSS"]
+    # Take the values from 'override' if non-null, else use the original values from 'date'.
+    daily['date'] = daily['override'].fillna(daily['date'])
+
+    # Reinstate columns invariant.
+    daily = daily.loc[:, ['uuid', 'work_today', 'date', 'time_start', 'time_end']]
+
     return daily
 
 
