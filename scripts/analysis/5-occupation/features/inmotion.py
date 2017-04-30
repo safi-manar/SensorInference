@@ -8,7 +8,7 @@ import work_windows as ww
 import os
 
 
-THRESHOLD = 2.0
+THRESHOLD = 1.5
 ACCEL_PATH = './data/in.csv'
 
 ONE_SECOND = 1000 # 1000 ms

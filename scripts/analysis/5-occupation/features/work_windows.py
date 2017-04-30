@@ -18,16 +18,31 @@ DISAMB_PATH = '/home/manar/scratch/5-occupation/data/daily_disambiguated.csv'
 
 # Main Method
 def getWindows(uuid, DAILY_PATH=DAILY_PATH, TZ_PATH=TZ_PATH):
+    daily = getMasterDaily(DAILY_PATH, TZ_PATH)
+    # Now, apply the user-specific reduction to get windows.
+    daily = filterUuid(daily, uuid)
+
+    return daily
+
+# Get the Daily data for all users
+def getMasterDaily(DAILY_PATH=DAILY_PATH, TZ_PATH=TZ_PATH):
     daily = read_data(DAILY_PATH)
     daily = fix_timezones(daily, TZ_PATH)
-    daily = filterValid(daily, uuid)
-    daily = overrideAmbiguousDates(daily, DISAMB_PATH) # Override dates before calculate_day()
+    daily = filterValid(daily)
+    daily = overrideAmbiguousDates(daily, DISAMB_PATH) # Override dates before calling calculate_day()
     daily = calculate_day(daily)
     daily = calculate_windows(daily)
     daily = cleanColumns(daily)
     daily = check24Hour(daily)
 
     return daily
+
+# A utility function for outside classes that want a master list of the UUID's
+# for which there is valid daily survey data (with applying filterValid()).
+def getMasterUuids(DAILY_PATH=DAILY_PATH, TZ_PATH=TZ_PATH):
+    daily = getMasterDaily(DAILY_PATH, TZ_PATH)
+    return daily['uuid'].tolist()
+
 
 # Read in the given daily csv, and return only the relevant columns for filtering and timestamp processing.
 # Use the coded start / end times.
@@ -84,16 +99,20 @@ def fix_timezones(daily, TZ_PATH):
 
 
 # Applies the following filters:
-#   1. Filter by matching UUID.
-#   2. Filter by entries where subjet answered the questions.
-#   3. Filter by instances where the subject actually worked that day.
-def filterValid(daily, uuid):
-    # Filter by uuid
-    daily = daily[daily['uuid'] == uuid]
+#   1. Filter by entries where subjet answered the questions.
+#   2. Filter by instances where the subject actually worked that day.
+def filterValid(daily):
     # Filter only those subjects that answered the work_today, time_start / time_end questions. (All other columns must have entries automatically.)
     daily = daily.dropna(how='any')
-    # Filter only the days in which the subject worked
+    # Filter only the days in which the subjects worked
     daily = daily[daily.work_today.str.contains('Yes', regex=True)]
+    return daily
+
+# Applies the following filters:
+#   1. Filter by matching UUID.
+def filterUuid(daily, uuid):
+    # Filter by uuid
+    daily = daily[daily['uuid'] == uuid]
     return daily
 
 
